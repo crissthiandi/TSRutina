@@ -84,14 +84,15 @@ serie_tiempo_pruebas <-function(datos,frecuencia){
 }
 
 conditional.tsrutina <- function(datos){
-  cat("Si el tiempo es fecha, use el orden dia-mes-year")
-  cat("Se han cargado las librerias")
+  cat("Si el tiempo es fecha, use el formato dia-mes-year \n")
+  cat("Se han cargado las librerias \n")
   pausa()
 
   if(ncol(datos)!=2)
     stop("Los datos deben tener solo dos columnas, tiempo y valor en ese orden")
   if(!is.numeric(datos[,2]))
     stop("La segunda columna deben ser los valores, la primera el tiempo")
+  cat("Se toma la base en la primera columna como fecha y la segunda como flotante")
 }
 
 pausa <-function(duracion = Inf){
@@ -118,8 +119,8 @@ serie_tiempo_rutina<-function(datos,frecuencia,inicio){
     names(datos)<-c("x","y")
     datos$x<-as.Date(datos$x,format("%d/%m/%Y"))  #Y debe ser mayuscula
     print(head(datos))
-    continuar<-readline(" Estan bien los datos a usar? si hay un error, corrige,
-             si no los hay, enter para continuar: ")
+    continuar<-readline(" ¿Estan bien los datos a usar? Si hay un error [Esc]
+             de lo contrario [Enter para continuar]: \n\n")
 
     if(!continuar=="")
         stop("Corrige el error")
@@ -299,8 +300,8 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio){
     names(datos)<-c("x","y")
     datos$x<-as.Date(datos$x,format("%d/%m/%Y"))  #Y debe ser mayuscula
     print(head(datos))
-    continuar<-readline(" Estan bien los datos a usar? si hay un error,
-    corrige, si no los hay, enter para continuar: ")
+    continuar<-readline(" ¿Estan bien los datos a usar? Si hay un error [Esc]
+             de lo contrario [Enter para continuar]: \n\n")
 
     if(!continuar=="")
         stop("Corrige el error")
@@ -509,9 +510,12 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=4,inicio=2010){
 
   names(datos)<-c("x","y")
   datos$x<-as.Date(datos$x,format("%d/%m/%Y"))  #Y debe ser mayuscula
+  if(is.na(datos$x)){
+    datos$x=tratamiento.fechas.TSR(datos$x)
+  }
   print(head(datos))
-  continuar<-readline(" Estan bien los datos a usar? si hay un error,
-    corrige, si no los hay, enter para continuar: ")
+  continuar<-readline(" ¿Estan bien los datos a usar? Si hay un error [Esc]
+             de lo contrario [Enter para continuar]: \n\n")
 
   if(!continuar=="")
     stop("Corrige el error")
@@ -538,9 +542,9 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=4,inicio=2010){
       print("No se puede rechazar H0:Hay presencia de una raiz unitaria")
       print("No es estacionaria")
       pausa()
-      base<-diff(base$y,lag = 1,differences = 1)
+      base$y<-diff(base$y,lag = 1,differences = 1)
 
-      print('se diferencio la base de datos')
+      message('se diferencio la base de datos')
     }else{
       print("Se rechaza H0, se obta por H1: La serie de tiempo es Estacionaria")
       p=1

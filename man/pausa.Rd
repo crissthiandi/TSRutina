@@ -1,10 +1,10 @@
 \name{pausa}
 \alias{pausa}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{ Toma una pausa
+\title{ Toma una pausa dentro de una function
 %%  ~~function to do ... ~~
 }
-\description{ Detiene la salida hasta que el usuario lo desee, leer sobre sys.sleep para mas detalle
+\description{ Detiene la salida hasta que el usuario lo desee, leer sobre \code{\link{sys.sleep}} para mas detalle
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -12,10 +12,10 @@ pausa(x)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{ninguno}{ Puede usarse el modo default
+  \item{ninguno}{ Puede usarse en el default mode
 %%     ~~Describe \code{x} here~~
 }
-  \item{duration}{ Segundos de pausa}
+  \item{duracion}{ Segundos de pausa}
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
@@ -32,7 +32,7 @@ pausa(x)
 }
 \author{
 %%  ~~who you are~~
-Cristhian Diaz Chable
+Cristhian Diaz chable
 
 Sabrina Guevara Cervera
 }
@@ -47,7 +47,7 @@ Sabrina Guevara Cervera
 Sys.sleep()
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
+##---- Should be DIRECTLY executable :3 !! ----
 pausa()
 
 ##o usar para 10 segundos

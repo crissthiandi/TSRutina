@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1583442177124.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3618561774",
+    "id" : "53AB7711",
+    "lastKnownWriteTime" : 1583444190,
+    "last_content_update" : 1583444190308,
+    "path" : "~/R_libros_and_code/creando_package/seriesdetiempo/man/serie_tiempo_rutina.Rd",
+    "project_path" : "man/serie_tiempo_rutina.Rd",
+    "properties" : {
+        "cursorPosition" : "18,0",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_doc"
+}

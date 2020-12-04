@@ -1,0 +1,61 @@
+\name{serie_tiempo_ARIMA}
+\alias{serie_tiempo_ARIMA}
+%- Also NEED an '\alias' for EACH other topic documented here.
+\title{MA(q) o AR(p)
+%%  ~~function to do ... ~~
+}
+\description{
+Realiza un analisis con diferenciaciones para una serie de tiempo y obtiene entre los modelos MA(q) o AR(p), selecciona el mejor
+%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+}
+\usage{
+serie_tiempo_ARIMA(x)
+}
+%- maybe also 'usage' for other objects documented here.
+\arguments{
+\item{datos}{ Sera el dataframe de no mas de 2 columnas, en el orden primero tiempo y luego valor el tiempo va en formato fecha, y tiene que ser en el orden dia-mes-year
+%%     ~~Describe \code{x} here~~
+}
+\item{
+  frecuencia
+  }{ Este es el periodo de la serie, trimestral=3, cuatrimestral=4, mensual=12, etc.}
+  \item{inicio}{ Este es el año a iniciar la serie de tiempo}
+}
+\details{
+%%  ~~ If necessary, more details than the description above ~~
+se usa una salida interactiva para el proceso
+}
+\value{
+%%  ~Describe the value returned
+%%  If it is a LIST, use
+%%  \item{comp1 }{Description of 'comp1'}
+%%  \item{comp2 }{Description of 'comp2'}
+%% ...
+}
+\references{
+%% ~put references to the literature/web site here ~
+}
+\author{
+%%  ~~who you are~~
+Cristhian Diaz Chable
+
+Sabrina Guevara Cervera
+}
+\note{
+%%  ~~further notes~~
+}
+
+%% ~Make other sections like Warning with \section{Warning }{....} ~
+
+\seealso{
+%% ~~objects to See Also as \code{\link{help}}, ~~~
+}
+\examples{
+##---- Should be DIRECTLY executable !! ----
+serie_tiempo_ARIMA(datos=base)
+
+}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+%\keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
+%\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

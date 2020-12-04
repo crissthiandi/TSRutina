@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1583442969804.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3025307852",
+    "id" : "2EC5AE04",
+    "lastKnownWriteTime" : 1583444054,
+    "last_content_update" : 1583444054283,
+    "path" : "~/R_libros_and_code/creando_package/seriesdetiempo/man/serie_tiempo_plots.Rd",
+    "project_path" : "man/serie_tiempo_plots.Rd",
+    "properties" : {
+        "cursorPosition" : "60,0",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_doc"
+}

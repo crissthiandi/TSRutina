@@ -5,21 +5,21 @@
 %%  ~~function to do ... ~~
 }
 \description{
-Realiza un analisis con diferenciaciones para una serie de tiempo y obtiene entre los modelos MA(q) o AR(p), selecciona el mejor
+Realiza un analisis con diferenciaciones a una serie de tiempo y obtiene entre los modelos MA(q) o AR(p), el mejor basandoce en criterio \code{\link{AIC}}
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-serie_tiempo_ARIMA(x)
+serie_tiempo_ARIMA(datos, frecuencia = 4, incio = 2020)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-\item{datos}{ Sera el dataframe de no mas de 2 columnas, en el orden primero tiempo y luego valor el tiempo va en formato fecha, y tiene que ser en el orden dia-mes-year
+\item{datos}{ Dataframe de no mas de 2 columnas, en el orden de primero \bold{tiempo} y luego \bold{valor}. El tiempo va en formato fecha, y tiene que ser en el orden \bold{dia-mes-year}
 %%     ~~Describe \code{x} here~~
 }
 \item{
   frecuencia
   }{ Este es el periodo de la serie, trimestral=3, cuatrimestral=4, mensual=12, etc.}
-  \item{inicio}{ Este es el año a iniciar la serie de tiempo}
+  \item{inicio}{ Este es el year a iniciar la serie de tiempo}
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~

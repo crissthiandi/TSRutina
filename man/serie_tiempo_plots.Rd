@@ -9,7 +9,7 @@ Obten archivos .png de tus graficos de serie de tiempo en tu directorio
 
 Usa y se estiliza con
 
-ggplot2()
+\code{\link{ggplot2:::ggplot}}
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -23,18 +23,18 @@ serie_tiempo_plots(x)
 \item{
   frecuencia
   }{ Este es el periodo de la serie, trimestral=3, cuatrimestral=4, mensual=12, etc.}
-  \item{inicio}{ Este es el año a iniciar la serie de tiempo}
+  \item{inicio}{ Este es el year a iniciar la serie de tiempo}
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
-se usa una salida interactiva para el proceso
+Se usa una salida interactiva para el proceso
 }
 \value{
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
 %%  \item{comp2 }{Description of 'comp2'}
-  \item{Graficos}{ Un conjunto de imagenes .png se generan en el directorio estos con los nombres de que representan como titulo del archivo}
+  \item{Graficos}{ Un conjunto de imagenes .png se generan en el directorio \code{\link{getwd}}. Se guardan con los nombres de que representan como titulo del archivo}
 %% ...
 }
 \references{
@@ -54,9 +54,14 @@ Sabrina Guevara Cervera
 
 \seealso{
 %% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{ggplot}}
+
+\code{\link{getwd}}
 }
 \examples{
 ##---- Should be DIRECTLY executable !! ----
+
+base=data.frame(tiempo=1:20,valores=1:20*3+5)
 serie_tiempo_plots(datos=base,frecuencia=4,inicio=2010)
 
 

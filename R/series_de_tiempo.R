@@ -14,7 +14,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia){
     message("Se han cargado los paquetes necesarios")
     pausa()
 
-    conditional.tsrutina()
+    conditional.tsrutina(datos)
 
     if(!is.ts(datos) | ncol(datos) != 2){
 
@@ -83,7 +83,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia){
 
 }
 
-conditional.tsrutina <- function(){
+conditional.tsrutina <- function(datos){
   cat("si el tiempo es fecha, use el orden dia-mes-year")
   cat("se han cargado las librerias")
   pausa()
@@ -113,7 +113,7 @@ pausa <-function(duracion = Inf){
 
 serie_tiempo_rutina<-function(datos,frecuencia,inicio){
     paquetes.tsrutina()
-    conditional.tsrutina()
+    conditional.tsrutina(datos)
 
     names(datos)<-c("x","y")
     datos$x<-as.Date(datos$x,format("%d/%m/%Y"))  #Y debe ser mayuscula
@@ -294,14 +294,8 @@ serie_tiempo_rutina<-function(datos,frecuencia,inicio){
 serie_tiempo_plots<-function(datos,frecuencia,inicio){
     paquetes.tsrutina()
 
-    print("si el tiempo es fecha, use el orden dia-mes-year")
-    print("se han cargado las librerias")
-    pausa()
+    conditional.tsrutina(datos)
 
-    if(ncol(datos)!=2)
-        stop("Los datos deben tener solo dos columnas, tiempo y valor en ese orden")
-    if(!is.numeric(datos[,2]))
-        stop("La segunda columna deben ser los valores, la primera el tiempo")
     names(datos)<-c("x","y")
     datos$x<-as.Date(datos$x,format("%d/%m/%Y"))  #Y debe ser mayuscula
     print(head(datos))
@@ -505,18 +499,14 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio){
 
 serie_tiempo_ARIMA<-function(datos,frecuencia=4,inicio=2010){
   paquetes.tsrutina()
-
-  print("si el tiempo es fecha, use el orden dia-mes-year")
-  print("se han cargado las librerias")
+  conditional.tsrutina(datos)
   pausa()
+
   if(!is.ts(datos)){
 
     if(is.data.frame(datos)){
 
-  if(ncol(datos)!=2)
-    stop("Los datos deben tener solo dos columnas, tiempo y valor en ese orden")
-  if(!is.numeric(datos[,2]))
-    stop("La segunda columna deben ser los valores, la primera el tiempo")
+
   names(datos)<-c("x","y")
   datos$x<-as.Date(datos$x,format("%d/%m/%Y"))  #Y debe ser mayuscula
   print(head(datos))

@@ -6,17 +6,17 @@
 }
 \description{Realiza una rutina para una base de datos en la que se incluyen ajustes por
 
-Regresion linean
+\itemize{\item{Regresion lineal}{}}
 
-Promedios movil simple
+\itemize{\item{Promedio movil simple}{}}
 
-Promedios movil ponderado
+\itemize{\item{Promedio movil ponderado}{}}
 
-Suavizaiento exponencial simple
+\itemize{\item{Suavizamiento exponencial simple}{}}
 
-Suav. expon. doble o de Holt
+\itemize{\item{Suav. expon. doble o de Holt}{}}
 
-Suavizamiento Holt-Winter
+\itemize{\item{Suavizamiento Holt-Winter}{}}
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
@@ -24,13 +24,13 @@ serie_tiempo_rutina(x)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{datos}{ Sera el dataframe de no mas de 2 columnas, en el orden primero tiempo y luego valor el tiempo va en formato fecha, y tiene que ser en el orden dia-mes-year
+  \item{datos}{ Dataframe de no mas de 2 columnas, en el orden primero \bold{tiempo} y luego valor el \bold{tiempo} va en formato fecha, y tiene que ser en el orden \bold{dia-mes-year}
 %%     ~~Describe \code{x} here~~
 }
 \item{
   frecuencia
   }{ Este es el periodo de la serie, trimestral=3, cuatrimestral=4, mensual=12, etc.}
-  \item{inicio}{ Este es el año a iniciar la serie de tiempo}
+  \item{inicio}{ Este es el year a iniciar la serie de tiempo}
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
@@ -65,9 +65,9 @@ Sabrina Guevara Cervera
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
 
-## The function is currently defined as
+base=data.frame(tiempo=1:20,valores=1:20*3+5)
+
 serie_tiempo_rutina(datos=base,frecuencia=4,inicio=2010)
 
 }

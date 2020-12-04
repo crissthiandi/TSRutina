@@ -7,12 +7,13 @@ paquetes.tsrutina <- function(){
   library('tseries',warn.conflicts = F,quietly = F)
   library('greybox',warn.conflicts = F,quietly = F)
   library('readr',warn.conflicts = F,quietly = F)
+  message("Se han cargado los paquetes necesarios")
+
 }
 
 serie_tiempo_pruebas <-function(datos,frecuencia){
     paquetes.tsrutina()
 
-    message("Se han cargado los paquetes necesarios")
     pausa()
 
     conditional.tsrutina(datos)
@@ -85,9 +86,6 @@ serie_tiempo_pruebas <-function(datos,frecuencia){
 }
 
 conditional.tsrutina <- function(datos){
-  cat("Si el tiempo es fecha, use el formato dia-mes-year \n")
-  cat("Se han cargado las librerias \n")
-  pausa()
 
   if(ncol(datos)!=2)
     stop("Los datos deben tener solo dos columnas, tiempo y valor en ese orden")
@@ -105,6 +103,11 @@ tratamiento.fechas.TRS <- function(fecha_vector){
   if(is.na(fecha_vector_tratamiento[1])){
     fecha_vector_tratamiento=as.Date(fecha_vector,format("%Y-%m-%d"))
   }
+  if(is.na(fecha_vector_tratamiento[1])){
+    message("\n Si la variable tiempo es fecha, use el formato dia-mes-year: \n
+            \"%Y-%m-%d\" ")
+  }
+
   return(fecha_vector_tratamiento)
 }
 
@@ -113,7 +116,8 @@ pausa <-function(duracion = Inf){
         if (is.infinite(duracion)) {
             arg <- "*"
             while (arg != "") {
-                arg <- readline("Pause. [ to continue / 'stop' to exit] ")
+                cat("\n")
+                arg <- readline("  [Intro to continue / 'stop' to exit]: ")
                 if (arg == "stop") {
                     stop("El programa finalizo", call. = FALSE)
                 }
@@ -132,9 +136,9 @@ serie_tiempo_rutina<-function(datos,frecuencia,inicio){
     names(datos)<-c("x","y")
     datos$x <- tratamiento.fechas.TRS(datos$x)
     print(head(datos))
-    continuar<-readline("\n ¿Estan bien los datos a usar? \n
-    Si hay un error [Esc] \n
-    De lo contrario [Enter para continuar]: \n\n")
+    message("\n ¿Estan bien los datos a usar? \n
+    Si hay un error [Esc] \n De lo contrario [Enter para continuar]")
+    continuar<-readline(": \t")
 
     if(!continuar=="")
         stop("Corrige el error")
@@ -314,8 +318,9 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio){
     names(datos)<-c("x","y")
     datos$x <- tratamiento.fechas.TRS(datos$x)
     print(head(datos))
-    continuar<-readline(" ¿Estan bien los datos a usar? Si hay un error [Esc]
-             de lo contrario [Enter para continuar]: \n\n")
+    message("\n ¿Estan bien los datos a usar? \n
+    Si hay un error [Esc] \n De lo contrario [Enter para continuar]")
+    continuar<-readline(": \t")
 
     if(!continuar=="")
         stop("Corrige el error")
@@ -528,8 +533,9 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=4,inicio=2010){
     datos$x=tratamiento.fechas.TSR(datos$x)
   }
   print(head(datos))
-  continuar<-readline(" ¿Estan bien los datos a usar? Si hay un error [Esc]
-             de lo contrario [Enter para continuar]: \n\n")
+  message("\n ¿Estan bien los datos a usar? \n
+    Si hay un error [Esc] \n De lo contrario [Enter para continuar]")
+  continuar<-readline(": \t")
 
   if(!continuar=="")
     stop("Corrige el error")

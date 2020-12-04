@@ -6,6 +6,7 @@ paquetes.tsrutina <- function(){
   library('forecast',warn.conflicts = F,quietly = F,)
   library('tseries',warn.conflicts = F,quietly = F)
   library('greybox',warn.conflicts = F,quietly = F)
+  library('readr',warn.conflicts = F,quietly = F)
 }
 
 serie_tiempo_pruebas <-function(datos,frecuencia){
@@ -92,7 +93,19 @@ conditional.tsrutina <- function(datos){
     stop("Los datos deben tener solo dos columnas, tiempo y valor en ese orden")
   if(!is.numeric(datos[,2]))
     stop("La segunda columna deben ser los valores, la primera el tiempo")
-  cat("Se toma la base en la primera columna como fecha y la segunda como flotante")
+  cat("Se toma la base con la primera columna como variable Tiempo y \n
+      la segunda como variable valor")
+}
+
+tratamiento.fechas.TRS <- function(fecha_vector){
+  fecha_vector_tratamiento<-as.Date(fecha_vector,format("%d/%m/%Y"))  #Y debe ser mayuscula
+  if(is.na(fecha_vector_tratamiento[1])){
+    fecha_vector_tratamiento=as.Date(fecha_vector,format("%d-%m-%Y"))
+  }
+  if(is.na(fecha_vector_tratamiento[1])){
+    fecha_vector_tratamiento=as.Date(fecha_vector,format("%Y-%m-%d"))
+  }
+  return(fecha_vector_tratamiento)
 }
 
 pausa <-function(duracion = Inf){
@@ -117,7 +130,7 @@ serie_tiempo_rutina<-function(datos,frecuencia,inicio){
     conditional.tsrutina(datos)
 
     names(datos)<-c("x","y")
-    datos$x<-as.Date(datos$x,format("%d/%m/%Y"))  #Y debe ser mayuscula
+    datos$x <- tratamiento.fechas.TRS(datos$x)
     print(head(datos))
     continuar<-readline(" ¿Estan bien los datos a usar? Si hay un error [Esc]
              de lo contrario [Enter para continuar]: \n\n")
@@ -298,7 +311,7 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio){
     conditional.tsrutina(datos)
 
     names(datos)<-c("x","y")
-    datos$x<-as.Date(datos$x,format("%d/%m/%Y"))  #Y debe ser mayuscula
+    datos$x <- tratamiento.fechas.TRS(datos$x)
     print(head(datos))
     continuar<-readline(" ¿Estan bien los datos a usar? Si hay un error [Esc]
              de lo contrario [Enter para continuar]: \n\n")
@@ -509,7 +522,7 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=4,inicio=2010){
 
 
   names(datos)<-c("x","y")
-  datos$x<-as.Date(datos$x,format("%d/%m/%Y"))  #Y debe ser mayuscula
+  datos$x <- tratamiento.fechas.TRS(datos$x)
   if(is.na(datos$x)){
     datos$x=tratamiento.fechas.TSR(datos$x)
   }

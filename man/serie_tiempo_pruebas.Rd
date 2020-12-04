@@ -56,9 +56,10 @@ Sabrina Guevara Cervera
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
 
 ## Por ejemplo
+base=data.frame(tiempo=1:20,valores=1:20*3+5)
+
 serie_tiempo_pruebas (datos=base,frecuencia=4)
 
 }

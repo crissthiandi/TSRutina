@@ -9,15 +9,15 @@ Obten archivos .png de tus graficos de serie de tiempo en tu directorio
 
 Usa y se estiliza con
 
-\code{\link{ggplot2:::ggplot}}
+\code{\link{ggplot2}} A traves de \code{\link{ggfortify}}
 %%  ~~ A concise (1-5 lines) description of what the function does. ~~
 }
 \usage{
-serie_tiempo_plots(x)
+serie_tiempo_plots(datos,frecuencia,inicio)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-\item{datos}{ Sera el dataframe de no mas de 2 columnas, en el orden primero tiempo y luego valor el tiempo va en formato fecha, y tiene que ser en el orden dia-mes-year
+\item{datos}{  Dataframe de no mas de 2 columnas, en el orden primero \bold{tiempo} y luego valor el \bold{tiempo} va en formato fecha, y tiene que ser en el orden \bold{dia-mes-year}
 %%     ~~Describe \code{x} here~~
 }
 \item{
@@ -34,7 +34,7 @@ Se usa una salida interactiva para el proceso
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
 %%  \item{comp2 }{Description of 'comp2'}
-  \item{Graficos}{ Un conjunto de imagenes .png se generan en el directorio \code{\link{getwd}}. Se guardan con los nombres de que representan como titulo del archivo}
+  \item{Graficos}{ Un conjunto de imagenes .png se generan en tu directorio \code{\link{getwd}}. Se guardan con los nombres que se prepresentan como titulo del grafico.}
 %% ...
 }
 \references{
@@ -59,7 +59,7 @@ Sabrina Guevara Cervera
 \code{\link{getwd}}
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
+## suerte :p
 
 base=data.frame(tiempo=1:20,valores=1:20*3+5)
 serie_tiempo_plots(datos=base,frecuencia=4,inicio=2010)

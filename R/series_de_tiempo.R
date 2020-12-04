@@ -84,8 +84,8 @@ serie_tiempo_pruebas <-function(datos,frecuencia){
 }
 
 conditional.tsrutina <- function(datos){
-  cat("si el tiempo es fecha, use el orden dia-mes-year")
-  cat("se han cargado las librerias")
+  cat("Si el tiempo es fecha, use el orden dia-mes-year")
+  cat("Se han cargado las librerias")
   pausa()
 
   if(ncol(datos)!=2)

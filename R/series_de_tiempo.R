@@ -93,8 +93,8 @@ conditional.tsrutina <- function(datos){
     stop("Los datos deben tener solo dos columnas, tiempo y valor en ese orden")
   if(!is.numeric(datos[,2]))
     stop("La segunda columna deben ser los valores, la primera el tiempo")
-  cat("Se toma la base con la primera columna como variable Tiempo y \n
-      la segunda como variable valor")
+  message("\n Primera columna => variable de Tiempo
+      \n Segunda columna => variable de valor \n")
 }
 
 tratamiento.fechas.TRS <- function(fecha_vector){
@@ -132,8 +132,9 @@ serie_tiempo_rutina<-function(datos,frecuencia,inicio){
     names(datos)<-c("x","y")
     datos$x <- tratamiento.fechas.TRS(datos$x)
     print(head(datos))
-    continuar<-readline(" ¿Estan bien los datos a usar? Si hay un error [Esc]
-             de lo contrario [Enter para continuar]: \n\n")
+    continuar<-readline("\n ¿Estan bien los datos a usar? \n
+    Si hay un error [Esc] \n
+    De lo contrario [Enter para continuar]: \n\n")
 
     if(!continuar=="")
         stop("Corrige el error")
@@ -537,8 +538,8 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=4,inicio=2010){
   datosts<-ts(data = datos$y,frequency =  frecuencia,start=inicio)
 
   base=datos
-  p=0
-  while(p==0){
+  ban=TRUE
+  while(ban){
 
     prueba<-adf.test(base$y)
     print(prueba)
@@ -555,37 +556,39 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=4,inicio=2010){
       print("No se puede rechazar H0:Hay presencia de una raiz unitaria")
       print("No es estacionaria")
       pausa()
-      base$y<-diff(base$y,lag = 1,differences = 1)
+      differenciado<-diff(base$y,lag = 1,differences = 1)
+      base=base[-nrow(base),]
+      base$y=differenciado
 
-      message('se diferencio la base de datos')
+      message('Se diferencio la base de datos')
     }else{
       print("Se rechaza H0, se obta por H1: La serie de tiempo es Estacionaria")
-      p=1
+      ban=FALSE
     }
     pausa()
   }
   #plotea el acf y analizas
-  print(acf(base))
+  print(acf(base$y,main="Autocorrelación"))
   ma<-readline('Que MA(r) sospechas?, inserte el valor de r:     ')
   ma<-c(0,0,as.numeric(ma))
   pausa()
   #plotea el pacf
-  print(acf(base))
+  print(pacf(base$y,main="Autocorrelación Parcial"))
   ra<-readline('Que AR(p) sospechas?, inserte el valor de p:     ')
   ra<-c(0,0,as.numeric(ra))
   pausa()
   #imprime arimas
-  print(arima(base,order = ma))
+  print(arima(base$y,order = ma))
   pausa()
-  print(arima(base,order = ra))
+  print(arima(base$y,order = ra))
   pausa()
   #compara arimas
-  mama<-arima(base,order = ma)
-  rara<-arima(base,order = ra)
+  mama<-arima(base$y,order = ma)
+  rara<-arima(base$y,order = ra)
   if(mama$aic<rara$aic){
-    print(sprintf('El modelo con menor AIC es el MA(%s)',ma))
+    print(sprintf('El modelo con menor AIC es el MA(%s)',ma[3]))
   }else{
-    print(sprintf('El modelo con menor AIC es el RA(%s)',ra))
+    print(sprintf('El modelo con menor AIC es el RA(%s)',ra[3]))
   }
   pausa()
 

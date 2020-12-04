@@ -1,9 +1,22 @@
+paquetes.tsrutina <- function(){
+  require('tseries',warn.conflicts = F,quietly = F)
+  library('lmtest',warn.conflicts = F,quietly = F)
+  library('pracma',warn.conflicts = F,quietly = F)
+  library('ggfortify',warn.conflicts = F,quietly = F)
+  library('forecast',warn.conflicts = F,quietly = F,)
+  library('tseries',warn.conflicts = F,quietly = F)
+  library('greybox',warn.conflicts = F,quietly = F)
+}
+
 serie_tiempo_pruebas <-function(datos,frecuencia){
-    library(tseries)
-    library(lmtest)
-    print("se han cargado las librerias")
+    paquetes.tsrutina()
+
+    message("Se han cargado los paquetes necesarios")
     pausa()
-    if(!is.ts(datos)){
+
+    conditional.tsrutina()
+
+    if(!is.ts(datos) | ncol(datos) != 2){
 
         if(is.data.frame(datos)){
             base<-datos
@@ -15,7 +28,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia){
             regresion<-lm(y~xx,base2)
             prueba<-dwtest(regresion)
             print(prueba)
-            p_valor<-readline('Inserte un p valor, intro para p=0.05')
+            p_valor<-readline('Inserte un p valor, (intro para p=0.05) \n')
 
             if(p_valor==""){
                     p_valor<-0.05
@@ -26,9 +39,9 @@ serie_tiempo_pruebas <-function(datos,frecuencia){
 
 
             if(prueba$p.value>0.05){
-                print("No se puede rechazar H0:No hay presencia de autocorrelacion ")
+                cat("No se puede rechazar H0 = No hay presencia de autocorrelacion ")
             }else{
-                print("Se rechaza H0, se obta por H1: Hay presencia de autocorrelacion")
+                cat("Se rechaza H0, se obta por H1 = Hay presencia de autocorrelacion")
             }
 
 
@@ -43,7 +56,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia){
 
             prueba<-adf.test(basets)
             print(prueba)
-            p_valor<-readline('Inserte un p valor, intro para p=0.05')
+            p_valor<-readline('Inserte un p valor, (intro para p=0.05) \n')
 
             if(p_valor==""){
                 p_valor<-0.05
@@ -53,13 +66,13 @@ serie_tiempo_pruebas <-function(datos,frecuencia){
             }
 
                 if(prueba$p.value>p_valor){
-                    print("No se puede rechazar H0:Hay presencia de una raiz unitaria")
+                    cat("No se puede rechazar H0:Hay presencia de una raiz unitaria")
                 }else{
-                    print("Se rechaza H0, se obta por H1: La serie de tiempo es Estacionaria")
+                    cat("Se rechaza H0, se obta por H1: La serie de tiempo es Estacionaria")
                 }
 
-            print("Prueba de Box-Pierce and Ljung-Box Test")
-            print("Box.test(), el pvalor>0.05 entonces no hay correlacion ruido blanco")
+            cat("Prueba de Box-Pierce and Ljung-Box Test")
+            cat("Box.test(), el pvalor>0.05 entonces no hay correlacion ruido blanco")
         }else{
             stop("El objeto debe ser data frame")
         }
@@ -70,38 +83,38 @@ serie_tiempo_pruebas <-function(datos,frecuencia){
 
 }
 
-pausa <-function(duration = Inf){
+conditional.tsrutina <- function(){
+  cat("si el tiempo es fecha, use el orden dia-mes-year")
+  cat("se han cargado las librerias")
+  pausa()
 
-        if (is.infinite(duration)) {
+  if(ncol(datos)!=2)
+    stop("Los datos deben tener solo dos columnas, tiempo y valor en ese orden")
+  if(!is.numeric(datos[,2]))
+    stop("La segunda columna deben ser los valores, la primera el tiempo")
+}
+
+pausa <-function(duracion = Inf){
+
+        if (is.infinite(duracion)) {
             arg <- "*"
             while (arg != "") {
                 arg <- readline("Pause. [ to continue / 'stop' to exit] ")
                 if (arg == "stop") {
-                    stop("End of the program", call. = FALSE)
+                    stop("El programa finalizo", call. = FALSE)
                 }
             }
         } else {
-            cat("Pause of", duration, "seconds\n")
-            Sys.sleep(duration)
+            cat("Pause of", duracion, "seconds\n")
+            Sys.sleep(duracion)
         }
         invisible(NULL)
     }
 
 serie_tiempo_rutina<-function(datos,frecuencia,inicio){
-    library('pracma')
-    library('ggfortify')
-    library('forecast')
-    library('tseries')
-    library("greybox")
+    paquetes.tsrutina()
+    conditional.tsrutina()
 
-    print("si el tiempo es fecha, use el orden dia-mes-year")
-    print("se han cargado las librerias")
-    pausa()
-
-    if(ncol(datos)!=2)
-        stop("Los datos deben tener solo dos columnas, tiempo y valor en ese orden")
-    if(!is.numeric(datos[,2]))
-        stop("La segunda columna deben ser los valores, la primera el tiempo")
     names(datos)<-c("x","y")
     datos$x<-as.Date(datos$x,format("%d/%m/%Y"))  #Y debe ser mayuscula
     print(head(datos))
@@ -279,11 +292,7 @@ serie_tiempo_rutina<-function(datos,frecuencia,inicio){
 }
 
 serie_tiempo_plots<-function(datos,frecuencia,inicio){
-    library('pracma')
-    library('ggfortify')
-    library('forecast')
-    library('tseries')
-    library('greybox')
+    paquetes.tsrutina()
 
     print("si el tiempo es fecha, use el orden dia-mes-year")
     print("se han cargado las librerias")
@@ -495,7 +504,7 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio){
 }
 
 serie_tiempo_ARIMA<-function(datos,frecuencia=4,inicio=2010){
-  library('tseries')
+  paquetes.tsrutina()
 
   print("si el tiempo es fecha, use el orden dia-mes-year")
   print("se han cargado las librerias")

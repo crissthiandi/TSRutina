@@ -11,13 +11,13 @@ paquetes.tsrutina <- function(){
 
 }
 
-serie_tiempo_pruebas <-function(datos,frecuencia){
-    paquetes.tsrutina()
-
+serie_tiempo_pruebas <-function(datos,frecuencia,init_=FALSE){
+    if(!init_){
+      paquetes.tsrutina()
+      pausa()
+      conditional.tsrutina(datos)
+    }
     pausa()
-
-    conditional.tsrutina(datos)
-
     if(!is.ts(datos) | ncol(datos) != 2){
 
         if(is.data.frame(datos)){
@@ -28,9 +28,11 @@ serie_tiempo_pruebas <-function(datos,frecuencia){
             base2$xx<-1:length(base$x)
 
             regresion<-lm(y~xx,base2)
+            cat("\n Prueba de presencia de autocorrelación Durbin-Watson Test \n")
+            cat("\n (Prueba aplicada a una regresión lineal) \n")
             prueba<-dwtest(regresion)
             print(prueba)
-            p_valor<-readline('Inserte un p valor, (intro para p=0.05) \n')
+            p_valor<-readline('Inserte un p valor, (intro para p=0.05):  \n')
 
             if(p_valor==""){
                     p_valor<-0.05
@@ -55,6 +57,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia){
             #H1: La serie de tiempo es Estacionaria.
             #No se rechaza H0 pues pvalor=0.467 es mayor que 0.05 (No se rechaza H0)
             basets<-ts(base$y,frequency=frecuencia)
+            cat("\n Prueba de presencia de Estacionalidad Dickey-Fuller Test \n")
 
             prueba<-adf.test(basets)
             print(prueba)
@@ -68,13 +71,10 @@ serie_tiempo_pruebas <-function(datos,frecuencia){
             }
 
                 if(prueba$p.value>p_valor){
-                    cat("No se puede rechazar H0:Hay presencia de una raiz unitaria")
+                    cat("No se puede rechazar H0 = Hay presencia de una raiz unitaria")
                 }else{
-                    cat("Se rechaza H0, se obta por H1: La serie de tiempo es Estacionaria")
+                    cat("Se rechaza H0, se obta por H1 = La serie de tiempo es Estacionaria")
                 }
-
-            cat("Prueba de Box-Pierce and Ljung-Box Test")
-            cat("Box.test(), el pvalor>0.05 entonces no hay correlacion ruido blanco")
         }else{
             stop("El objeto debe ser data frame")
         }
@@ -129,9 +129,13 @@ pausa <-function(duracion = Inf){
         invisible(NULL)
     }
 
-serie_tiempo_rutina<-function(datos,frecuencia,inicio){
-    paquetes.tsrutina()
-    conditional.tsrutina(datos)
+serie_tiempo_rutina<-function(datos,frecuencia,inicio,init_=FALSE){
+
+    if(!init_){
+      paquetes.tsrutina()
+      pausa()
+      conditional.tsrutina(datos)
+    }
 
     names(datos)<-c("x","y")
     datos$x <- tratamiento.fechas.TRS(datos$x)
@@ -310,10 +314,12 @@ serie_tiempo_rutina<-function(datos,frecuencia,inicio){
 
 }
 
-serie_tiempo_plots<-function(datos,frecuencia,inicio){
-    paquetes.tsrutina()
-
-    conditional.tsrutina(datos)
+serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
+    if(!init_){
+      paquetes.tsrutina()
+      pausa()
+      conditional.tsrutina(datos)
+    }
 
     names(datos)<-c("x","y")
     datos$x <- tratamiento.fechas.TRS(datos$x)
@@ -517,10 +523,12 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio){
     dev.off()
 }
 
-serie_tiempo_ARIMA<-function(datos,frecuencia=4,inicio=2010){
-  paquetes.tsrutina()
-  conditional.tsrutina(datos)
-  pausa()
+serie_tiempo_ARIMA<-function(datos,frecuencia=4,inicio=2010,init_=FALSE){
+  if(!init_){
+    paquetes.tsrutina()
+    pausa()
+    conditional.tsrutina(datos)
+  }
 
   if(!is.ts(datos)){
 
@@ -541,7 +549,7 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=4,inicio=2010){
     stop("Corrige el error")
 
   #creando el objeto series
-  datosts<-ts(data = datos$y,frequency =  frecuencia,start=inicio)
+  datosts <- ts(data = datos$y,frequency =  frecuencia, start=inicio)
 
   base=datos
   ban=TRUE
@@ -598,6 +606,33 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=4,inicio=2010){
   }
   pausa()
 
+  cat("Prueba de Box-Pierce and Ljung-Box Test")
+  for (i in 1:2) {
+    modelo=list(mama,rara)
+    box_test=Box.test(modelo[[i]]$residuals, type ="Ljung-Box")
+    print(box_test)
+    cat("Box.test(), el p_valor > 0.05 entonces no hay correlacion ruido blanco")
+    p_valor<-readline('Inserte un p valor, (intro para p=0.05):  \n')
+
+    if(p_valor==""){
+      p_valor<-0.05
+    }else{
+      print(sprintf("El valor de p= %s",p_valor))
+      p_valor<-as.numeric(p_valor)
+    }
+
+
+    if(prueba$p.value>0.05){
+      cat("No se puede rechazar H0 = No hay presencia de autocorrelacion ")
+    }else{
+      cat("Se rechaza H0, se obta por H1 = Hay presencia de autocorrelacion")
+    }
+
+
+    sprintf("\n \n")
+  }
+
+
     }else{
       stop("El objeto debe ser data frame")
     }
@@ -605,5 +640,16 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=4,inicio=2010){
   }else{
     stop("El objeto debe ser un data frame con dos elementos")
   }
+
+}
+
+
+init <- function(datos,frecuencia,init_=TRUE,...){
+  paquetes.tsrutina()
+  pausa()
+  conditional.tsrutina(datos)
+
+  serie_tiempo_rutina(datos = datos,frecuencia = frecuencia,init_ = init_,...)
+
 
 }

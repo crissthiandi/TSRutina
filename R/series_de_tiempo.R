@@ -357,10 +357,6 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
 
     if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes")){
       cat("Graficando...")
-      #dev.TRS()
-      #dev.new()
-      # dev.list()
-      #Sys.sleep(3)
       print(
       ggplot(datos, aes(x, y)) +
         geom_point()+geom_line()+
@@ -433,12 +429,13 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
 
     if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes")){
       cat("Graficando...")
-      dev.new()
+      print(
       ggplot(datos, aes(x,y)) +
         geom_point()+geom_line()+
         ggtitle("Serie de tiempo")+
         theme(plot.title = element_text(color = "Black",hjust = 0.5))+
         geom_line(aes(x,lineal), col="blue")
+      )
       pausa()
     }
 
@@ -465,12 +462,13 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
 
     if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes")){
       cat("Graficando...")
-      dev.new()
-      ggplot(datos, aes(x,y)) +
-        geom_point()+geom_line()+
-        ggtitle("Serie de tiempo")+
-        theme(plot.title = element_text(color = "Black",hjust = 0.5))+
-        geom_line(aes(x,promo), col="blue")
+      print(
+        ggplot(datos, aes(x,y)) +
+          geom_point()+geom_line()+
+          ggtitle("Serie de tiempo")+
+          theme(plot.title = element_text(color = "Black",hjust = 0.5))+
+          geom_line(aes(x,promo), col="blue")
+      )
       pausa()
     }
 
@@ -501,12 +499,13 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
 
     if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes")){
       cat("Graficando...")
-      dev.new()
-      ggplot(datos, aes(x,y)) +
-        geom_point()+geom_line()+
-        ggtitle("Serie de tiempo")+
-        theme(plot.title = element_text(color = "Black",hjust = 0.5))+
-        geom_line(aes(x,promopo), col="blue")
+      print(
+        ggplot(datos, aes(x,y)) +
+          geom_point()+geom_line()+
+          ggtitle("Serie de tiempo")+
+          theme(plot.title = element_text(color = "Black",hjust = 0.5))+
+          geom_line(aes(x,promopo), col="blue")
+      )
       pausa()
     }
 
@@ -538,12 +537,13 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
 
     if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes")){
       cat("Graficando...")
-      dev.new()
-      ggplot(datos, aes(x,y)) +
-        geom_point()+geom_line()+
-        ggtitle("Serie de tiempo")+
-        theme(plot.title = element_text(color = "Black",hjust = 0.5))+
-        geom_line(aes(x,sess), col="blue")
+      print(
+        ggplot(datos, aes(x,y)) +
+          geom_point()+geom_line()+
+          ggtitle("Serie de tiempo")+
+          theme(plot.title = element_text(color = "Black",hjust = 0.5))+
+          geom_line(aes(x,sess), col="blue")
+      )
       pausa()
     }
 
@@ -573,12 +573,13 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
 
     if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes")){
       cat("Graficando...")
-      dev.new()
-      ggplot(datos, aes(x,y)) +
-        geom_point()+geom_line()+
-        ggtitle("Serie de tiempo")+
-        theme(plot.title = element_text(color = "Black",hjust = 0.5))+
-        geom_line(aes(x,holtt), col="blue")
+      print(
+        ggplot(datos, aes(x,y)) +
+          geom_point()+geom_line()+
+          ggtitle("Serie de tiempo")+
+          theme(plot.title = element_text(color = "Black",hjust = 0.5))+
+          geom_line(aes(x,holtt), col="blue")
+      )
       pausa()
     }
 
@@ -610,12 +611,13 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
 
     if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes")){
       cat("Graficando...")
-      dev.new()
-      ggplot(datos, aes(x,y)) +
-        geom_point()+geom_line()+
-        ggtitle("Serie de tiempo")+
-        theme(plot.title = element_text(color = "Black",hjust = 0.5))+
-        geom_line(aes(x,Ajustado), col="blue")
+      print(
+        ggplot(datos, aes(x,y)) +
+          geom_point()+geom_line()+
+          ggtitle("Serie de tiempo")+
+          theme(plot.title = element_text(color = "Black",hjust = 0.5))+
+          geom_line(aes(x,Ajustado), col="blue")
+      )
       pausa()
     }
 
@@ -667,8 +669,9 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
 
     if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes")){
       cat("Graficando...")
-      dev.new()
-      autoplot(pronostico)
+      print(
+        autoplot(pronostico)
+      )
     }
 
 

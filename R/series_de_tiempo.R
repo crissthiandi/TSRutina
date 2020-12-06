@@ -170,7 +170,7 @@ serie_tiempo_rutina<-function(datos,frecuencia,inicio,init_=FALSE){
     pausa()
 
     seasonplot(datosts,col=rainbow(length(datos$y)/frecuencia),year.labels=TRUE,xlab="Mes",
-               ylab="Serie de tiempo",main = "Grafico Estacional de la S.T.")
+               ylab="Serie de tiempo",main = "Grafico Estacional de la Serie Temp.")
 
     pausa()
 
@@ -184,7 +184,7 @@ serie_tiempo_rutina<-function(datos,frecuencia,inicio,init_=FALSE){
     #Grafico del modelo de regresion lineal
     plot(datos$periodos,datos$y,type = "l",
          xlab="Periodos",ylab="Valor de la serie",
-         main="Regresion Lineal")
+         main="Regresión Lineal")
     lines(datos_rl$fitted.values, col="blue")
     pausa()
 
@@ -215,7 +215,7 @@ serie_tiempo_rutina<-function(datos,frecuencia,inicio,init_=FALSE){
     summary(pesoses)
     plot(datos$periodos,datos$y,type = "l",
          xlab="Periodos",ylab="Valor de la serie",
-         main="Ajuste Exponencial")
+         main="Suavizamiento Exponencial")
     lines(datos$periodos,pesoses$fitted, col="red")
     pausa()
 
@@ -227,7 +227,7 @@ serie_tiempo_rutina<-function(datos,frecuencia,inicio,init_=FALSE){
     summary(pesoholt)
     plot(datos$periodos,datos$y,type = "l",
          xlab="Periodos",ylab="Valor de la serie",
-         main="Ajuste Exponencial holt")
+         main="Suavizamiento Exponencial holt")
     lines(datos$periodos,pesoholt$fitted, col="green")
     pausa()
 
@@ -241,7 +241,7 @@ serie_tiempo_rutina<-function(datos,frecuencia,inicio,init_=FALSE){
 
     plot(datos$periodos,datos$y,type = "l",
          xlab="Periodos",ylab="Valor de la serie",
-         main="Ajuste Exponencial holt-winter")
+         main="Suavizamiento Exponencial holt-winter")
     lines(datos$periodos, datos$Ajustadohw, col="red", type="l")
     pausa()
     #Ahora, para elegir el mejor modelo de "suavizamiento",
@@ -291,11 +291,11 @@ serie_tiempo_rutina<-function(datos,frecuencia,inicio,init_=FALSE){
             pausa()
             pronostico<-forecast(pesoses,h=5,level=c(80,95))
             plot(pronostico)},
-        '5' = {print('Ajuste de Holt')
+        '5' = {print('Suavizamiento de Holt')
             pausa()
             pronostico<-forecast(pesoholt,h=5,level=c(80,95))
             plot(pronostico)},
-        '6' = {print('Holt-Winter')
+        '6' = {print('Suavizamiento de Holt-Winter')
             pausa()
             pronostico<-forecast(datos_rl,h=5,level=c(80,95))
             plot(pronostico)}
@@ -359,7 +359,7 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
     print(
     ggplot(datos, aes(x, y)) +
         geom_point()+geom_line()+
-        ggtitle("Serie de tiempo")+
+        ggtitle("Serie de tiempo Visualización")+
         theme(plot.title = element_text(color = "Black",hjust = 0.5))
     )
     dev.off(4)
@@ -368,13 +368,13 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
     message("¿Deseas ver en el grafico o seguir generando los siguientes graficos? \n")
     imprime = readline(" [Sí/Intro]:")
 
-    if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes")){
+    if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
       cat("Graficando...")
       dev.TRS() #Regulador de device graphics
       print(
       ggplot(datos, aes(x, y)) +
         geom_point()+geom_line()+
-        ggtitle("Serie de tiempo")+
+        ggtitle("Serie de tiempo Visualización")+
         theme(plot.title = element_text(color = "Black",hjust = 0.5))
       )
       pausa()
@@ -384,7 +384,8 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
 
     png("st_descomposicion.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
     print(
-      autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue")
+      autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue",
+               main = "Descomposición de Serie de tiempo")
       )
     cat("Descomposición de Serie de tiempo st_descomposicion.png fue creada y guardada \n")
 
@@ -392,10 +393,11 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
     message("¿Deseas ver en el grafico o seguir generando los siguientes graficos? \n")
     imprime = readline(" [Sí/Intro]:")
 
-    if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes")){
+    if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
       cat("Graficando...")
       print(
-        autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue")
+        autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue",
+                 main = "Descomposición de Serie de tiempo")
       )
       pausa()
     }
@@ -410,7 +412,7 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
     message("¿Deseas ver en el grafico o seguir generando los siguientes graficos? \n")
     imprime = readline(" [Sí/Intro]:")
 
-    if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes")){
+    if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
       cat("Graficando...")
       print(
       seasonplot(datosts,col=rainbow(length(datos$y)/frecuencia),year.labels=TRUE,
@@ -432,7 +434,7 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
     print(
     ggplot(datos, aes(x,y)) +
         geom_point()+geom_line()+
-        ggtitle("Serie de tiempo")+
+        ggtitle("Serie de tiempo + Regresión lineal")+
         theme(plot.title = element_text(color = "Black",hjust = 0.5))+
         geom_line(aes(x,lineal), col="blue")
     )
@@ -441,12 +443,12 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
     message("¿Deseas ver en el grafico o seguir generando los siguientes graficos? \n")
     imprime = readline(" [Sí/Intro]:")
 
-    if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes")){
+    if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
       cat("Graficando...")
       print(
       ggplot(datos, aes(x,y)) +
         geom_point()+geom_line()+
-        ggtitle("Serie de tiempo")+
+        ggtitle("Serie de tiempo + Regresión lineal")+
         theme(plot.title = element_text(color = "Black",hjust = 0.5))+
         geom_line(aes(x,lineal), col="blue")
       )
@@ -463,7 +465,7 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
     print(
     ggplot(datos, aes(x,y)) +
         geom_point()+geom_line()+
-        ggtitle("Serie de tiempo")+
+        ggtitle("Serie de tiempo + Promedio movil simple")+
         theme(plot.title = element_text(color = "Black",hjust = 0.5))+
         geom_line(aes(x,promo), col="blue")
     )
@@ -474,12 +476,12 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
     message("¿Deseas ver en el grafico o seguir generando los siguientes graficos? \n")
     imprime = readline(" [Sí/Intro]:")
 
-    if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes")){
+    if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
       cat("Graficando...")
       print(
         ggplot(datos, aes(x,y)) +
           geom_point()+geom_line()+
-          ggtitle("Serie de tiempo")+
+          ggtitle("Serie de tiempo + Promedio movil simple")+
           theme(plot.title = element_text(color = "Black",hjust = 0.5))+
           geom_line(aes(x,promo), col="blue")
       )
@@ -500,7 +502,7 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
     print(
     ggplot(datos, aes(x,y)) +
         geom_point()+geom_line()+
-        ggtitle("Serie de tiempo")+
+        ggtitle("Serie de tiempo + Promedio ponderado")+
         theme(plot.title = element_text(color = "Black",hjust = 0.5))+
         geom_line(aes(x,promopo), col="blue")
     )
@@ -511,12 +513,12 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
     message("¿Deseas ver en el grafico o seguir generando los siguientes graficos? \n")
     imprime = readline(" [Sí/Intro]:")
 
-    if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes")){
+    if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
       cat("Graficando...")
       print(
         ggplot(datos, aes(x,y)) +
           geom_point()+geom_line()+
-          ggtitle("Serie de tiempo")+
+          ggtitle("Serie de tiempo + Promedio ponderado")+
           theme(plot.title = element_text(color = "Black",hjust = 0.5))+
           geom_line(aes(x,promopo), col="blue")
       )
@@ -538,7 +540,7 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
     print(
     ggplot(datos, aes(x,y)) +
         geom_point()+geom_line()+
-        ggtitle("Serie de tiempo")+
+        ggtitle("Serie de tiempo + Ajuste exponencial")+
         theme(plot.title = element_text(color = "Black",hjust = 0.5))+
         geom_line(aes(x,sess), col="blue")
     )
@@ -549,12 +551,12 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
     message("¿Deseas ver en el grafico o seguir generando los siguientes graficos? \n")
     imprime = readline(" [Sí/Intro]:")
 
-    if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes")){
+    if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
       cat("Graficando...")
       print(
         ggplot(datos, aes(x,y)) +
           geom_point()+geom_line()+
-          ggtitle("Serie de tiempo")+
+          ggtitle("Serie de tiempo + Ajuste exponencial")+
           theme(plot.title = element_text(color = "Black",hjust = 0.5))+
           geom_line(aes(x,sess), col="blue")
       )
@@ -575,7 +577,7 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
     print(
     ggplot(datos, aes(x,y)) +
         geom_point()+geom_line()+
-        ggtitle("Serie de tiempo")+
+        ggtitle("Serie de tiempo + Ajuste de Holt")+
         theme(plot.title = element_text(color = "Black",hjust = 0.5))+
         geom_line(aes(x,holtt), col="blue")
     )
@@ -585,12 +587,12 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
     message("¿Deseas ver en el grafico o seguir generando los siguientes graficos? \n")
     imprime = readline(" [Sí/Intro]:")
 
-    if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes")){
+    if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
       cat("Graficando...")
       print(
         ggplot(datos, aes(x,y)) +
           geom_point()+geom_line()+
-          ggtitle("Serie de tiempo")+
+          ggtitle("Serie de tiempo + Ajuste de Holt")+
           theme(plot.title = element_text(color = "Black",hjust = 0.5))+
           geom_line(aes(x,holtt), col="blue")
       )
@@ -612,7 +614,7 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
     print(
     ggplot(datos, aes(x,y)) +
         geom_point()+geom_line()+
-        ggtitle("Serie de tiempo")+
+        ggtitle("Serie de tiempo + Holt winter")+
         theme(plot.title = element_text(color = "Black",hjust = 0.5))+
         geom_line(aes(x,Ajustado), col="blue")
     )
@@ -623,12 +625,12 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
     message("¿Deseas ver en el grafico o seguir generando los siguientes graficos? \n")
     imprime = readline(" [Sí/Intro]:")
 
-    if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes")){
+    if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
       cat("Graficando...")
       print(
         ggplot(datos, aes(x,y)) +
           geom_point()+geom_line()+
-          ggtitle("Serie de tiempo")+
+          ggtitle("Serie de tiempo + Holt Winter")+
           theme(plot.title = element_text(color = "Black",hjust = 0.5))+
           geom_line(aes(x,Ajustado), col="blue")
       )
@@ -681,7 +683,7 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
     message("¿Deseas ver en el grafico o seguir generando los siguientes graficos? \n")
     imprime = readline(" [Sí/Intro]:")
 
-    if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes")){
+    if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
       cat("Graficando...")
       print(
         autoplot(pronostico)

@@ -152,19 +152,20 @@ serie_tiempo_rutina<-function(datos,frecuencia,inicio,init_=FALSE){
 
 
     #print(adf.test(datosts))
-    pausa()
+    #pausa()
 
 
     #Graficos para ver si es estacional
     print(
     ggplot(datos, aes(x,y)) +
         geom_point()+geom_line()+
-        ggtitle("Serie de tiempo")+
+        ggtitle("Serie de tiempo Visualización")+
         theme(plot.title = element_text(color = "Black",hjust = 0.5))
     )
     pausa()
     print(
-    autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue")
+    autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue",
+             main="Ruido + Estacionalidad + Tendencia + SerieTemporal ")
     )
     pausa()
 
@@ -818,9 +819,13 @@ init <- function(datos,frecuencia,inicio,init_=TRUE,...){
   pausa()
   conditional.tsrutina(datos)
 
+  message("\n Inicio de rutina para tratamiento de una Serie de tiempo \n")
   serie_tiempo_rutina(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_,...)
+  message("\n Inicio de pruebas para tratamiento de una Serie de tiempo \n")
   serie_tiempo_pruebas(datos = datos,frecuencia = frecuencia,init_ = init_)
+  message("\n Ajuste de un modelo ARIMA para tratamiento de una Serie de tiempo \n")
   serie_tiempo_ARIMA(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_)
+  message("\n Varios suavizamientos de una Serie de tiempo creación en workdir \n")
   serie_tiempo_plots(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_)
 
 }

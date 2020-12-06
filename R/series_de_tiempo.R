@@ -314,10 +314,19 @@ serie_tiempo_rutina<-function(datos,frecuencia,inicio,init_=FALSE){
 
 }
 dev.TRS <- function(){
-  n=length(dev.list()[-1])
-  for (i in 1:(n-1)) {
-    dev.off()
+  n=length(dev.list())
+
+  if(n < 2){
+    dev.new()
+    dev.TRS()
   }
+
+  if(n > 2){
+    for (i in 1:(n-2)){
+      dev.off(i+3)
+    }
+  }
+
 }
 
 serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
@@ -336,6 +345,9 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
 
     if(!continuar=="")
         stop("Corrige el error")
+
+    #tratamiento para errores en mostrar graficos
+    dev.TRS()
 
     #creando el objeto series
     datosts<-ts(data = datos$y,frequency =  frecuencia,start=inicio)

@@ -43,9 +43,9 @@ serie_tiempo_pruebas <-function(datos,frecuencia,init_=FALSE){
 
 
             if(prueba$p.value>0.05){
-                cat("No se puede rechazar H0 = No hay presencia de autocorrelacion ")
+                message("No se puede rechazar H0 = No hay presencia de autocorrelacion \n")
             }else{
-                cat("Se rechaza H0, se obta por H1 = Hay presencia de autocorrelacion")
+                message("Se rechaza H0, se obta por H1 = Hay presencia de autocorrelacion \n")
             }
 
 
@@ -71,9 +71,9 @@ serie_tiempo_pruebas <-function(datos,frecuencia,init_=FALSE){
             }
 
                 if(prueba$p.value>p_valor){
-                    cat("No se puede rechazar H0 = Hay presencia de una raiz unitaria")
+                    message("No se puede rechazar H0 = Hay presencia de una raiz unitaria \n")
                 }else{
-                    cat("Se rechaza H0, se obta por H1 = La serie de tiempo es Estacionaria")
+                    message("Se rechaza H0, se obta por H1 = La serie de tiempo es Estacionaria \n")
                 }
         }else{
             stop("El objeto debe ser data frame")
@@ -151,7 +151,7 @@ serie_tiempo_rutina<-function(datos,frecuencia,inicio,init_=FALSE){
     datosts<-ts(data = datos$y,frequency =  frecuencia,start=inicio)
 
 
-    print(adf.test(datosts))
+    #print(adf.test(datosts))
     pausa()
 
 
@@ -305,9 +305,9 @@ serie_tiempo_rutina<-function(datos,frecuencia,inicio,init_=FALSE){
     prueba<-shapiro.test(pesohw$residuals)
     print(prueba)
     if(prueba$p.value>0.05){
-        print("No se puede rechazar H0:Hay Normalidad")
+        message("No se puede rechazar H0:Hay Normalidad")
     }else{
-        print("Se rechaza H0, se obta por H1: No hay normalidad")
+        message("Se rechaza H0, se obta por H1: No hay normalidad")
     }
 
 
@@ -369,6 +369,7 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
 
     if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes")){
       cat("Graficando...")
+      dev.TRS() #Regulador de device graphics
       print(
       ggplot(datos, aes(x, y)) +
         geom_point()+geom_line()+
@@ -812,12 +813,14 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=4,inicio=2010,init_=FALSE){
 }
 
 
-init <- function(datos,frecuencia,init_=TRUE,...){
+init <- function(datos,frecuencia,inicio,init_=TRUE,...){
   paquetes.tsrutina()
   pausa()
   conditional.tsrutina(datos)
 
-  serie_tiempo_rutina(datos = datos,frecuencia = frecuencia,init_ = init_,...)
-
+  serie_tiempo_rutina(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_,...)
+  serie_tiempo_pruebas(datos = datos,frecuencia = frecuencia,init_ = init_)
+  serie_tiempo_ARIMA(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_)
+  serie_tiempo_plots(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_)
 
 }

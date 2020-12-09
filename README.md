@@ -37,7 +37,8 @@ La idea principal es solo correr una función a la cual se le pasan la menor can
 Tomemos la base de datos **sunspot.year** la cual tiene las manchas solares anuales entre los años 1749 y 1983.
 ![image](img/manchasts.png)
 
-
+luego llamemos a ```init(sunspot.year)``` y obtenemos una analisis de estos datos.
+**Pendiente a documentación** :c
 
 
 

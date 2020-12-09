@@ -18,7 +18,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia,init_=FALSE){
       conditional.tsrutina(datos)
     }
     pausa()
-    if(!is.ts(datos) | ncol(datos) != 2){
+    if(!is.ts(datos)){
 
         if(is.data.frame(datos)){
             base<-datos
@@ -80,12 +80,19 @@ serie_tiempo_pruebas <-function(datos,frecuencia,init_=FALSE){
         }
 
     }else{
-        stop("El objeto debe ser un data frame con dos elementos")
+        if(is.ts(datos)){
+          elementos = tratamiento.ts_set(datos)
+          serie_tiempo_pruebas(elementos$data,elementos$frecu,init_ = TRUE)
+          }else{
+          stop("El objeto debe ser un data frame con dos elementos o una serie de tiempo")
+        }
     }
-
 }
 
 conditional.tsrutina <- function(datos){
+  if(is.ts(datos)){
+    return(NULL)
+  }
 
   if(ncol(datos)!=2)
     stop("Los datos deben tener solo dos columnas, tiempo y valor en ese orden")
@@ -93,6 +100,18 @@ conditional.tsrutina <- function(datos){
     stop("La segunda columna deben ser los valores, la primera el tiempo")
   message("\n Primera columna => variable de Tiempo
       \n Segunda columna => variable de valor \n")
+}
+
+tratamiento.ts_set <- function(datosts){
+  datos_conver=as.data.frame(datosts)
+  datos_conver=data.frame(x = row(datos_conver),y = datos_conver$x)
+  elementos=list()
+  elementos$data=datos_conver
+  elementos$frecu=frequency(datosts)
+  elementos$inicio=start(datosts)
+  elementos$fin=end(datosts)
+
+  return(elementos)
 }
 
 tratamiento.fechas.TRS <- function(fecha_vector){

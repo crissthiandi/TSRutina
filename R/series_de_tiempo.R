@@ -839,6 +839,12 @@ init <- function(datos,frecuencia,inicio,init_=TRUE,...){
   paquetes.tsrutina()
   pausa()
   conditional.tsrutina(datos)
+  if(is.ts(datos)){
+    elemento = tratamiento.ts_set(datos)
+    datos = elemento$data
+    frecuencia = elemento$frecu
+    inicio = elemento$inicio
+  }
 
   message("\n Inicio de rutina para tratamiento de una Serie de tiempo \n")
   serie_tiempo_rutina(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_,...)

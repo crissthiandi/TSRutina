@@ -1,7 +1,7 @@
 Package: TSRutina
 Type: Package
 Title: Asistente para Analisis de Time Series
-Version: 2.0.0
+Version: 2.1.0
 nameVersion: GalileoGalilei
 Author: Crissthiandi <albertocenaa@gmail.com>
 Maintainer: Crissthiandi <albertocenaa@gmail.com>

@@ -104,7 +104,23 @@ conditional.tsrutina <- function(datos){
 
 tratamiento.ts_set <- function(datosts){
   datos_conver=as.data.frame(datosts)
-  datos_conver=data.frame(x = row(datos_conver),y = datos_conver$x)
+  year=start(datosts)[1L]
+  mes=start(datosts)[2L]
+  dia=start(datosts)[3L]
+  dia=ifelse(test = is.na(dia),yes = 1,no = dia)
+  fecha_inicio=as.Date(paste(dia,mes,year, sep = "-"),format = "%d-%m-%Y")
+  frecuencia=frequency(datosts)
+  avance=switch(as.character(frecuencia),
+    "1" = 'year',
+    "12" = 'month',
+    "4" = '3 month',
+    "54" = '7 days',
+    "3" = '4 month'
+  )
+
+
+  fecha_secuencia=seq(fecha_inicio, by=avance, length=nrow(datos_conver))
+  datos_conver=data.frame(x = fecha_secuencia,y = datos_conver$x)
   elementos=list()
   elementos$data=datos_conver
   elementos$frecu=frequency(datosts)
@@ -115,6 +131,7 @@ tratamiento.ts_set <- function(datosts){
 }
 
 tratamiento.fechas.TRS <- function(fecha_vector){
+
   fecha_vector_tratamiento<-as.Date(fecha_vector,format("%d/%m/%Y"))  #Y debe ser mayuscula
   if(is.na(fecha_vector_tratamiento[1])){
     fecha_vector_tratamiento=as.Date(fecha_vector,format("%d-%m-%Y"))

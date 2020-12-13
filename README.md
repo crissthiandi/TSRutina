@@ -60,4 +60,12 @@ La segunda salida es una descomposición de la serie de tiempo apartir del ruido
 
 ![image](img/img_descomposicion.png)
 
+Al final se obtiene el mejor ajuste de la lista de suavizamiento posibles, junto con su predicción a 12 periodos:
+
+![image](img/predic.png)
+
+
+
+
+
 

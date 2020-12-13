@@ -11,7 +11,7 @@ paquetes.tsrutina <- function(){
 
 }
 
-serie_tiempo_pruebas <-function(datos,frecuencia,init_=FALSE){
+serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE){
     if(!init_){
       paquetes.tsrutina()
       pausa()
@@ -169,7 +169,7 @@ pausa <-function(duracion = Inf){
         invisible(NULL)
     }
 
-serie_tiempo_rutina<-function(datos,frecuencia,inicio,init_=FALSE){
+serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
 
     if(!init_){
       paquetes.tsrutina()
@@ -378,7 +378,7 @@ dev.TRS <- function(){
 
 }
 
-serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
+serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
     if(!init_){
       paquetes.tsrutina()
       pausa()
@@ -751,7 +751,7 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
 
 }
 
-serie_tiempo_ARIMA<-function(datos,frecuencia=4,inicio=2010,init_=FALSE){
+serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
   if(!init_){
     paquetes.tsrutina()
     pausa()
@@ -880,7 +880,7 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=4,inicio=2010,init_=FALSE){
 }
 
 
-init <- function(datos,frecuencia,inicio,init_=TRUE,...){
+init <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,...){
   paquetes.tsrutina()
   pausa()
   conditional.tsrutina(datos)

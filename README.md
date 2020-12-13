@@ -43,11 +43,21 @@ luego llamemos a ```init(sunspot.year)``` y obtenemos una analisis de estos dato
 init(sunspot.year,frecuencia=4)
 ```
 ![image](img/primera_salida.png)
+
 Esta primera salida nos pedira confirmar si los datos son bien interpretados por la *rutina*. De marchar todo bien, *intro* para continuar, de lo contrario si hay un error *esc* para abortar la rutina.
 
 Despues de brincar este filtro tendremos lo que en general seran los filtros *pausa*, que son momentos en los que la función muestra un resultado (grafico o estadistico). En ese momento la función espera a que el usuario analise la salida y decida continuar con la rutina de analisis.
 
 ![image](img/segunda_salida.png)
 
+### Salida de la Función init() (caso sunspot.year)
+
+La primera salida de función init() es un vistazo a la serie de tiempo.
+
+![image](img/visualiza.png)
+
+La segunda salida es una descomposición de la serie de tiempo apartir del ruido, estacionalidad y tendencia.
+
+![image](img/img_descomposicion.png)
 
 

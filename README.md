@@ -38,8 +38,16 @@ Tomemos la base de datos **sunspot.year** la cual tiene las manchas solares anua
 ![image](img/manchasts.png)
 
 luego llamemos a ```init(sunspot.year)``` y obtenemos una analisis de estos datos.
-**Pendiente a documentación** :c
 
+```r
+init(sunspot.year,frecuencia=4)
+```
+![image](img/primera_salida.png)
+Esta primera salida nos pedira confirmar si los datos son bien interpretados por la *rutina*. De marchar todo bien, *intro* para continuar, de lo contrario si hay un error *esc* para abortar la rutina.
+
+Despues de brincar este filtro tendremos lo que en general seran los filtros *pausa*, que son momentos en los que la función muestra un resultado (grafico o estadistico). En ese momento la función espera a que el usuario analise la salida y decida continuar con la rutina de analisis.
+
+![image](img/segunda_salida.png)
 
 
 

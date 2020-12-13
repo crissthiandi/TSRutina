@@ -80,9 +80,13 @@ serie_tiempo_pruebas <-function(datos,frecuencia,init_=FALSE){
         }
 
     }else{
+
+
+
         if(is.ts(datos)){
           elementos = tratamiento.ts_set(datos)
-          serie_tiempo_pruebas(elementos$data,elementos$frecu,init_ = TRUE)
+          frecuencia=ifelse(is.null(frecuencia),elementos$frecu,frecuencia)
+          serie_tiempo_pruebas(elementos$data,frecuencia,init_ = TRUE)
           }else{
           stop("El objeto debe ser un data frame con dos elementos o una serie de tiempo")
         }
@@ -171,6 +175,14 @@ serie_tiempo_rutina<-function(datos,frecuencia,inicio,init_=FALSE){
       paquetes.tsrutina()
       pausa()
       conditional.tsrutina(datos)
+    }
+
+    if(is.ts(datos)){
+      elementos=tratamiento.ts_set(datos)
+      datos=elementos$data
+      frecuencia=ifelse(is.null(frecuencia),elementos$frecu,frecuencia)
+      inicio=ifelse(is.null(inicio),elementos$inicio,inicio)
+
     }
 
     names(datos)<-c("x","y")
@@ -371,6 +383,14 @@ serie_tiempo_plots<-function(datos,frecuencia,inicio,init_=FALSE){
       paquetes.tsrutina()
       pausa()
       conditional.tsrutina(datos)
+    }
+
+    if(is.ts(datos)){
+      elementos=tratamiento.ts_set(datos)
+      datos=elementos$data
+      frecuencia=ifelse(is.null(frecuencia),elementos$frecu,frecuencia)
+      inicio=ifelse(is.null(inicio),elementos$inicio,inicio)
+
     }
 
     names(datos)<-c("x","y")
@@ -846,6 +866,14 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=4,inicio=2010,init_=FALSE){
     }
 
   }else{
+
+    if(is.ts(datos)){
+      elementos=tratamiento.ts_set(datos)
+      datos=elementos$data
+      frecuencia=ifelse(is.null(frecuencia),elementos$frecu,frecuencia)
+      inicio=ifelse(is.null(inicio),elementos$inicio,inicio)
+      serie_tiempo_ARIMA(datos,frecuencia,inicio,init_ = TRUE)
+    }
     stop("El objeto debe ser un data frame con dos elementos")
   }
 
@@ -856,11 +884,12 @@ init <- function(datos,frecuencia,inicio,init_=TRUE,...){
   paquetes.tsrutina()
   pausa()
   conditional.tsrutina(datos)
+
   if(is.ts(datos)){
-    elemento = tratamiento.ts_set(datos)
-    datos = elemento$data
-    frecuencia = elemento$frecu
-    inicio = elemento$inicio
+    elementos=tratamiento.ts_set(datos)
+    datos=elementos$data
+    frecuencia=ifelse(is.null(frecuencia),elementos$frecu,frecuencia)
+    inicio=ifelse(is.null(inicio),elementos$inicio,inicio)
   }
 
   message("\n Inicio de rutina para tratamiento de una Serie de tiempo \n")

@@ -1,4 +1,15 @@
 
+#' Carga paquetes para un analisis de series de tiempo
+#'
+#' Proximamento en desuso en las funciones de TSRutina pero ideal para usarse en procesos
+#' escribir codigo para analisis de series de tiempo
+#'
+#' @return Mensage si todo sale bien
+#' @export
+#'
+#' @examples
+#'
+#' paquetes.tsrutina()
 paquetes.tsrutina <- function(){
   require('tseries',warn.conflicts = F,quietly = F)
   library('lmtest',warn.conflicts = F,quietly = F)
@@ -94,6 +105,19 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE){
     }
 }
 
+#' Primer filtro de las funciones en TSRutina
+#'
+#' @param datos objeto a verificar
+#'
+#' @description Verifica si un data.frame tiene dos columnas y si la segunda de estas
+#' es de caracter numerico, si es serie de tiempo no hace nada, retorna NULL.
+#'
+#' @return NULL or stop() event
+#'
+#' @examples
+#'
+#' conditional.tsrutina(datos)
+#'
 conditional.tsrutina <- function(datos){
   if(is.ts(datos)){
     return(NULL)
@@ -107,6 +131,23 @@ conditional.tsrutina <- function(datos){
       \n Segunda columna => variable de valor \n")
 }
 
+#' From ts to data.frame
+#'
+#' @param datosts objeto ts a tranformar en data.frame class
+#'
+#' @description Convierte un objeto serie de tiempo a data.frame con dos columnas
+#'   x => variable fecha
+#'   y => variable valor
+#'   La variable fecha inicia con el inicio de la serie y termina con el numero de
+#'   frecuencias que se pueden hacer
+#'
+#' @return a data.frame object
+#' @export
+#'
+#' @examples
+#'
+#' tratamiento.ts_set(sunspot.year)
+#'
 tratamiento.ts_set <- function(datosts){
   datos_conver=as.data.frame(datosts)
   year=start(datosts)[1L]

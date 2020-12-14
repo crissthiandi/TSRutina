@@ -1,3 +1,4 @@
+
 paquetes.tsrutina <- function(){
   require('tseries',warn.conflicts = F,quietly = F)
   library('lmtest',warn.conflicts = F,quietly = F)
@@ -167,8 +168,37 @@ pausa <-function(duracion = Inf){
             Sys.sleep(duracion)
         }
         invisible(NULL)
-    }
+}
 
+#' @title Rutinas en una serie de tiempo
+#'
+#' @description Realiza una rutina para una base de datos en la que se
+#'   incluyen ajustes por:
+#'   \itemize{\item{Regresion lineal}{}}
+#'   \itemize{\item{Promedio movil simple}{}}
+#'   \itemize{\item{Promedio movil ponderado}{}}
+#'   \itemize{\item{Suavizamiento exponencial simple}{}}
+#'   \itemize{\item{Suav. expon. doble o de Holt}{}}
+#'   \itemize{\item{Suavizamiento Holt-Winter}{}}
+#'
+#' @param datos Dataframe de no mas de 2 columnas, en el orden primero tiempo y
+#'    luego valor el tiempo va en formato fecha, y tiene que ser en el orden
+#'    dia-mes-year. La versión 2.1 soporta objetos de la clase TS (time series)
+#' @param frecuencia Este es el periodo de la serie, trimestral = 3, cuatrimestral = 4
+#'   ,mensual = 12, etc.
+#' @param  inicio Este es el year a iniciar la serie de tiempo
+#'
+#' @return La salida no es como tal un objeto, si no una serie de impresiones de varios
+#'   varios analisis.
+#' @details Se usa una salida interactiva en la que el usuario debe agregar ciertos
+#'   datos o tomar ciertas decisiones durante la rutina.
+#'
+#' @author Cristhian Diaz
+#' @export
+#'
+#' @examples
+#' serie_tiempo_rutina(sunspot.year,5)
+#'
 serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
 
     if(!init_){

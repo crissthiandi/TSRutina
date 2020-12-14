@@ -19,9 +19,9 @@ dia-mes-year. La versión 2.1 soporta objetos de la clase TS (time series)}
 \value{
 La salida no es como tal un objeto, si no una serie de impresiones de varios
   varios analisis.
-  \itemize{\item{Plost}{Arroja una lista de plots que ayudan a ver el comportamiento de la serie y como ciertos ajustes se aproximan mejor a ella}}
-  \itemize{\item{Resumenes}{Arroja ciertos resumenes de ciertos ajustes o pruebas que se hacen}}
-  \itemize{\item{Modelo}{Modelo con el menor MSE(Error cuadratico medio)}}
+  \itemize{\item{Plost}{  Arroja una lista de plots que ayudan a ver el comportamiento de la serie y como ciertos ajustes se aproximan mejor a ella}}
+  \itemize{\item{Resumenes}{  Arroja ciertos resumenes de ciertos ajustes o pruebas que se hacen}}
+  \itemize{\item{Modelo}{  Modelo con el menor MSE(Error cuadratico medio)}}
 }
 \description{
 Realiza una rutina para una base de datos en la que se

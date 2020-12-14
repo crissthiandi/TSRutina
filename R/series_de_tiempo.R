@@ -190,14 +190,27 @@ pausa <-function(duracion = Inf){
 #'
 #' @return La salida no es como tal un objeto, si no una serie de impresiones de varios
 #'   varios analisis.
+#'   \itemize{\item{Plost}{Arroja una lista de plots que ayudan a ver el comportamiento de la serie y como ciertos ajustes se aproximan mejor a ella}}
+#'   \itemize{\item{Resumenes}{Arroja ciertos resumenes de ciertos ajustes o pruebas que se hacen}}
+#'   \itemize{\item{Modelo}{Modelo con el menor MSE(Error cuadratico medio)}}
+#'
 #' @details Se usa una salida interactiva en la que el usuario debe agregar ciertos
 #'   datos o tomar ciertas decisiones durante la rutina.
 #'
 #' @author Cristhian Diaz
 #' @export
 #'
+#' @import ggplot2
+#' @importFrom forecast ggseasonplot
+#' @importFrom pracma movavg
+#' @importFrom forecast ses hw holt forecast
+#' @importFrom greybox MSE
+#'
 #' @examples
 #' serie_tiempo_rutina(sunspot.year,5)
+#'
+#' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+#' serie_tiempo_rutina(datos=base,frecuencia=4,inicio=2010)
 #'
 serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
 

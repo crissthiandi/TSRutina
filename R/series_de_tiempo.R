@@ -23,13 +23,23 @@ paquetes.tsrutina <- function(){
 
 }
 
-#' Serie de Tiempo Pruebas
+#' Pruebas de una serie de tiempo
+#'
+#' Esta funcion incluye el calculo y la decision de dos pruebas estadisticas a una serie de tiempo.
+#'
+#' Realiza las siguientes pruebas:
+#' La prueba de estacionalidad (Dickey-Fuller)
+#'
+#' La prueba de autocorrelacion (Durbin-Watson)
+#'
+#' Se debe meter un dataframe de dos columnas, la primera el tiempo y la segunda el valor de la serie
+#' Tambien soporta el uso de objetos TimeSeries
 #'
 #' @param datos Data.frame o objeto TS a analizar
 #' @param frecuencia Frecuencia de los datos, en caso de TS sobrescribe los valores
 #' @param init_ Indicador para verificar los datos [True/False]
 #'
-#' @return NULL or stop() event
+#' @return Solo arroja la decicion a tomar, por defecto con respecto a p=0.05
 #' @export
 #'
 #' @importFrom lmtest dwtest
@@ -37,7 +47,7 @@ paquetes.tsrutina <- function(){
 #'
 #' @examples
 #'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
-#'  serie_tiempo_rutina(datos=base,frecuencia=4,inicio=2010)
+#'  serie_tiempo_pruebas(datos=base,frecuencia=4)
 #'
 serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE){
     if(!init_){

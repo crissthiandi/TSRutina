@@ -23,6 +23,22 @@ paquetes.tsrutina <- function(){
 
 }
 
+#' Serie de Tiempo Pruebas
+#'
+#' @param datos Data.frame o objeto TS a analizar
+#' @param frecuencia Frecuencia de los datos, en caso de TS sobrescribe los valores
+#' @param init_ Indicador para verificar los datos [True/False]
+#'
+#' @return NULL or stop() event
+#' @export
+#'
+#' @importFrom lmtest dwtest
+#' @importFrom tseries adf.test
+#'
+#' @examples
+#'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+#'  serie_tiempo_rutina(datos=base,frecuencia=4,inicio=2010)
+#'
 serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE){
     if(!init_){
       paquetes.tsrutina()
@@ -964,6 +980,25 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
 }
 
 
+#' Rutina Principal de TSRutina
+#'
+#' @param datos Datos para el analisis de serie de tiempo suport (data.frame and ts class)
+#' @param frecuencia Frecuencia de la serie de tiempo, sirve para
+#'   reescribir la frecuencia cuando datos es un objeto ts
+#' @param inicio Inicio de la serie de tiempo, igual que frecuencia
+#'   sobreescribe valores de objetos ts
+#' @param init_ (True or False) validar el parametro datos
+#' @param ... Not work
+#'
+#' @return La salida no es como tal un objeto, si no una serie de impresiones de varios
+#'   analisis. La siguiente lista detalla alguno de ellos:
+#'   \itemize{\item{Plost}{  Arroja una lista de plots que ayudan a ver el comportamiento de la serie y como ciertos ajustes se aproximan mejor a ella}}
+#'   \itemize{\item{Resumenes}{  Arroja ciertos resumenes de ciertos ajustes o pruebas que se hacen}}
+#'   \itemize{\item{Modelo}{  Modelo con el menor MSE(Error cuadratico medio)}}
+#'
+#' @export
+#'
+#' @examples
 init <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,...){
   paquetes.tsrutina()
   pausa()

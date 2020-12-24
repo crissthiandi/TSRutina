@@ -509,21 +509,15 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
 
     }
 
-    names(datos)<-c("x","y")
-    datos$x <- tratamiento.fechas.TRS(datos$x)
-    print(head(datos))
-    message("\n ¿Estan bien los datos a usar? \n
-    Si hay un error [Esc] \n De lo contrario [Enter para continuar]")
-    continuar<-readline(": \t")
+    #verificar si los elementos se ven bien
+    elementos=checar_datos(datos,frecuencia,inicio)
+    datos=elementos$datos
+    datosts=elementos$datosts
 
-    if(!continuar=="")
-        stop("Corrige el error")
 
     #tratamiento para errores en mostrar graficos
     dev.TRS()
 
-    #creando el objeto series
-    datosts<-ts(data = datos$y,frequency =  frecuencia,start=inicio)
 
     #Graficos para ver si es estacional
 
@@ -879,21 +873,11 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
     if(is.data.frame(datos)){
 
 
-  names(datos)<-c("x","y")
-  datos$x <- tratamiento.fechas.TRS(datos$x)
-  if(is.na(datos$x)){
-    datos$x=tratamiento.fechas.TSR(datos$x)
-  }
-  print(head(datos))
-  message("\n ¿Estan bien los datos a usar? \n
-    Si hay un error [Esc] \n De lo contrario [Enter para continuar]")
-  continuar<-readline(": \t")
+  #verificar si los elementos se ven bien
+  elementos=checar_datos(datos,frecuencia,inicio)
+  datos=elementos$datos
+  #datosts=elementos$datosts #No se usa en la rutina
 
-  if(!continuar=="")
-    stop("Corrige el error")
-
-  #creando el objeto series
-  datosts <- ts(data = datos$y,frequency =  frecuencia, start=inicio)
 
   base=datos
   ban=TRUE

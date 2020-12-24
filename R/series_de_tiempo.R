@@ -992,6 +992,14 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
 
 #' Rutina Principal de TSRutina
 #'
+#' Realiza todas las rutinas de la paqueteria TSRutina, ver detalles para más información
+#'
+#' Se hace un ajuste por metodo no ARIMA y se determina cual de estos modelos es el de menor
+#' Error en los residuos. Ver \code{\link{serie_tiempo_rutina}}
+#'
+#' Se realiza las rutinas que verifican si la serie es o no estacionaria, si existe correlación
+#' , luego se ajusta un modelo ARIMA y se guardan los graficos importantes en el directorio
+#'
 #' @param datos Datos para el analisis de serie de tiempo suport (data.frame and ts class)
 #' @param frecuencia Frecuencia de la serie de tiempo, sirve para
 #'   reescribir la frecuencia cuando datos es un objeto ts
@@ -1009,6 +1017,8 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
 #' @export
 #'
 #' @examples
+#'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+#'  init(datos=base,frecuencia=4,inicio=2010)
 init <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,...){
   paquetes.tsrutina()
   pausa()

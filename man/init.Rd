@@ -27,5 +27,16 @@ La salida no es como tal un objeto, si no una serie de impresiones de varios
   \itemize{\item{Modelo}{  Modelo con el menor MSE(Error cuadratico medio)}}
 }
 \description{
-Rutina Principal de TSRutina
+Realiza todas las rutinas de la paqueteria TSRutina, ver detalles para más información
+}
+\details{
+Se hace un ajuste por metodo no ARIMA y se determina cual de estos modelos es el de menor
+Error en los residuos. Ver \code{\link{serie_tiempo_rutina}}
+
+Se realiza las rutinas que verifican si la serie es o no estacionaria, si existe correlación
+, luego se ajusta un modelo ARIMA y se guardan los graficos importantes en el directorio
+}
+\examples{
+ base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+ init(datos=base,frecuencia=4,inicio=2010)
 }

@@ -20,9 +20,10 @@ Solo arroja la decicion a tomar, por defecto con respecto a p=0.05
 Esta funcion incluye el calculo y la decision de dos pruebas estadisticas a una serie de tiempo.
 }
 \details{
-La prueba de estacionalidad
+Realiza las siguientes pruebas:
+La prueba de estacionalidad (Dickey-Fuller)
 
-La prueba de autocorrelacion
+La prueba de autocorrelacion (Durbin-Watson)
 
 Se debe meter un dataframe de dos columnas, la primera el tiempo y la segunda el valor de la serie
 Tambien soporta el uso de objetos TimeSeries

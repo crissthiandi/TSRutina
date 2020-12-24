@@ -67,7 +67,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE){
 
             regresion<-lm(y~xx,base2)
             cat("\n Prueba de presencia de autocorrelación Durbin-Watson Test \n")
-            cat("\n (Prueba aplicada a una regresión lineal) \n")
+            cat("\n (Prueba aplicada los residuos de una regresión lineal) \n")
             prueba<-dwtest(regresion)
             print(prueba)
             p_valor<-readline('Inserte un p valor, (intro para p=0.05):  \n')
@@ -81,9 +81,9 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE){
 
 
             if(prueba$p.value>0.05){
-                message("No se puede rechazar H0 = No hay presencia de autocorrelacion \n")
+                message("No se puede rechazar \"H0 = No hay presencia de autocorrelacion en los residuos\" \n")
             }else{
-                message("Se rechaza H0, se obta por H1 = Hay presencia de autocorrelacion \n")
+                message("Se rechaza H0, se obta por \"H1 = Hay presencia de autocorrelacion en los residuos\" \n")
             }
 
 
@@ -219,13 +219,30 @@ tratamiento.fechas.TRS <- function(fecha_vector){
   return(fecha_vector_tratamiento)
 }
 
+checar_datos <- function(datos,frecuencia,inicio) {
+  names(datos)<-c("x","y")
+  datos$x <- tratamiento.fechas.TRS(datos$x)
+  print(head(datos))
+  message("\n ¿Estan bien los datos a usar? \n
+      Si hay un error [Esc] \n De lo contrario [Enter] para continuar")
+  continuar<-readline(": \t")
+
+  if(!continuar=="")
+    stop("Corrige el error")
+
+  #creando el objeto series
+  datosts<-ts(data = datos$y,frequency =  frecuencia,start=inicio)
+
+  return(list(datos=datos,datosts=datosts))
+}
+
 pausa <-function(duracion = Inf){
 
         if (is.infinite(duracion)) {
             arg <- "*"
             while (arg != "") {
                 cat("\n")
-                arg <- readline("  [Intro to continue / 'stop' to exit]: ")
+                arg <- readline("[Intro] to continue | [stop/Esc] to exit... ")
                 if (arg == "stop") {
                     stop("El programa finalizo", call. = FALSE)
                 }
@@ -295,22 +312,11 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
 
     }
 
-    names(datos)<-c("x","y")
-    datos$x <- tratamiento.fechas.TRS(datos$x)
-    print(head(datos))
-    message("\n ¿Estan bien los datos a usar? \n
-    Si hay un error [Esc] \n De lo contrario [Enter para continuar]")
-    continuar<-readline(": \t")
 
-    if(!continuar=="")
-        stop("Corrige el error")
-
-    #creando el objeto series
-    datosts<-ts(data = datos$y,frequency =  frecuencia,start=inicio)
-
-
-    #print(adf.test(datosts))
-    #pausa()
+    #verificar si los elementos se ven bien
+    elementos=checar_datos(datos,frecuencia,inicio)
+    datos=elementos$datos
+    datosts=elementos$datosts
 
 
     #Graficos para ver si es estacional

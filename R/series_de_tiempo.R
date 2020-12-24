@@ -202,6 +202,21 @@ tratamiento.ts_set <- function(datosts){
   return(elementos)
 }
 
+#' Tratamiento de fechas TSR
+#'
+#' Tratamiento para que una fecha tenga el formato Date. De no tener un formato convertible se retorna NA
+#' values
+#'
+#' @param fecha_vector Vector de valores con las fechas en formato caracter o Date
+#'     Formatos soportador:  "\%d/\%m/\%Y", "\%Y-\%m-\%d" y "\%d-\%m-\%Y"
+#'
+#' @return Vector en formato fecha estandar de R
+#' @export
+#'
+#' @examples
+#' tiempo=seq(Sys.Date(),by="days",length=20)
+#' tratamiento.fechas.TRS(tiempo)
+#'
 tratamiento.fechas.TRS <- function(fecha_vector){
 
   fecha_vector_tratamiento<-as.Date(fecha_vector,format("%d/%m/%Y"))  #Y debe ser mayuscula

@@ -234,6 +234,24 @@ tratamiento.fechas.TRS <- function(fecha_vector){
   return(fecha_vector_tratamiento)
 }
 
+#' Checa los datos en rutina TSR
+#'
+#' Imprime un head de los datos y te pregunta si todo esta bien.
+#'
+#' Ideal para usarse en las rutinas de TSRutina que deben preguntar si se interpretaron
+#' bien los datos.
+#'
+#' @param datos Data.Frame de 2 columnas, fecha y valores respectivamente. (se hace tratamiento de fechas con \code{\link{tratamiento.fechas.TRS}})
+#' @param frecuencia Frecuencia de la serie de tiempo
+#' @param inicio Inicio de la serie de tiempo
+#'
+#' @return Una lista \code{\link{list}} que contiene dos elementos, la base de datos tratada y un objeto TimeSeries
+#' @export
+#'
+#' @examples
+#' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+#' checar_datos(datos=base,frecuencia=4,inicio=2010)
+#'
 checar_datos <- function(datos,frecuencia,inicio) {
   names(datos)<-c("x","y")
   datos$x <- tratamiento.fechas.TRS(datos$x)

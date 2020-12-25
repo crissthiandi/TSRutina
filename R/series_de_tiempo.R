@@ -74,10 +74,10 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE){
 
             if(p_valor==""){
                     p_valor<-0.05
-                }else{
+            }else{
                     print(sprintf("El valor de p= %s",p_valor))
                     p_valor<-as.numeric(p_valor)
-                }
+            }
 
 
             if(prueba$p.value>0.05){
@@ -269,6 +269,22 @@ checar_datos <- function(datos,frecuencia,inicio) {
   return(list(datos=datos,datosts=datosts))
 }
 
+#' Pausa la consola al imprimir resultados
+#'
+#' Realiza una pausa tanto indeterminada como por una cantidad de segundos
+#'
+#' Cuando \bold{duracion} no es definido la pausa es indefinida y se espera la entrada de "stop" o Esc para terminar la pausa
+#'
+#' @param duracion Tiempo de pausa en segundos, default Inf (infinito)
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#'
+#' #para 10 segundos
+#' pausa(10)
+#'
 pausa <-function(duracion = Inf){
 
         if (is.infinite(duracion)) {

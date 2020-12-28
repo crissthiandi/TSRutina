@@ -527,6 +527,15 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
 
 
 }
+#' Depurador de dispositivos graficos
+#'
+#' Depura el espacio de dispositivos graficos atravez de dev.off() y dev.new(). Checando dev.list().
+#' @return NULL return
+#' @export
+#'
+#' @examples
+#' dev.TRS()
+#' #Se limpia los datos, consulte dev.list()
 dev.TRS <- function(){
   n=length(dev.list())
 

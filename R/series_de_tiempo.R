@@ -975,28 +975,30 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
 
   base=datos
   ban=TRUE
+  numero_diferenciaciones=0
   while(ban){
 
     prueba<-adf.test(base$y)
     print(prueba)
-    p_valor<-readline('Inserte un p valor (intro para p=0.05)')
+    p_valor<-readline('\n Inserte un p valor (intro para p=0.05): ')
 
     if(p_valor==""){
       p_valor<-0.05
     }else{
-      print(sprintf("El valor de p= %s",p_valor))
+      print(sprintf("\n El valor de p= %s \n",p_valor))
       p_valor<-as.numeric(p_valor)
     }
 
     if(prueba$p.value>p_valor){
-      print("No se puede rechazar H0:Hay presencia de una raiz unitaria")
-      print("No es estacionaria")
+      cat("No se puede rechazar H0:Hay presencia de una raiz unitaria")
+      cat("No es estacionaria")
       pausa()
       differenciado<-diff(base$y,lag = 1,differences = 1)
       base=base[-nrow(base),]
       base$y=differenciado
+      numero_diferenciaciones=numero_diferenciaciones+1 #contador de diferenciaciones
 
-      message('Se diferencio la base de datos')
+      message('\n Se ha diferencio la base de datos para obtener estacionalidad\n')
     }else{
       print("Se rechaza H0, se obta por H1: La serie de tiempo es Estacionaria")
       ban=FALSE
@@ -1004,12 +1006,12 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
     pausa()
   }
   #plotea el acf y analizas
-  print(acf(base$y,main="Autocorrelación"))
+  print(acf(base$y,main="Autocorrelación, Analiza el valor de r en MA(r)"))
   ma<-readline('Que MA(r) sospechas?, inserte el valor de r:     ')
   ma<-c(0,0,as.numeric(ma))
   pausa()
   #plotea el pacf
-  print(pacf(base$y,main="Autocorrelación Parcial"))
+  print(pacf(base$y,main="Autocorrelación Parcial,Analiza el valor de p en AR(p)"))
   ra<-readline('Que AR(p) sospechas?, inserte el valor de p:     ')
   ra<-c(0,0,as.numeric(ra))
   pausa()

@@ -571,7 +571,16 @@ dev.TRS <- function(){
 #'   \itemize{\item{Plost}{  Arroja una lista de plots que ayudan a ver el comportamiento de la serie y como ciertos ajustes se aproximan mejor a ella}}
 #'   \itemize{\item{PNG}{ Imagenes grabadas en el directorio de trabajo}}
 #'
+#' @author Cristhian Diaz
+#'
 #' @export
+#'
+#' @import ggplot2
+#' @importFrom forecast ggseasonplot seasonplot
+#' @importFrom pracma movavg
+#' @importFrom forecast ses hw holt forecast
+#' @importFrom greybox MSE
+#'
 #'
 #' @examples
 #' serie_tiempo_rutina(sunspot.year,5)

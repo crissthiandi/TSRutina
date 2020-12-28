@@ -37,3 +37,6 @@ base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(
 serie_tiempo_rutina(datos=base,frecuencia=4,inicio=2010)
 
 }
+\author{
+Cristhian Diaz
+}

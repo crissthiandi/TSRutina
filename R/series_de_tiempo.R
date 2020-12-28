@@ -954,6 +954,32 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
 
 
 }
+recomendacion_autocorrelaciones <- function(objeto_cf) {
+  llamada=match.call()
+  ruta=match(c("objeto_cf"),names(llamada))
+
+
+  if(ruta!=2){#chequeo de que se agregaron bien los parametros
+    message("Objeto_cf no encontrado o hay más de un parametro en la función")
+    stop()
+  }
+
+  #Zona de plot not True
+  a=llamada[[2]]
+  a=as.character(a)
+  if(length(a)!=3 | as.logical(a[3])){
+    message("EL objeto debe ser un ACF o PACF con parametro plot = FALSE")
+    message("Ver el ejemplo de la documentación")
+    eval(?recomendacion_autocorrelaciones)
+
+  }
+  #si la salida es un vector de 3 elementos entonces hay dos parametros
+
+
+  #obtener los intervalos de confianza dando el objeto
+  intervalo_confianza_acf(objeto_cf)
+
+}
 
 serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
   if(!init_){
@@ -1007,7 +1033,11 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
   }
   #plotea el acf y analizas
   print(acf(base$y,main="Autocorrelación, Analiza el valor de r en MA(r)"))
-  ma<-readline('Que MA(r) sospechas?, inserte el valor de r:     ')
+
+  #función de recomendación
+  recomendacion_autocorrelaciones(acf(base$y,plot = FALSE))
+
+  ma<-readline('Que MA(r) sospechas?, inserte el valor de r:')
   ma<-c(0,0,as.numeric(ma))
   pausa()
   #plotea el pacf

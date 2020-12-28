@@ -552,6 +552,33 @@ dev.TRS <- function(){
 
 }
 
+#' Grafica de ajuste de TimeSeries en PNG
+#'
+#' Obten archivos .png de tus graficos de serie de tiempo en tu directorio
+#'
+#' Se usa una salida interactiva para el proceso
+#'
+#' @param datos Dataframe de no mas de 2 columnas, en el orden primero tiempo y
+#'    luego valor el tiempo va en formato fecha, y tiene que ser en el orden
+#'    dia-mes-year. La versión 2.1 soporta objetos de la clase TS (time series)
+#' @param frecuencia  Este es el periodo de la serie, trimestral = 3, cuatrimestral = 4
+#'    ,mensual = 12, etc.
+#' @param inicio Este es el year a iniciar la serie de tiempo
+#' @param init_ Boleano, True/False indica di se vericaran los datos
+#'
+#' @return  La salida no es como tal un objeto, si no una serie de impresiones de varios
+#'   varios analisis.
+#'   \itemize{\item{Plost}{  Arroja una lista de plots que ayudan a ver el comportamiento de la serie y como ciertos ajustes se aproximan mejor a ella}}
+#'   \itemize{\item{PNG}{ Imagenes grabadas en el directorio de trabajo}}
+#'
+#' @export
+#'
+#' @examples
+#' serie_tiempo_rutina(sunspot.year,5)
+#'
+#' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+#' serie_tiempo_rutina(datos=base,frecuencia=4,inicio=2010)
+#'
 serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
     if(!init_){
       paquetes.tsrutina()

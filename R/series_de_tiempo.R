@@ -1024,7 +1024,7 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
 #' @param init_ Boleano, True/False indica di se vericaran los datos
 #'
 #' @return La salida no es como tal un objeto, si no una serie de impresiones de varios
-#'    analisis.
+#'    analisis. El mejor basando en criterio AIC.
 #' @export
 #'
 #' @examples

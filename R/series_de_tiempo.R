@@ -1,3 +1,4 @@
+#Trabajo hecho y en mantenimiento por @crissthiandi <albertocenaa@gmail.com>
 
 #' Carga paquetes para un analisis de series de tiempo
 #'
@@ -413,7 +414,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
     plot(datos$periodos,datos$y,type = "l",
          xlab="Periodos",ylab="Valor de la serie",
          main="Promedio movil simple")
-    lines(promo,col="orange")
+    lines(promo,col="blue")
     pausa()
 
     #Promedio Movil ponderado
@@ -434,7 +435,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
     plot(datos$periodos,datos$y,type = "l",
          xlab="Periodos",ylab="Valor de la serie",
          main="Suavizamiento Exponencial")
-    lines(datos$periodos,pesoses$fitted, col="red")
+    lines(datos$periodos,pesoses$fitted, col="blue")
     pausa()
 
 
@@ -446,7 +447,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
     plot(datos$periodos,datos$y,type = "l",
          xlab="Periodos",ylab="Valor de la serie",
          main="Suavizamiento Exponencial holt")
-    lines(datos$periodos,pesoholt$fitted, col="green")
+    lines(datos$periodos,pesoholt$fitted, col="blue")
     pausa()
 
     #Holt-Winters' Exponential Smoothing

@@ -381,9 +381,14 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
              main="Ruido + Estacionalidad + Tendencia + SerieTemporal ")
     )
     pausa()
-
-    seasonplot(datosts,col=rainbow(length(datos$y)/frecuencia),year.labels=TRUE,xlab="Mes",
+    if(frecuencia==1){
+      message("La frecuencia de la serie de tiempo es 1, usaremos frecuencia 12 para los siguientes 2 graficos")
+    }
+    seasonplot(datosts,col=rainbow(length(datos$y)/frecuencia),year.labels=TRUE,xlab="Tiempo",
                ylab="Serie de tiempo",main = "Grafico Estacional de la Serie Temp.")
+    pausa()
+
+    boxplot(datosts~cycle(datosts),xlab = "Frecuencias",ylab = "Valores",main="Boxplot por cada valor de la frecuencia")
 
     pausa()
 
@@ -682,6 +687,21 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
       pausa()
       }
     #Se aprecia que no hay estacionalidad
+
+    png("st_boxes_plot.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
+    print(boxplot(datosts~cycle(datosts),xlab = "Frecuencias",ylab = "Valores",main="Boxplot por cada valor de la frecuencia"))
+    cat("Temporalidad de Serie de tiempo st_boxes_plot.png fue creada y guardada \n")
+    dev.off()
+    message("¿Deseas ver el grafico o seguir generando los siguientes graficos? \n")
+    imprime = readline(" [Sí/Intro]:")
+
+    if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
+      cat("Graficando...")
+      print(
+        boxplot(datosts~cycle(datosts),xlab = "Frecuencias",ylab = "Valores",main="Boxplot por cada valor de la frecuencia")
+      )
+      pausa()
+    }
 
     #Modelo de regresion lineal
     datos$periodos<-1:length(datos$x)

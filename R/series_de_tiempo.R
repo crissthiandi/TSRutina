@@ -446,7 +446,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
 
     #Holt-Winters' Exponential Smoothing
 
-    pesohw<- hw(datosts,seasonal = "additive",h=10,level = 95)
+    pesohw<- hw(datosts)
 
     summary(pesohw)
     #asignamos valores ajustados a una columna
@@ -510,7 +510,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
             plot(pronostico)},
         '6' = {print('Suavizamiento de Holt-Winter')
             pausa()
-            pronostico<-forecast(datos_rl,h=5,level=c(80,95))
+            pronostico<-forecast(pesohw,h=5,level=c(80,95))
             plot(pronostico)}
     )
     pausa()

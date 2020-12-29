@@ -1030,7 +1030,7 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
 #' @examples
 #' serie_tiempo_ARIMA(sunspot.year,5)
 #'
-#' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+#' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(20))
 #' serie_tiempo_ARIMA(datos=base,frecuencia=4,inicio=2010)
 #'
 serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
@@ -1068,7 +1068,7 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
     }
 
     if(prueba$p.value>p_valor){
-      cat("No se puede rechazar H0:Hay presencia de una raiz unitaria")
+      cat("No se puede rechazar H0:Hay presencia de una raiz unitaria\n")
       cat("No es estacionaria")
       pausa()
       differenciado<-diff(base$y,lag = 1,differences = 1)
@@ -1078,7 +1078,7 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
 
       message('\n Se ha diferencio la base de datos para obtener estacionalidad\n')
     }else{
-      print("Se rechaza H0, se obta por H1: La serie de tiempo es Estacionaria")
+      print("Se rechaza H0, se obta por H1: La serie de tiempo es Estacionaria\n")
       ban=FALSE
     }
     pausa()
@@ -1089,7 +1089,7 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
   #función de recomendación
   rec=recomendacion_autocorrelaciones(acf(base$y,plot = FALSE))
 
-  ma<-readline('Que MA(r) sospechas?, inserte el valor de r:')
+  ma<-readline('Que MA(r) sospechas?, inserte el valor de r: ')
   ma<-if(ma==""){
     c(0,numero_diferenciaciones,as.numeric(rec))
   }else{
@@ -1100,7 +1100,7 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
   print(pacf(base$y,main="Autocorrelación Parcial,Analiza el valor de p en AR(p)"))
   rec=recomendacion_autocorrelaciones(pacf(base$y,plot = FALSE))
 
-  ra<-readline('Que AR(p) sospechas?, inserte el valor de p:     ')
+  ra<-readline('Que AR(p) sospechas?, inserte el valor de p: ')
   ra<-if(ra==""){
     c(as.numeric(rec),numero_diferenciaciones,0)
   }else{
@@ -1125,6 +1125,12 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
   cat("Prueba de Box-Pierce and Ljung-Box Test")
   for (i in 1:2) {
     modelo=list(mama,rara)
+    if(mama[["call"]][["order"]]=="ma"){
+      message("\nAnalisis de correlación en el modelo para Ma(r)")
+    }else{
+      message("\nAnalisis de correlación en el modelo para RA(p)")
+    }
+
     box_test=Box.test(modelo[[i]]$residuals, type ="Ljung-Box")
     print(box_test)
     cat("Box.test(), el p_valor > 0.05 entonces no hay correlacion ruido blanco")

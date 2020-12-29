@@ -4,16 +4,21 @@
 \alias{recomendacion_autocorrelaciones}
 \title{Recomendaciones a un grafico ACF o PACF}
 \usage{
-recomendacion_autocorrelaciones(objeto_cf)
+recomendacion_autocorrelaciones(objeto_cf, print_IC = FALSE)
 }
 \arguments{
 \item{objeto_cf}{objeto ACF o PACF}
+
+\item{print_IC}{Indicador True/False para mostrar valos absoluto de intervalo de confianza ver details}
 }
 \value{
-
+Valor del ultimo lag significativo de la funcion de autocorrelacion
 }
 \description{
 Obten un recomendación a tu ajuste de series de tiempo ACF o PACF
+}
+\details{
+El valor IC se calcula siguiendo la metodologia de la paqueteria Stats en a función acf(). Se retorna el valor positivo talque el intervalo se forma con (IC,-IC)
 }
 \examples{
 base=data.frame(x=seq(Sys.Date(),by="days",length=20),y=1:20*3+runif(1))

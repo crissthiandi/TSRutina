@@ -959,9 +959,12 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
 #'
 #' Obten un recomendación a tu ajuste de series de tiempo ACF o PACF
 #'
-#' @param objeto_cf objeto ACF o PACF
+#' El valor IC se calcula siguiendo la metodologia de la paqueteria Stats en a función acf(). Se retorna el valor positivo talque el intervalo se forma con (IC,-IC)
 #'
-#' @return
+#' @param objeto_cf objeto ACF o PACF
+#' @param print_IC Indicador True/False para mostrar valos absoluto de intervalo de confianza ver details
+#'
+#' @return Valor del ultimo lag significativo de la funcion de autocorrelacion
 #' @export
 #'
 #' @examples

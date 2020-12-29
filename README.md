@@ -1,6 +1,6 @@
-# TSRutina
+# TSRutina V3.0 Taby
 
-Asistente para el análisis de series de tiempo, permite mantener un flujo de trabajo mecánico y basado en la metodología definida en un curso introductorio.
+Asistente para el análisis de series de tiempo, permite mantener un flujo de trabajo mecánico y basado en la metodología definida acontinuación:
 
 Temas tratados:
 * Prueba de Estacionariedad
@@ -14,10 +14,20 @@ Temas tratados:
   * Consideramos las aproximaciónes:
   * ARIMA(0,0,q)=Ma(q)
   * ARIMA(p,0,0)=Ar(p)
+  * ARIMA(p,0,q)=ARMA(p,q)
 
-Contiene un generador de graficas de los ajustes al igual que un metodo de escritura en disco duro, pendiente capacidad de ajuste de calidad y dimensiones.
+El asistente contiene un generador de graficas de los Suavizamientos anteriores que permite almacenar los graficos en el directorio de trabajo, pendiente capacidad de ajuste de calidad y dimensiones en las imagenes PNG.
 
-## Ejemplo de uso
+Se realizan multiples pruebas estadisticas que permite tomar decisiones sobre si la serie se ajusta o no a la lista de supuestos de algun modelo.
+
+Esta paqueteria tiene una documentación de la mayoria de las funciónes, si se tien duda de su uso o que hacen algunas funciones no dudes en usar la documentación que se instala junto a la paqueteria. Ejemplo:
+```python
+#acceder a la documentación de la función init()
+library('TSRutina')
+?init
+```
+
+## Ejemplo de uso y salidas
 
 ### Instalación
 
@@ -32,7 +42,7 @@ library('TSRutina')
 ```
 ### Rutina init()
 
-La idea principal es solo correr una función a la cual se le pasan la menor cantidad de parametros posibles y que con ello la función realice todo el proceso de analisis. ```init()``` es la función encargada de esta tarea.
+La idea principal es solo correr una función a la cual *se le pasaran la menor cantidad de parametros posibles*. Parametros con los que la función realizara todo el proceso de analisis. ```init()``` es la función encargada de esta tarea.
 
 Tomemos la base de datos **sunspot.year** la cual tiene las manchas solares anuales entre los años 1749 y 1983.
 ![image](img/manchasts.png)

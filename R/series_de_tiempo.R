@@ -997,7 +997,7 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
   cat("\nLos siguientes elementos son propuestas de r: ")
   posibles_lags=objeto_cf$lag[mayores]
   cat(posibles_lags)
-  cat("Proponemos que r sea:",posibles_lags[length(posibles_lags)])
+  cat("\nProponemos que r sea:",posibles_lags[length(posibles_lags)])
 
   if(print_IC){
     cat("\nEl IC de modelo es: ",IC)
@@ -1060,15 +1060,25 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
   print(acf(base$y,main="Autocorrelación, Analiza el valor de r en MA(r)"))
 
   #función de recomendación
-  recomendacion_autocorrelaciones(acf(base$y,plot = FALSE))
+  rec=recomendacion_autocorrelaciones(acf(base$y,plot = FALSE))
 
   ma<-readline('Que MA(r) sospechas?, inserte el valor de r:')
-  ma<-c(0,0,as.numeric(ma))
+  ma<-if(ma==""){
+    c(0,numero_diferenciaciones,as.numeric(rec))
+  }else{
+    c(0,numero_diferenciaciones,as.numeric(ma))
+  }
   pausa()
   #plotea el pacf
   print(pacf(base$y,main="Autocorrelación Parcial,Analiza el valor de p en AR(p)"))
+  rec=recomendacion_autocorrelaciones(pacf(base$y,plot = FALSE))
+
   ra<-readline('Que AR(p) sospechas?, inserte el valor de p:     ')
-  ra<-c(0,0,as.numeric(ra))
+  ra<-if(ra==""){
+    c(as.numeric(rec),numero_diferenciaciones,0)
+  }else{
+    c(as.numeric(ra),numero_diferenciaciones,0)
+  }
   pausa()
   #imprime arimas
   print(arima(base$y,order = ma))

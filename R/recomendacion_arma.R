@@ -1,5 +1,21 @@
 #Trabajo hecho y en mantenimiento por @crissthiandi <albertocenaa@gmail.com>
 
+#' Matriz extendida de acf
+#'
+#' Se calcula la matriz extendida, igual que en TSA solo que con un control de impresión de matriz
+#'
+#' @param z Serie de tiempo a analizar
+#' @param ar.max Maximo valor del orden de AR
+#' @param ma.max Maximo valor del orden de MA
+#' @param print_matrix Indicador de si se emprime o no la matriz eacf
+#'
+#' @return Lista de valores del analisis eacf: matriz de acf extendida
+#'    Symbol: matrix con los valores de cuales cordenadas de ARMA son significativos "x" para ese caso, "o" para no significativos.
+#' @export
+#'
+#' @examples
+#'
+#' matriz_eacf(AirPassengers)
 matriz_eacf <- function (z, ar.max = 7, ma.max = 13,print_matrix=TRUE)
 {
   lag1 <- function(z, lag = 1) {
@@ -63,7 +79,7 @@ matriz_eacf <- function (z, ar.max = 7, ma.max = 13,print_matrix=TRUE)
   }
   rownames(symbol) <- 0:(ar.max - 1)
   colnames(symbol) <- 0:(ma.max - 1)
-  cat("AR en Filas MA En columnas\n")#definir bien quien es quien
+  cat("\nAR en Filas MA En columnas\n")#definir bien quien es quien
   if(print_matrix){
     print(symbol, quote = FALSE)
   }

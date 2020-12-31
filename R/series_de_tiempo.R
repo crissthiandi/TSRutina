@@ -1030,6 +1030,35 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
   return(invisible(posibles_lags[length(posibles_lags)]))
 }
 
+
+recomendaciones_arma <- function(time_series,print_matrix=TRUE) {
+  x=time_series
+
+  modelo_arma <- matriz_eacf(x,7,7,print_matrix)
+
+  matriz_true_false <- modelo_arma$symbol=="o"
+  matriz_true_false=matriz_true_false[-1,][,-1]
+
+  for (i in 1:7) {
+    if(sum(matriz_true_false[,i])>0){
+      for (j in 1:7) {
+        zz=matriz_true_false[,i]
+        if(zz[j]==1){
+          #se analizan vecinos
+          izquierda=matriz_true_false[j,i+1]
+          abajo=matriz_true_false[j+1,i]
+          diagonal=matriz_true_false[j+1,i+1]
+          #condicion algun vecino o diagonal no null
+          if(izquierda+abajo+diagonal >2 | diagonal>0){
+            vec=c(i,j)
+            return(vec)
+          }
+        }
+      }
+    }
+  }
+}
+
 #' Ajuste de Modelo ARIMA a tu Serie de tiempo
 #'
 #' Ajusta un modelo arima usando un asistente que te mostrar si tu serie se ajusta a un modelo ARIMA en particular

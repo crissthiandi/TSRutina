@@ -1,3 +1,4 @@
+#Trabajo hecho y en mantenimiento por @crissthiandi <albertocenaa@gmail.com>
 
 #' Obten el intervalo de confianza de un objeto ACF o PACF
 #'

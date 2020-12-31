@@ -1008,26 +1008,62 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
   a=as.character(a)
   if(length(a)!=3 | as.logical(a[3])){
     message("EL objeto debe ser un ACF o PACF con parametro plot = FALSE")
-    message("Ver el ejemplo de la documentación")
-    eval(?recomendacion_autocorrelaciones)
-
+    message("Ver el ejemplo en la documentación")
+    ?recomendacion_autocorrelaciones
   }
   #si la salida es un vector de 3 elementos entonces hay dos parametros
+  serie=tryCatch(get(objeto_cf$series),error= function(e){message(e," \nSe busca otra entrada..."); return(NULL)})
+  #en caso de serie NULL
+  if(is.null(serie)){
+    vec=strsplit(a[2],split = "$",fixed = TRUE)
+    message("\nSe encontro la base de datos llamada: ",vec[[1]][1])
+    message("\nDentro de ella se encontro el vector llamado: ",vec[[1]][2])
+    serie=eval(str2lang(a[2]))
+    cat("\nLos primeros 6 valores de este vector son:\n")
+    print(head(serie))
+  }
+  serie=ts(serie)
+
+
+  if(objeto_cf$type=="partial"){
+    matriz=matriz_eacf(serie,ar.max = 1, ma.max = 15,print_matrix = FALSE)
+    matriz=matriz$symbol=="o"
+    for(i in 1:15){
+      if(matriz[1,i]==1){
+        order_=i
+        cat("\nProponemos MA(q) con q=:",order_)
+        break
+      }
+    }
+
+  }
+  if(objeto_cf$type=="correlation"){
+    matriz=TSRutina::matriz_eacf(serie,ar.max = 15,ma.max = 1,print_matrix = FALSE)
+    matriz=matriz$symbol=="o"
+    for(i in 1:15){
+      if(matriz[i,1]==1){
+        order_=i
+        cat("\nProponemos AR(p) con p=:",order_)
+        break
+      }
+    }
+  }
+
 
 
   #obtener los intervalos de confianza dando el objeto
   IC=intervalo_confianza_acf(objeto_cf)
-  mayores=abs(objeto_cf$acf)>IC
-  cat("\nLos siguientes elementos son propuestas de r: ")
-  posibles_lags=objeto_cf$lag[mayores]
-  cat(posibles_lags)
-  cat("\nProponemos que r sea:",posibles_lags[length(posibles_lags)])
+  #mayores=abs(objeto_cf$acf)>IC
+  #cat("\nLos siguientes elementos son propuestas de r: ")
+  #posibles_lags=objeto_cf$lag[mayores]
+  #cat(posibles_lags)
+  #cat("\nProponemos que r sea:",posibles_lags[length(posibles_lags)])
 
   if(print_IC){
     cat("\nEl IC de modelo es: ",IC)
   }
 
-  return(invisible(posibles_lags[length(posibles_lags)]))
+  return(invisible(order_))
 }
 
 #' Recomendación de modelo ARMA

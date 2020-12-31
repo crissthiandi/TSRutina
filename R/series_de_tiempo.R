@@ -989,7 +989,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
 #' @export
 #'
 #' @examples
-#' base=data.frame(x=seq(Sys.Date(),by="days",length=20),y=1:20*3+runif(1))
+#' base=data.frame(x=seq(Sys.Date(),by="days",length=200),y=1:20*3+runif(20))
 #' recomendacion_autocorrelaciones(acf(base$y,plot = FALSE))
 #'
 recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {

@@ -79,8 +79,8 @@ matriz_eacf <- function (z, ar.max = 7, ma.max = 13,print_matrix=TRUE)
   }
   rownames(symbol) <- 0:(ar.max - 1)
   colnames(symbol) <- 0:(ma.max - 1)
-  cat("\nAR en Filas MA En columnas\n")#definir bien quien es quien
   if(print_matrix){
+    cat("\nAR en Filas MA En columnas\n")#definir bien quien es quien
     print(symbol, quote = FALSE)
   }
   invisible(list(eacf = eacfm, ar.max = ar.max, ma.ma = ma.max,

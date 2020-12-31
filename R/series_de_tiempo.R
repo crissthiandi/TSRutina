@@ -1176,19 +1176,23 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
   }
 
   #analisis ARMA si diferecias es mayor a cero, ARMA=ARIMA
-  modelo_arma <- TSA::eacf(base$y, ar.max=4, ma.max=4)
+  datosts=ts(base$y)
 
-  rec=recomendacion_ARMA(modelo_arma) #checar como el objeto obtiene los symbol de la lista
+  rec=recomendaciones_arma(datosts) #checar como el objeto obtiene los symbol de la lista
 
-  arma_pq<-readline('Que ARMA(p,q) sospechas?, inserte el valor de p,q separado por comas: ')
-  arma_pq<-if(arma_pq==""){
+  cat("Que ARMA(p,q) sospechas?, inserte el valor de p,q separado por comas: ")
+  arma_pq<-readline('Ejemplo: 3,4')
+  arma_order<-if(arma_pq==""){
     c(as.numeric(rec[1]),numero_diferenciaciones,as.numeric(rec[2]))
   }else{
-    #checar herramientas de expresiones regulares
-    #la idea es dividir el elemento en dos
-    arma_pq
-    c(0,numero_diferenciaciones,as.numeric())
+    #dividir la entrada
+    w=strsplit(arma_pq,",")
+    arma_p=as.numeric(w[[1]][1])
+    arma_q=as.numeric(w[[1]][2])
+    c(arma_p,numero_diferenciaciones,arma_q)
   }
+  #se imprime el modelo arma
+  print(arima(base$y,order = arma_order))
   pausa()
 
 

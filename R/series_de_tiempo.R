@@ -1104,158 +1104,149 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
     conditional.tsrutina(datos)
   }
 
-  if(!is.ts(datos)){
-
-    if(is.data.frame(datos)){
-
-
-      #verificar si los elementos se ven bien
-      elementos=checar_datos(datos,frecuencia,inicio)
-      datos=elementos$datos
-      #datosts=elementos$datosts #No se usa en la rutina
-
-
-      base=datos
-      ban=TRUE
-      numero_diferenciaciones=0
-      while(ban){
-
-        prueba<-adf.test(base$y)
-        print(prueba)
-        p_valor<-readline('\nInserte un p valor (intro para p=0.05): ')
-
-        if(p_valor==""){
-          p_valor<-0.05
-        }else{
-          print(sprintf("\nEl valor de p= %s \n",p_valor))
-          p_valor<-as.numeric(p_valor)
-        }
-
-        if(prueba$p.value>p_valor){
-          cat("No se puede rechazar H0:Hay presencia de una raiz unitaria\n")
-          cat("No es estacionaria")
-          pausa()
-          differenciado<-diff(base$y,lag = 1,differences = 1)
-          base=base[-nrow(base),]
-          base$y=differenciado
-          numero_diferenciaciones=numero_diferenciaciones+1 #contador de diferenciaciones
-
-          message('\nSe ha diferencio la base de datos para obtener estacionalidad\n')
-        }else{
-          cat("Se rechaza H0, se obta por H1: La serie de tiempo es Estacionaria\n")
-          ban=FALSE
-        }
-        pausa()
-      }
-      #plotea el acf y analizas
-      print(acf(base$y,main="Autocorrelación, Analiza el valor de r en MA(r)"))
-
-      #función de recomendación
-      rec=recomendacion_autocorrelaciones(acf(base$y,plot = FALSE))
-
-      ma<-readline('Que MA(r) sospechas?, inserte el valor de r: ')
-      ma<-if(ma==""){
-        c(0,numero_diferenciaciones,as.numeric(rec))
-      }else{
-        c(0,numero_diferenciaciones,as.numeric(ma))
-      }
-      pausa()
-      #plotea el pacf
-      print(pacf(base$y,main="Autocorrelación Parcial,Analiza el valor de p en AR(p)"))
-      rec=recomendacion_autocorrelaciones(pacf(base$y,plot = FALSE))
-
-      ra<-readline('Que AR(p) sospechas?, inserte el valor de p: ')
-      ra<-if(ra==""){
-        c(as.numeric(rec),numero_diferenciaciones,0)
-      }else{
-        c(as.numeric(ra),numero_diferenciaciones,0)
-      }
-      pausa()
-      #imprime arimas
-      print(arima(base$y,order = ma))
-      pausa()
-      print(arima(base$y,order = ra))
-      pausa()
-      #compara arimas
-      mama<-arima(base$y,order = ma)
-      rara<-arima(base$y,order = ra)
-      if(mama$aic<rara$aic){
-        print(sprintf('El modelo con menor AIC es el MA(%s)',ma[3]))
-      }else{
-        print(sprintf('El modelo con menor AIC es el RA(%s)',ra[3]))
-      }
-      pausa()
-
-      cat("Prueba de Box-Pierce and Ljung-Box Test")
-      for (i in 1:2) {
-        modelo=list(mama,rara)
-        if(mama[["call"]][["order"]]=="ma"){
-          message("\nAnalisis de correlación en el modelo para Ma(r)")
-        }else{
-          message("\nAnalisis de correlación en el modelo para RA(p)")
-        }
-
-        box_test=Box.test(modelo[[i]]$residuals, type ="Ljung-Box")
-        print(box_test)
-        cat("Box.test(), el p_valor > 0.05 entonces no hay correlacion ruido blanco")
-        p_valor<-readline('Inserte un p valor, (intro para p=0.05):  \n')
-
-        if(p_valor==""){
-          p_valor<-0.05
-        }else{
-          print(sprintf("El valor de p= %s",p_valor))
-          p_valor<-as.numeric(p_valor)
-        }
-
-
-        if(prueba$p.value>0.05){
-          cat("No se puede rechazar H0 = No hay presencia de autocorrelacion ")
-        }else{
-          cat("Se rechaza H0, se obta por H1 = Hay presencia de autocorrelacion")
-        }
-
-
-        sprintf("\n \n")
-      }
-
-      #analisis ARMA si diferecias es mayor a cero, ARMA=ARIMA
-      datosts=ts(base$y)
-
-      rec=recomendaciones_arma(datosts) #checar como el objeto obtiene los symbol de la lista
-      cat("\nSe recomienda el modelo ARMA(p,q) con p=",rec[1]," q=",rec[2])
-      cat("\nQue ARMA(p,q) sospechas?, inserte el valor de p,q separado por comas: ")
-      arma_pq<-readline('Ejemplo: 3,4 \t')
-      arma_order<-if(arma_pq==""){
-        c(as.numeric(rec[1]),numero_diferenciaciones,as.numeric(rec[2]))
-      }else{
-        #dividir la entrada
-        w=strsplit(arma_pq,",")
-        arma_p=as.numeric(w[[1]][1])
-        arma_q=as.numeric(w[[1]][2])
-        c(arma_p,numero_diferenciaciones,arma_q)
-      }
-      #se imprime el modelo arma
-      print(arima(base$y,order = arma_order))
-      pausa()
-
-      return(NULL)
-  }else{
-      stop("El objeto debe ser data frame")
-    }
-  }else{
-
-    if(is.ts(datos)){
+  if(is.ts(datos)){
       elementos=tratamiento.ts_set(datos)
       datos=elementos$data
       frecuencia=ifelse(is.null(frecuencia),elementos$frecu,frecuencia)
       inicio=ifelse(is.null(inicio),elementos$inicio,inicio)
-      serie_tiempo_ARIMA(datos,frecuencia,inicio,init_ = TRUE)
-    }
+  }
+
+  if(!is.data.frame(datos)){
     stop("El objeto debe ser un data frame con dos elementos")
   }
 
-}
 
+  #verificar si los elementos se ven bien
+  elementos=checar_datos(datos,frecuencia,inicio)
+  datos=elementos$datos
+  #datosts=elementos$datosts #No se usa en la rutina
+
+
+  base=datos
+  ban=TRUE
+  numero_diferenciaciones=0
+  while(ban){
+
+    prueba<-adf.test(base$y)
+    print(prueba)
+    p_valor<-readline('\nInserte un p valor (intro para p=0.05): ')
+
+    if(p_valor==""){
+      p_valor<-0.05
+    }else{
+      print(sprintf("\nEl valor de p= %s \n",p_valor))
+      p_valor<-as.numeric(p_valor)
+    }
+
+    if(prueba$p.value>p_valor){
+      cat("No se puede rechazar H0:Hay presencia de una raiz unitaria\n")
+      cat("No es estacionaria")
+      pausa()
+      differenciado<-diff(base$y,lag = 1,differences = 1)
+      base=base[-nrow(base),]
+      base$y=differenciado
+      numero_diferenciaciones=numero_diferenciaciones+1 #contador de diferenciaciones
+
+      message('\nSe ha diferencio la base de datos para obtener estacionalidad\n')
+    }else{
+      cat("Se rechaza H0, se obta por H1: La serie de tiempo es Estacionaria\n")
+      ban=FALSE
+    }
+    pausa()
+  }
+  #plotea el acf y analizas
+  print(acf(base$y,main="Autocorrelación, Analiza el valor de r en MA(r)"))
+
+  #función de recomendación
+  rec=recomendacion_autocorrelaciones(acf(base$y,plot = FALSE))
+
+  ma<-readline('Que MA(r) sospechas?, inserte el valor de r: ')
+  ma<-if(ma==""){
+    c(0,numero_diferenciaciones,as.numeric(rec))
+  }else{
+    c(0,numero_diferenciaciones,as.numeric(ma))
+  }
+  pausa()
+  #plotea el pacf
+  print(pacf(base$y,main="Autocorrelación Parcial,Analiza el valor de p en AR(p)"))
+  rec=recomendacion_autocorrelaciones(pacf(base$y,plot = FALSE))
+
+  ra<-readline('Que AR(p) sospechas?, inserte el valor de p: ')
+  ra<-if(ra==""){
+    c(as.numeric(rec),numero_diferenciaciones,0)
+  }else{
+    c(as.numeric(ra),numero_diferenciaciones,0)
+  }
+  pausa()
+  #imprime arimas
+  print(arima(base$y,order = ma))
+  pausa()
+  print(arima(base$y,order = ra))
+  pausa()
+  #compara arimas
+  mama<-arima(base$y,order = ma)
+  rara<-arima(base$y,order = ra)
+  if(mama$aic<rara$aic){
+    print(sprintf('El modelo con menor AIC es el MA(%s)',ma[3]))
+  }else{
+    print(sprintf('El modelo con menor AIC es el RA(%s)',ra[3]))
+  }
+  pausa()
+
+  cat("Prueba de Box-Pierce and Ljung-Box Test")
+  for (i in 1:2) {
+    modelo=list(mama,rara)
+    if(mama[["call"]][["order"]]=="ma"){
+      message("\nAnalisis de correlación en el modelo para Ma(r)")
+    }else{
+      message("\nAnalisis de correlación en el modelo para RA(p)")
+    }
+
+    box_test=Box.test(modelo[[i]]$residuals, type ="Ljung-Box")
+    print(box_test)
+    cat("Box.test(), el p_valor > 0.05 entonces no hay correlacion ruido blanco")
+    p_valor<-readline('Inserte un p valor, (intro para p=0.05):  \n')
+
+    if(p_valor==""){
+      p_valor<-0.05
+    }else{
+      print(sprintf("El valor de p= %s",p_valor))
+      p_valor<-as.numeric(p_valor)
+    }
+
+
+    if(prueba$p.value>0.05){
+      cat("No se puede rechazar H0 = No hay presencia de autocorrelacion ")
+    }else{
+      cat("Se rechaza H0, se obta por H1 = Hay presencia de autocorrelacion")
+    }
+
+
+    sprintf("\n \n")
+  }
+
+  #analisis ARMA si diferecias es mayor a cero, ARMA=ARIMA
+  datosts=ts(base$y)
+
+  rec=recomendaciones_arma(datosts) #checar como el objeto obtiene los symbol de la lista
+  cat("\nSe recomienda el modelo ARMA(p,q) con p=",rec[1]," q=",rec[2])
+  cat("\nQue ARMA(p,q) sospechas?, inserte el valor de p,q separado por comas: ")
+  arma_pq<-readline('Ejemplo: 3,4 \t')
+  arma_order<-if(arma_pq==""){
+    c(as.numeric(rec[1]),numero_diferenciaciones,as.numeric(rec[2]))
+  }else{
+    #dividir la entrada
+    w=strsplit(arma_pq,",")
+    arma_p=as.numeric(w[[1]][1])
+    arma_q=as.numeric(w[[1]][2])
+    c(arma_p,numero_diferenciaciones,arma_q)
+  }
+  #se imprime el modelo arma
+  print(arima(base$y,order = arma_order))
+  pausa()
+
+  return(NULL)
+}
 
 #' Rutina Principal de TSRutina
 #'

@@ -21,7 +21,7 @@ Obten un recomendación a tu ajuste de series de tiempo ACF o PACF
 El valor IC se calcula siguiendo la metodologia de la paqueteria Stats en a función acf(). Se retorna el valor positivo talque el intervalo se forma con (IC,-IC)
 }
 \examples{
-base=data.frame(x=seq(Sys.Date(),by="days",length=20),y=1:20*3+runif(1))
+base=data.frame(x=seq(Sys.Date(),by="days",length=200),y=1:20*3+runif(20))
 recomendacion_autocorrelaciones(acf(base$y,plot = FALSE))
 
 }

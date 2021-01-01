@@ -1012,16 +1012,19 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
     ?recomendacion_autocorrelaciones
   }
   #si la salida es un vector de 3 elementos entonces hay dos parametros
-  serie=tryCatch(get(objeto_cf$series),error= function(e){message(e," \nSe busca otra entrada..."); return(NULL)})
+  #serie=tryCatch(get(objeto_cf$series),error= function(e){message(e," \nSe busca otra entrada..."); return(NULL)})
+  serie=get(objeto_cf$series,envir = parent.frame())
+  #se corrigio el uso de envir
+
   #en caso de serie NULL
-  if(is.null(serie)){
-    vec=strsplit(a[2],split = "$",fixed = TRUE)
-    message("\nSe encontro la base de datos llamada: ",vec[[1]][1])
-    message("\nDentro de ella se encontro el vector llamado: ",vec[[1]][2])
-    serie=eval(str2lang(a[2]))
-    cat("\nLos primeros 6 valores de este vector son:\n")
-    print(head(serie))
-  }
+  # if(is.null(serie)){
+  #   vec=strsplit(a[2],split = "$",fixed = TRUE)
+  #   message("\nSe encontro la base de datos llamada: ",vec[[1]][1])
+  #   message("\nDentro de ella se encontro el vector llamado: ",vec[[1]][2])
+  #   serie=eval(str2lang(a[2]))
+  #   cat("\nLos primeros 6 valores de este vector son:\n")
+  #   print(head(serie))
+  # }
   serie=ts(serie)
 
 

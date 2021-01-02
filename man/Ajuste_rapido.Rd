@@ -37,7 +37,7 @@ La salida no es como tal un objeto, si no una serie de impresiones de varios
 Esta función considera que las recomendaciones de la paqueteria seran tomandas como los valores a usar
 }
 \details{
-Todo los detalles son los mismo que en \code{\link{init}}
+Esta función comparte los mismos detalles que \code{\link{init}}
 }
 \examples{
  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))

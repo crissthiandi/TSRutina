@@ -334,9 +334,9 @@ pausa <-function(duracion = Inf){
 #'
 #' @return La salida no es como tal un objeto, si no una serie de impresiones de varios
 #'   varios analisis.
-#'   \itemize{\item{Plost}{  Arroja una lista de plots que ayudan a ver el comportamiento de la serie y como ciertos ajustes se aproximan mejor a ella}}
-#'   \itemize{\item{Resumenes}{  Arroja ciertos resumenes de ciertos ajustes o pruebas que se hacen}}
-#'   \itemize{\item{Modelo}{  Modelo con el menor MSE(Error cuadratico medio)}}
+#'   \itemize{\item{\bold{Plost}}{  Arroja una lista de plots que ayudan a ver el comportamiento de la serie y como ciertos ajustes se aproximan mejor a ella}}
+#'   \itemize{\item{\bold{Resumenes}}{  Arroja ciertos resumenes de ciertos ajustes o pruebas que se hacen}}
+#'   \itemize{\item{\bold{Modelo}}{  Modelo con el menor MSE(Error cuadratico medio)}}
 #'
 #' @details Se usa una salida interactiva en la que el usuario debe agregar ciertos
 #'   datos o tomar ciertas decisiones durante la rutina.
@@ -583,8 +583,8 @@ dev.TRS <- function(){
 #'
 #' @return  La salida no es como tal un objeto, si no una serie de impresiones de varios
 #'    analisis.
-#'    \itemize{\item{Plost}{  Arroja una lista de plots que ayudan a ver el comportamiento de la serie y como ciertos ajustes se aproximan mejor a ella}}
-#'    \itemize{\item{PNG}{ Imagenes grabadas en el directorio de trabajo}}
+#'    \itemize{\item{\bold{Plost}}{  Arroja una lista de plots que ayudan a ver el comportamiento de la serie y como ciertos ajustes se aproximan mejor a ella}}
+#'    \itemize{\item{\bold{PNG}}{ Imagenes grabadas en el directorio de trabajo}}
 #'
 #' @author Cristhian Diaz
 #'
@@ -1347,9 +1347,9 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
 #'
 #' @return La salida no es como tal un objeto, si no una serie de impresiones de varios
 #'   analisis. La siguiente lista detalla alguno de ellos:
-#'   \itemize{\item{Plost}{  Arroja una lista de plots que ayudan a ver el comportamiento de la serie y como ciertos ajustes se aproximan mejor a ella}}
-#'   \itemize{\item{Resumenes}{  Arroja ciertos resumenes de ciertos ajustes o pruebas que se hacen}}
-#'   \itemize{\item{Modelo}{  Modelo con el menor MSE(Error cuadratico medio)}}
+#'   \itemize{\item{\bold{Plost}}{  Arroja una lista de plots que ayudan a ver el comportamiento de la serie y como ciertos ajustes se aproximan mejor a ella}}
+#'   \itemize{\item{\bold{Resumenes}}{  Arroja ciertos resumenes de ciertos ajustes o pruebas que se hacen}}
+#'   \itemize{\item{\bold{Modelo}}{  Modelo con el menor MSE(Error cuadratico medio)}}
 #'
 #' @export
 #'
@@ -1396,9 +1396,9 @@ init <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=TRUE,...){
 #'
 #' @return La salida no es como tal un objeto, si no una serie de impresiones de varios
 #'   analisis. La siguiente lista detalla alguno de ellos:
-#'   \itemize{\item{Plost}{  Arroja una lista de plots que ayudan a ver el comportamiento de la serie y como ciertos ajustes se aproximan mejor a ella}}
-#'   \itemize{\item{Resumenes}{  Arroja ciertos resumenes de ciertos ajustes o pruebas que se hacen}}
-#'   \itemize{\item{Modelo}{  Modelo con el menor MSE(Error cuadratico medio)}}
+#'   \itemize{\item{\bold{Plost}}{  Arroja una lista de plots que ayudan a ver el comportamiento de la serie y como ciertos ajustes se aproximan mejor a ella}}
+#'   \itemize{\item{\bold{Resumenes}}{  Arroja ciertos resumenes de ciertos ajustes o pruebas que se hacen}}
+#'   \itemize{\item{\bold{Modelo}}{  Modelo con el menor MSE(Error cuadratico medio)}}
 #'
 #' @export
 #'

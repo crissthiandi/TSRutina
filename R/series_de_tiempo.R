@@ -540,9 +540,8 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
         message("Se rechaza H0, se obta por H1: No hay normalidad")
     }
 
-
-
 }
+
 #' Depurador de dispositivos graficos
 #'
 #' Depura el espacio de dispositivos graficos atravez de dev.off() y dev.new(). Checando dev.list().
@@ -1154,7 +1153,7 @@ recomendaciones_arma <- function(time_series,print_matrix=TRUE) {
 #' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(20))
 #' serie_tiempo_ARIMA(datos=base,frecuencia=4,inicio=2010)
 #'
-serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
+serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=TRUE){
   if(!init_){
     paquetes.tsrutina()
     pausa()
@@ -1186,7 +1185,11 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
 
     prueba<-adf.test(base$y)
     print(prueba)
-    p_valor<-readline('\nInserte un p valor (intro para p=0.05): ')
+    if(msg){
+      p_valor<-readline('\nInserte un p valor (intro para p=0.05): ')
+    }else{
+      p_valor<-0.05
+    }
 
     if(p_valor==""){
       p_valor<-0.05
@@ -1217,7 +1220,12 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
   #función de recomendación
   rec=recomendacion_autocorrelaciones(acf(base$y,plot = FALSE))
 
-  ma<-readline('Que MA(r) sospechas?, inserte el valor de r: ')
+  if(msg){
+    ma<-readline('Que MA(r) sospechas?, inserte el valor de r: ')
+  }else{
+    ma<-""
+  }
+
   ma<-if(ma==""){
     c(0,numero_diferenciaciones,as.numeric(rec))
   }else{
@@ -1228,7 +1236,11 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
   print(pacf(base$y,main="Autocorrelación Parcial,Analiza el valor de p en AR(p)"))
   rec=recomendacion_autocorrelaciones(pacf(base$y,plot = FALSE))
 
-  ra<-readline('Que AR(p) sospechas?, inserte el valor de p: ')
+  if(msg){
+    ra<-readline('Que AR(p) sospechas?, inserte el valor de p: ')
+  }else{
+    ra<-""
+  }
   ra<-if(ra==""){
     c(as.numeric(rec),numero_diferenciaciones,0)
   }else{
@@ -1262,7 +1274,12 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
     box_test=Box.test(modelo[[i]]$residuals, type ="Ljung-Box")
     print(box_test)
     cat("Box.test(), el p_valor > 0.05 entonces no hay correlacion ruido blanco")
-    p_valor<-readline('Inserte un p valor, (intro para p=0.05):  \n')
+
+    if(msg){
+      p_valor<-readline('Inserte un p valor, (intro para p=0.05):  \n')
+    }else{
+      p_valor<-0.05
+    }
 
     if(p_valor==""){
       p_valor<-0.05
@@ -1287,8 +1304,13 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
 
   rec=recomendaciones_arma(datosts) #checar como el objeto obtiene los symbol de la lista
   cat("\nSe recomienda el modelo ARMA(p,q) con p=",rec[1]," q=",rec[2])
-  cat("\nQue ARMA(p,q) sospechas?, inserte el valor de p,q separado por comas: ")
-  arma_pq<-readline('Ejemplo: 3,4 \t')
+  if(msg){
+    cat("\nQue ARMA(p,q) sospechas?, inserte el valor de p,q separado por comas: ")
+    arma_pq<-readline('Ejemplo: 3,4 \t')
+  }else{
+    arma_pq<-""
+  }
+
   arma_order<-if(arma_pq==""){
     c(as.numeric(rec[1]),numero_diferenciaciones,as.numeric(rec[2]))
   }else{

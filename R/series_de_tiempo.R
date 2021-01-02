@@ -50,7 +50,7 @@ paquetes.tsrutina <- function(){
 #'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
 #'  serie_tiempo_pruebas(datos=base,frecuencia=4)
 #'
-serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE){
+serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE){
     if(!init_){
       paquetes.tsrutina()
       pausa()
@@ -71,7 +71,11 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE){
             cat("\n (Prueba aplicada los residuos de una regresión lineal) \n")
             prueba<-dwtest(regresion)
             print(prueba)
-            p_valor<-readline('Inserte un p valor, (intro para p=0.05):  \n')
+            if(msg){
+              p_valor<-readline('Inserte un p valor, (intro para p=0.05):  \n')
+            }else{
+              p_valor<-0.05
+            }
 
             if(p_valor==""){
                     p_valor<-0.05
@@ -100,7 +104,11 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE){
 
             prueba<-adf.test(basets)
             print(prueba)
-            p_valor<-readline('Inserte un p valor, (intro para p=0.05) \n')
+            if(msg){#si no hay mensaje entonces predeterminado
+              p_valor<-readline('Inserte un p valor, (intro para p=0.05) \n')
+            }else{
+              p_valor<-0.05
+            }
 
             if(p_valor==""){
                 p_valor<-0.05
@@ -1042,7 +1050,6 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
     if(is.null(order_)){
       cat("El valor de la q propuesta es mayor a 15...")
       order_=16
-
     }
   }
   if(objeto_cf$type=="correlation"){
@@ -1345,5 +1352,12 @@ init <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,...){
   serie_tiempo_ARIMA(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_)
   message("\n Varios suavizamientos de una Serie de tiempo creación en workdir \n")
   serie_tiempo_plots(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_)
+
+}
+
+
+Ajuste_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,...){
+ #Función para hacer el proceso de forma directa con las sugerencias como respuestas
+  #Probablemente se deba agregar en el futuro la opción de reporte
 
 }

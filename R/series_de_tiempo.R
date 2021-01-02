@@ -1410,5 +1410,22 @@ Ajuste_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=FALSE
  #Función para hacer el proceso de forma directa con las sugerencias como respuestas
   #Probablemente se deba agregar en el futuro la opción de reporte
   init(datos,frecuencia,inicio,init_,msg)
+}
 
+Ajuste_ARIMA_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=FALSE,...){
+  paquetes.tsrutina()
+  pausa()
+  conditional.tsrutina(datos)
+
+  if(is.ts(datos)){
+    elementos=tratamiento.ts_set(datos)
+    datos=elementos$data
+    frecuencia=ifelse(is.null(frecuencia),elementos$frecu,frecuencia)
+    inicio=ifelse(is.null(inicio),elementos$inicio,inicio)
+  }
+
+  #solo se hace ajuste arima y prueba de estacionalidad
+
+  serie_tiempo_pruebas(datos,frecuencia,init_,msg)
+  serie_tiempo_ARIMA(datos,frecuencia,inicio,init_,msg)
 }

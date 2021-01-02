@@ -1013,7 +1013,7 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
   }
   #si la salida es un vector de 3 elementos entonces hay dos parametros
   #serie=tryCatch(get(objeto_cf$series),error= function(e){message(e," \nSe busca otra entrada..."); return(NULL)})
-  serie=get(objeto_cf$series,envir = parent.frame())
+  serie=get("base",envir = parent.frame())
   #se corrigio el uso de envir
 
   #en caso de serie NULL
@@ -1025,7 +1025,7 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
   #   cat("\nLos primeros 6 valores de este vector son:\n")
   #   print(head(serie))
   # }
-  serie=ts(serie)
+  serie=ts(serie$y)
 
 
   if(objeto_cf$type=="partial"){
@@ -1038,7 +1038,9 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
         break
       }
     }
-
+    #parche para casos donde no hay valor a proponer
+    cat("El valor de la q propuesta es mayor a 15...")
+    order_=16
   }
   if(objeto_cf$type=="correlation"){
     matriz=TSRutina::matriz_eacf(serie,ar.max = 15,ma.max = 1,print_matrix = FALSE)
@@ -1050,6 +1052,8 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
         break
       }
     }
+    cat("El valor de la p propuesta es mayor a 15...")
+    order_=16
   }
 
 

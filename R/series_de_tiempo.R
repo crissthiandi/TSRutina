@@ -261,16 +261,18 @@ tratamiento.fechas.TRS <- function(fecha_vector){
 #' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
 #' checar_datos(datos=base,frecuencia=4,inicio=2010)
 #'
-checar_datos <- function(datos,frecuencia,inicio) {
+checar_datos <- function(datos,frecuencia,inicio,msg=TRUE) {
   names(datos)<-c("x","y")
   datos$x <- tratamiento.fechas.TRS(datos$x)
   print(head(datos))
-  message("\n ¿Estan bien los datos a usar? \n
-      Si hay un error [Esc] \n De lo contrario [Enter] para continuar")
-  continuar<-readline(": \t")
+  if(msg){
+    message("\n ¿Estan bien los datos a usar? \n
+        Si hay un error [Esc] \n De lo contrario [Enter] para continuar")
+    continuar<-readline(": \t")
 
-  if(!continuar=="")
-    stop("Corrige el error")
+    if(!continuar=="")
+      stop("Corrige el error")
+  }
 
   #creando el objeto series
   datosts<-ts(data = datos$y,frequency =  frecuencia,start=inicio)

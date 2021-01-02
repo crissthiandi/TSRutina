@@ -1356,7 +1356,7 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
 #' @examples
 #'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
 #'  init(datos=base,frecuencia=4,inicio=2010)
-init <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,...){
+init <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=TRUE,...){
   paquetes.tsrutina()
   pausa()
   conditional.tsrutina(datos)
@@ -1371,17 +1371,19 @@ init <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,...){
   message("\n Inicio de rutina para tratamiento de una Serie de tiempo \n")
   serie_tiempo_rutina(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_,...)
   message("\n Inicio de pruebas para tratamiento de una Serie de tiempo \n")
-  serie_tiempo_pruebas(datos = datos,frecuencia = frecuencia,init_ = init_)
+  serie_tiempo_pruebas(datos = datos,frecuencia = frecuencia,init_ = init_,msg)
   message("\n Ajuste de un modelo ARIMA para tratamiento de una Serie de tiempo \n")
-  serie_tiempo_ARIMA(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_)
+  serie_tiempo_ARIMA(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_,msg)
   message("\n Varios suavizamientos de una Serie de tiempo creación en workdir \n")
   serie_tiempo_plots(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_)
 
 }
 
 
-Ajuste_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,...){
+
+Ajuste_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=FALSE,...){
  #Función para hacer el proceso de forma directa con las sugerencias como respuestas
   #Probablemente se deba agregar en el futuro la opción de reporte
+  init(datos,frecuencia,inicio,init_,msg)
 
 }

@@ -4,7 +4,13 @@
 \alias{serie_tiempo_ARIMA}
 \title{Ajuste de Modelo ARIMA a tu Serie de tiempo}
 \usage{
-serie_tiempo_ARIMA(datos, frecuencia = NULL, inicio = NULL, init_ = FALSE)
+serie_tiempo_ARIMA(
+  datos,
+  frecuencia = NULL,
+  inicio = NULL,
+  init_ = FALSE,
+  msg = TRUE
+)
 }
 \arguments{
 \item{datos}{Dataframe de no mas de 2 columnas, en el orden primero tiempo y

@@ -4,7 +4,7 @@
 \alias{checar_datos}
 \title{Checa los datos en rutina TSR}
 \usage{
-checar_datos(datos, frecuencia, inicio)
+checar_datos(datos, frecuencia, inicio, msg = TRUE)
 }
 \arguments{
 \item{datos}{Data.Frame de 2 columnas, fecha y valores respectivamente. (se hace tratamiento de fechas con \code{\link{tratamiento.fechas.TRS}})}

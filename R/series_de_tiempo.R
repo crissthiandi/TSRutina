@@ -50,7 +50,7 @@ paquetes.tsrutina <- function(){
 #'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
 #'  serie_tiempo_pruebas(datos=base,frecuencia=4)
 #'
-serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE){
+serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa_off=1){
     if(!init_){
       paquetes.tsrutina()
       pausa()
@@ -297,6 +297,11 @@ checar_datos <- function(datos,frecuencia,inicio,msg=TRUE) {
 #' pausa(10)
 #'
 pausa <-function(duracion = Inf){
+        #parche para control de pausa
+        a=try(get("pausa_off",envir = parent.frame()),1)
+        if(a==0){
+          return(invisible(NULL))
+        }
 
         if (is.infinite(duracion)) {
             arg <- "*"
@@ -356,7 +361,7 @@ pausa <-function(duracion = Inf){
 #' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
 #' serie_tiempo_rutina(datos=base,frecuencia=4,inicio=2010)
 #'
-serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
+serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa_off=1){
 
     if(!init_){
       paquetes.tsrutina()
@@ -603,7 +608,7 @@ dev.TRS <- function(){
 #' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
 #' serie_tiempo_rutina(datos=base,frecuencia=4,inicio=2010)
 #'
-serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE){
+serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa_off=1){
     if(!init_){
       paquetes.tsrutina()
       pausa()
@@ -1155,7 +1160,7 @@ recomendaciones_arma <- function(time_series,print_matrix=TRUE) {
 #'
 #' serie_tiempo_ARIMA(wineind)
 #'
-serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=TRUE){
+serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=TRUE,pausa_off=1){
   if(!init_){
     paquetes.tsrutina()
     pausa()
@@ -1368,7 +1373,7 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
 #' @examples
 #'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
 #'  init(datos=base,frecuencia=4,inicio=2010)
-init <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=TRUE,...){
+init <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=TRUE,pausa_off=1,...){
   paquetes.tsrutina()
   pausa()
   conditional.tsrutina(datos)
@@ -1445,7 +1450,7 @@ Ajuste_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=FALSE
 #'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
 #'  Ajuste_ARIMA_rapido(datos=base,frecuencia=4,inicio=2010)
 #'
-Ajuste_ARIMA_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=FALSE,...){
+Ajuste_ARIMA_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=FALSE,pausa_off=1,...){
   paquetes.tsrutina()
   pausa()
   conditional.tsrutina(datos)

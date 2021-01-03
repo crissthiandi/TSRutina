@@ -1194,7 +1194,7 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
     if(p_valor==""){
       p_valor<-0.05
     }else{
-      print(sprintf("\nEl valor de p= %s \n",p_valor))
+      print(sprintf("El valor de p= %s",p_valor))
       p_valor<-as.numeric(p_valor)
     }
 
@@ -1238,6 +1238,7 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
 
   if(msg){
     ma<-readline('Que MA(q) sospechas?, inserte el valor de q: ')
+  }else{
     ma<-""
   }
   ma<-if(ma==""){
@@ -1259,7 +1260,7 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
   if(mama$aic<rara$aic){
     message(sprintf('El modelo con menor AIC es el MA(%s)',ma[3]))
   }else{
-    message(sprintf('El modelo con menor AIC es el RA(%s)',ra[3]))
+    message(sprintf('El modelo con menor AIC es el AR(%s)',ar[1]))
   }
   pausa()
 
@@ -1267,9 +1268,9 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
   for (i in 1:2) {
     modelo=list(mama,rara)
     if(modelo[[i]][["call"]][["order"]]=="ma"){
-      message("\nAnalisis de correlación en el modelo para Ma(r)")
+      message(sprintf("\nAnalisis de correlación en el modelo para Ma(%s)",ma[3]))
     }else{
-      message("\nAnalisis de correlación en el modelo para RA(p)")
+      message("\nAnalisis de correlación en el modelo para RA(%s)",ra[3])
     }
 
     box_test=Box.test(modelo[[i]]$residuals, type ="Ljung-Box")
@@ -1329,6 +1330,8 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
   message("\nAcontinuación su resumen estadistico")
   print(arima(base$y,order = arma_order))
   pausa()
+
+  #ajuste ARIMA drif
 
 
   return(NULL)

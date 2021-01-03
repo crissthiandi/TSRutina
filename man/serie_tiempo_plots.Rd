@@ -21,8 +21,8 @@ dia-mes-year. La versión 2.1 soporta objetos de la clase TS (time series)}
 \value{
 La salida no es como tal un objeto, si no una serie de impresiones de varios
    analisis.
-   \itemize{\item{Plost}{  Arroja una lista de plots que ayudan a ver el comportamiento de la serie y como ciertos ajustes se aproximan mejor a ella}}
-   \itemize{\item{PNG}{ Imagenes grabadas en el directorio de trabajo}}
+   \itemize{\item{\bold{Plost}}{  Arroja una lista de plots que ayudan a ver el comportamiento de la serie y como ciertos ajustes se aproximan mejor a ella}}
+   \itemize{\item{\bold{PNG}}{ Imagenes grabadas en el directorio de trabajo}}
 }
 \description{
 Obten archivos .png de tus graficos de serie de tiempo en tu directorio

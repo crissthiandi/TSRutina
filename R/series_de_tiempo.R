@@ -1321,8 +1321,14 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
     c(arma_p,numero_diferenciaciones,arma_q)
   }
   #se imprime el modelo arma
+  if(numero_diferenciaciones>0){
+    message("\nSe detecto que la base a sido diferenciada al menos una vez\n
+            El modelo ARIMA final es de la forma (",arma_order,")")
+  }
+  message("\nAcontinuación su resumen estadistico")
   print(arima(base$y,order = arma_order))
   pausa()
+
 
   return(NULL)
 }

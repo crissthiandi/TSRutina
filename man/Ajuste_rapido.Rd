@@ -29,9 +29,9 @@ sobreescribe valores de objetos ts}
 \value{
 La salida no es como tal un objeto, si no una serie de impresiones de varios
   analisis. La siguiente lista detalla alguno de ellos:
-  \itemize{\item{Plost}{  Arroja una lista de plots que ayudan a ver el comportamiento de la serie y como ciertos ajustes se aproximan mejor a ella}}
-  \itemize{\item{Resumenes}{  Arroja ciertos resumenes de ciertos ajustes o pruebas que se hacen}}
-  \itemize{\item{Modelo}{  Modelo con el menor MSE(Error cuadratico medio)}}
+  \itemize{\item{\bold{Plost}}{  Arroja una lista de plots que ayudan a ver el comportamiento de la serie y como ciertos ajustes se aproximan mejor a ella}}
+  \itemize{\item{\bold{Resumenes}}{  Arroja ciertos resumenes de ciertos ajustes o pruebas que se hacen}}
+  \itemize{\item{\bold{Modelo}}{  Modelo con el menor MSE(Error cuadratico medio)}}
 }
 \description{
 Esta función considera que las recomendaciones de la paqueteria seran tomandas como los valores a usar

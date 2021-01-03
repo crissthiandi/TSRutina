@@ -1153,6 +1153,8 @@ recomendaciones_arma <- function(time_series,print_matrix=TRUE) {
 #' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(20))
 #' serie_tiempo_ARIMA(datos=base,frecuencia=4,inicio=2010)
 #'
+#' serie_tiempo_ARIMA(wineind)
+#'
 serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=TRUE){
   if(!init_){
     paquetes.tsrutina()
@@ -1270,7 +1272,7 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
     if(modelo[[i]][["call"]][["order"]]=="ma"){
       message(sprintf("\nAnalisis de correlación en el modelo para Ma(%s)",ma[3]))
     }else{
-      message("\nAnalisis de correlación en el modelo para RA(%s)",ra[3])
+      message(sprintf("\nAnalisis de correlación en el modelo para AR(%s)",ar[1]))
     }
 
     box_test=Box.test(modelo[[i]]$residuals, type ="Ljung-Box")
@@ -1300,7 +1302,7 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
 
     sprintf("\n \n")
   }
-
+  pausa()
   #analisis ARMA si diferecias es mayor a cero, ARMA=ARIMA
   datosts=ts(base$y)
 

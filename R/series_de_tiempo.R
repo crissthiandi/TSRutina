@@ -1215,57 +1215,58 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
     pausa()
   }
   #plotea el acf y analizas
-  print(acf(base$y,main="Autocorrelación, Analiza el valor de r en MA(r)"))
+  acf(base$y,main="Autocorrelación, Analiza el valor de p en AR(p)")
 
   #función de recomendación
   rec=recomendacion_autocorrelaciones(acf(base$y,plot = FALSE))
 
   if(msg){
-    ma<-readline('Que MA(r) sospechas?, inserte el valor de r: ')
+    ar<-readline('Que AR(p) sospechas?, inserte el valor de p: ')
   }else{
-    ma<-""
+    ar<-""
   }
 
+  ar<-if(ar==""){
+    c(as.numeric(rec),numero_diferenciaciones,0)
+  }else{
+    c(as.numeric(ar),numero_diferenciaciones,0)
+  }
+  pausa()
+  #plotea el pacf
+  pacf(base$y,main="Autocorrelación Parcial,Analiza el valor de q en MA(q)")
+  rec=recomendacion_autocorrelaciones(pacf(base$y,plot = FALSE))
+
+  if(msg){
+    ma<-readline('Que MA(q) sospechas?, inserte el valor de q: ')
+    ma<-""
+  }
   ma<-if(ma==""){
     c(0,numero_diferenciaciones,as.numeric(rec))
   }else{
     c(0,numero_diferenciaciones,as.numeric(ma))
   }
   pausa()
-  #plotea el pacf
-  print(pacf(base$y,main="Autocorrelación Parcial,Analiza el valor de p en AR(p)"))
-  rec=recomendacion_autocorrelaciones(pacf(base$y,plot = FALSE))
-
-  if(msg){
-    ra<-readline('Que AR(p) sospechas?, inserte el valor de p: ')
-  }else{
-    ra<-""
-  }
-  ra<-if(ra==""){
-    c(as.numeric(rec),numero_diferenciaciones,0)
-  }else{
-    c(as.numeric(ra),numero_diferenciaciones,0)
-  }
-  pausa()
   #imprime arimas
-  print(arima(base$y,order = ma))
+  message("\nResumen estadistico de modelo AR(",ar[1],")")
+  print(arima(base$y,order = ar))
   pausa()
-  print(arima(base$y,order = ra))
+  message("\nResumen estadistico de modelo MA(",ma[3],")")
+  print(arima(base$y,order = ma))
   pausa()
   #compara arimas
   mama<-arima(base$y,order = ma)
-  rara<-arima(base$y,order = ra)
+  rara<-arima(base$y,order = ar)
   if(mama$aic<rara$aic){
-    print(sprintf('El modelo con menor AIC es el MA(%s)',ma[3]))
+    message(sprintf('El modelo con menor AIC es el MA(%s)',ma[3]))
   }else{
-    print(sprintf('El modelo con menor AIC es el RA(%s)',ra[3]))
+    message(sprintf('El modelo con menor AIC es el RA(%s)',ra[3]))
   }
   pausa()
 
   cat("Prueba de Box-Pierce and Ljung-Box Test")
   for (i in 1:2) {
     modelo=list(mama,rara)
-    if(mama[["call"]][["order"]]=="ma"){
+    if(modelo[[i]][["call"]][["order"]]=="ma"){
       message("\nAnalisis de correlación en el modelo para Ma(r)")
     }else{
       message("\nAnalisis de correlación en el modelo para RA(p)")

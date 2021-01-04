@@ -9,7 +9,8 @@ serie_tiempo_ARIMA(
   frecuencia = NULL,
   inicio = NULL,
   init_ = FALSE,
-  msg = TRUE
+  msg = TRUE,
+  pausa_off = 1
 )
 }
 \arguments{

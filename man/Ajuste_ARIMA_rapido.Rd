@@ -10,6 +10,7 @@ Ajuste_ARIMA_rapido(
   inicio = NULL,
   init_ = TRUE,
   msg = FALSE,
+  pausa_off = 1,
   ...
 )
 }

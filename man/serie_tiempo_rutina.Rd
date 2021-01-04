@@ -4,7 +4,13 @@
 \alias{serie_tiempo_rutina}
 \title{Rutinas en una serie de tiempo}
 \usage{
-serie_tiempo_rutina(datos, frecuencia = NULL, inicio = NULL, init_ = FALSE)
+serie_tiempo_rutina(
+  datos,
+  frecuencia = NULL,
+  inicio = NULL,
+  init_ = FALSE,
+  pausa_off = 1
+)
 }
 \arguments{
 \item{datos}{Dataframe de no mas de 2 columnas, en el orden primero tiempo y

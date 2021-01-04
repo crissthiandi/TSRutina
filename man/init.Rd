@@ -4,7 +4,15 @@
 \alias{init}
 \title{Rutina Principal de TSRutina}
 \usage{
-init(datos, frecuencia = NULL, inicio = NULL, init_ = TRUE, msg = TRUE, ...)
+init(
+  datos,
+  frecuencia = NULL,
+  inicio = NULL,
+  init_ = TRUE,
+  msg = TRUE,
+  pausa_off = 1,
+  ...
+)
 }
 \arguments{
 \item{datos}{Datos para el analisis de serie de tiempo suport (data.frame and ts class)}

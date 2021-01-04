@@ -4,7 +4,13 @@
 \alias{serie_tiempo_pruebas}
 \title{Pruebas de una serie de tiempo}
 \usage{
-serie_tiempo_pruebas(datos, frecuencia = NULL, init_ = FALSE, msg = TRUE)
+serie_tiempo_pruebas(
+  datos,
+  frecuencia = NULL,
+  init_ = FALSE,
+  msg = TRUE,
+  pausa_off = 1
+)
 }
 \arguments{
 \item{datos}{Data.frame o objeto TS a analizar}

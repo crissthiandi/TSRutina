@@ -1467,3 +1467,28 @@ Ajuste_ARIMA_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg
   serie_tiempo_pruebas(datos,frecuencia,init_,msg,pausa_off)
   serie_tiempo_ARIMA(datos,frecuencia,inicio,init_,msg,pausa_off)
 }
+
+
+
+#' De lista a reporte PDF
+#'
+#' Haz un reporte de tus objetos lista para poder analizar en formato de lectura tu serie de tiempo
+#'
+#' En desarrollo probablemente en uso hasta la version 3.1< de la tabby verse
+#'
+#' @param lista objeto lista a usar para el reporte, only output
+#'
+#' @return PDF report
+#' @export
+#'
+#' @examples
+#'
+#' a=TSRutina::Ajuste_ARIMA_rapido(AirPassengers,pausa_off = 0)
+#' hacer_reporte(a)
+#'
+hacer_reporte <- function(lista){
+  #jejeje no tengo perra idea de como hacer esto :c
+
+}
+
+

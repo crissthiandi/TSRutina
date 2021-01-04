@@ -1386,13 +1386,13 @@ init <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=TRUE,pausa_off
   }
 
   message("\n Inicio de rutina para tratamiento de una Serie de tiempo \n")
-  serie_tiempo_rutina(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_,...)
+  serie_tiempo_rutina(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_,pausa_off = pausa_off,...)
   message("\n Inicio de pruebas para tratamiento de una Serie de tiempo \n")
-  serie_tiempo_pruebas(datos = datos,frecuencia = frecuencia,init_ = init_,msg)
+  serie_tiempo_pruebas(datos = datos,frecuencia = frecuencia,init_ = init_,msg = msg,pausa_off = pausa_off)
   message("\n Ajuste de un modelo ARIMA para tratamiento de una Serie de tiempo \n")
-  serie_tiempo_ARIMA(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_,msg)
+  serie_tiempo_ARIMA(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_,msg = msg,pausa_off = pausa_off)
   message("\n Varios suavizamientos de una Serie de tiempo creación en workdir \n")
-  serie_tiempo_plots(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_)
+  serie_tiempo_plots(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_,pausa_off = pausa_off)
 
 }
 
@@ -1423,10 +1423,10 @@ init <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=TRUE,pausa_off
 #'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
 #'  Ajuste_rapido(datos=base,frecuencia=4,inicio=2010)
 #'
-Ajuste_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=FALSE,...){
+Ajuste_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=FALSE,pausa_off=1,...){
  #Función para hacer el proceso de forma directa con las sugerencias como respuestas
   #Probablemente se deba agregar en el futuro la opción de reporte
-  init(datos,frecuencia,inicio,init_,msg)
+  init(datos,frecuencia,inicio,init_,msg,pausa_off)
 }
 
 #' Ajuste ARIMA con pruebas estadisticas
@@ -1464,6 +1464,6 @@ Ajuste_ARIMA_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg
 
   #solo se hace ajuste arima y prueba de estacionalidad
 
-  serie_tiempo_pruebas(datos,frecuencia,init_,msg)
-  serie_tiempo_ARIMA(datos,frecuencia,inicio,init_,msg)
+  serie_tiempo_pruebas(datos,frecuencia,init_,msg,pausa_off)
+  serie_tiempo_ARIMA(datos,frecuencia,inicio,init_,msg,pausa_off)
 }

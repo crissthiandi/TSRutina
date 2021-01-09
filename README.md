@@ -84,12 +84,12 @@ La primera salida de la función **init(sunspot.year)** es un vistazo a la serie
 
 La segunda salida es una descomposición de la serie de tiempo apartir del *ruido, estacionalidad y tendencia*.
 
+
 ![image](img/img_descomposicion.png)
 
 Al final se obtiene el mejor ajuste de la lista de suavizamiento posibles, junto con su predicción a 12 periodos:
 
 ![image](img/predic.png)
-
 
 #### Suprimir los mensajes y aceptar las sugerencias
 
@@ -99,6 +99,7 @@ Lo anterior se logra suprimiendo los mensajes tipo pregunta de la rutina, con el
 ```r
 init(sunspot.year,10,msg = FALSE) #La rutina no hace preguntas
 ```
+
 
 
 

@@ -22,18 +22,23 @@ El asistente contiene un generador de gráficas de los Suavizamientos anteriores
 Se realizan múltiples pruebas estadísticas que permite tomar decisiones sobre si la serie se ajusta o no a la lista de supuestos de algún modelo.
 
 Esta paqueteria tiene una documentación en la mayoría de las funciones, si se tiene duda de su uso o que hacen algunas funciones no dudes en usar la documentación que se instala junto a la paqueteria. Ejemplo:
-```python
+```r
 #acceder a la documentación de la función init()
 library('TSRutina')
 ?init
 ```
 
+**Table of Contents**
+
+[TOCM]
+
 ## Ejemplo de uso y salidas
+=============
 
 ### Instalación
 
 Primeros pasos, instalación y uso:
-```python
+```r
 #Previos
 install.packages('devtools')
 library('devtools')

@@ -392,14 +392,16 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
         theme(plot.title = element_text(color = "Black",hjust = 0.5))
     )
     pausa()
+    if(frecuencia==1){
+      message("La frecuencia de la serie de tiempo es 1, usaremos frecuencia 12 para los siguientes 2 graficos")
+      frecuencia=12
+      datosts=ts(datos$y,frequency = 12,start = start(elementos$datosts))
+    }
     print(
     autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue",
              main="Ruido + Estacionalidad + Tendencia + SerieTemporal ")
     )
     pausa()
-    if(frecuencia==1){
-      message("La frecuencia de la serie de tiempo es 1, usaremos frecuencia 12 para los siguientes 2 graficos")
-    }
     seasonplot(datosts,col=rainbow(length(datos$y)/frecuencia),year.labels=TRUE,xlab="Tiempo",
                ylab="Serie de tiempo",main = "Grafico Estacional de la Serie Temp.")
     pausa()

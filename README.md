@@ -28,12 +28,9 @@ library('TSRutina')
 ?init
 ```
 
-**Table of Contents**
+Ejemplo de uso y salidas
+=================
 
-[TOCM]
-
-## Ejemplo de uso y salidas
-=============
 
 ### Instalación
 
@@ -55,14 +52,46 @@ Tomemos la base de datos **sunspot.year** la cual tiene las manchas solares anua
 
 luego llamemos a ```init(sunspot.year)``` y obtenemos una análisis de estos datos.
 
-Obtendremos un ERROR eventualmente o aviso porque la serie de tiempo *sunspot.year* no tiene frecuencia mayor a 1. Se puede omitir o modificar si creemos que existe una frecuencia de interés, por ejemplo cada 10 años creemos hay un ciclo en estas manchas solares.
-
-Si queremos hacer esto no necesitamos editar el objeto TS *sunspot.year* externamente, si no usando las misma funciones de la paqueteria **TSRutina**. Ejemplo:
+> **Obervación:**
+> 
+> Como no especificamos la frecuencia se usa la frecuencia del objeto *TS* y como esa frecuencia es igual a **1** entonces obtendremos un ERROR o aviso eventualmente porque la serie de tiempo *sunspot.year* no tiene frecuencia mayor a 1. Se puede omitir o modificar la frecuencia si creemos que existe algun valor de interés. Por ejemplo Creemos que cada 10 años hay un ciclo en estas manchas solares.
+> Si queremos hacer esto no necesitamos editar el objeto TS *sunspot.year* externamente, si no usando las misma funciones de la paqueteria **TSRutina**. Ejemplo:
 ```r
 init(sunspot.year,frecuencia = 10) #Editando la frecuencia del objeto TS
 ```
+##### Outputs
 
-#### Suprime los mensajes y acepta las sugerencias
+Las interacciónes con el asistente son de la forma:
+```bash
+Pregunta => Mensaje => Respuesta del usuario => Resultado
+```
+En la mayoria de los casos los mensajes son impresiones de color **azul** similares a los mensajes clasicos. Aunque en las futuras versiónes se usaran otros colores que podran dar una mejor idea de cuando inicia o termina un mensaje.
+
+Para la función ```init()``` la primera Pregunta y Mensaje son los siguientes
+![image](img/primera_salida.png)
+
+Esta primera salida nos pedira confirmar si los datos son bien interpretados por la *rutina*. De marchar todo bien, se ingresa *intro* para continuar, de lo contrario, si hay un error inserte o oprima *Esc* para abortar la rutina.
+
+Despues de brincar este filtro tendremos lo que en general seran los filtros *pausa*, que son momentos en los que la función muestra un resultado (grafico o estadistico) y espera que el usuario confirme para continuar (en ese momento la función espera a que el usuario analise la salida y decida si continuar con la rutina de analisis).
+
+![image](img/segunda_salida.png)
+
+#### Salida de la Función init(sunspot.year)
+
+La primera salida de la función **init(sunspot.year)** es un vistazo a la serie de tiempo.
+
+![image](img/visualiza.png)
+
+La segunda salida es una descomposición de la serie de tiempo apartir del *ruido, estacionalidad y tendencia*.
+
+![image](img/img_descomposicion.png)
+
+Al final se obtiene el mejor ajuste de la lista de suavizamiento posibles, junto con su predicción a 12 periodos:
+
+![image](img/predic.png)
+
+
+#### Suprimir los mensajes y aceptar las sugerencias
 
 Algunas veces el analista o usuario de la paqueteria **TSRutina** puede confiar en el criterio de la función para la propuesta de modelos o no tener mucha idea de cual es el mejor orden de los modelos. En tal caso puede aceptar que *el asistente  realice el mejor ajuste únicamente con sus propuestas sin ayuda del usuario*.
 

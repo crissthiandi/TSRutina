@@ -1,4 +1,4 @@
-# TSRutina V3.0 Taby
+# TSRutina V3.1 Taby
 
 Asistente para el análisis de series de tiempo basado en los modelos simples para series de tiempo univariadas.
 

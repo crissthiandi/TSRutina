@@ -45,6 +45,7 @@ paquetes.tsrutina <- function(){
 #'
 #' @importFrom lmtest dwtest
 #' @importFrom tseries adf.test
+#' @import crayon
 #'
 #' @examples
 #'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
@@ -257,6 +258,8 @@ tratamiento.fechas.TRS <- function(fecha_vector){
 #' @return Una lista \code{\link{list}} que contiene dos elementos, la base de datos tratada y un objeto TimeSeries
 #' @export
 #'
+#' @import crayon
+#'
 #' @examples
 #' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
 #' checar_datos(datos=base,frecuencia=4,inicio=2010)
@@ -290,6 +293,8 @@ checar_datos <- function(datos,frecuencia,inicio,msg=TRUE) {
 #'
 #' @return
 #' @export
+#'
+#' @import crayon
 #'
 #' @examples
 #'
@@ -354,6 +359,7 @@ pausa <-function(duracion = Inf){
 #' @importFrom pracma movavg
 #' @importFrom forecast ses hw holt forecast
 #' @importFrom greybox MSE
+#' @import crayon
 #'
 #' @examples
 #' serie_tiempo_rutina(sunspot.year,5)
@@ -602,6 +608,7 @@ dev.TRS <- function(){
 #' @importFrom pracma movavg
 #' @importFrom forecast ses hw holt forecast
 #' @importFrom greybox MSE
+#' @import crayon
 #'
 #'
 #' @examples
@@ -1004,6 +1011,8 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
 #' @return Valor del ultimo lag significativo de la funcion de autocorrelacion
 #' @export
 #'
+#' @import crayon
+#'
 #' @examples
 #' base=data.frame(x=seq(Sys.Date(),by="days",length=200),y=1:20*3+runif(20))
 #' recomendacion_autocorrelaciones(acf(base$y,plot = FALSE))
@@ -1106,6 +1115,8 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
 #' @return Vector de longitud 2, primera entrada valor de \bold{p}, segunda valor de \bold{q}
 #' @export
 #'
+#' @import crayon
+#'
 #' @examples
 #' recomendaciones_arma(AirPassengers)
 recomendaciones_arma <- function(time_series,print_matrix=TRUE) {
@@ -1153,6 +1164,8 @@ recomendaciones_arma <- function(time_series,print_matrix=TRUE) {
 #' @return La salida no es como tal un objeto, si no una serie de impresiones de varios
 #'    analisis. El mejor basando en criterio AIC.
 #' @export
+#'
+#' @import crayon
 #'
 #' @examples
 #' serie_tiempo_ARIMA(sunspot.year,5)
@@ -1372,6 +1385,8 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
 #'
 #' @export
 #'
+#' @import crayon
+#'
 #' @examples
 #'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
 #'  init(datos=base,frecuencia=4,inicio=2010)
@@ -1482,6 +1497,8 @@ Ajuste_ARIMA_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg
 #'
 #' @return PDF report
 #' @export
+#'
+#' @import crayon
 #'
 #' @examples
 #'

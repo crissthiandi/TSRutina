@@ -70,7 +70,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
             regresion<-lm(y~xx,base2)
             cat("\n Prueba de presencia de autocorrelación Durbin-Watson Test \n")
             cat("\n (Prueba aplicada los residuos de una regresión lineal) \n")
-            prueba<-dwtest(regresion)
+            prueba<-lmtest::dwtest(regresion)
             print(prueba)
             if(msg){
               p_valor<-readline('Inserte un p valor, (intro para p=0.05):  \n')
@@ -103,7 +103,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
             basets<-ts(base$y,frequency=frecuencia)
             cat("\n Prueba de presencia de Estacionalidad Dickey-Fuller Test \n")
 
-            prueba<-adf.test(basets)
+            prueba<-tseries::adf.test(basets)
             print(prueba)
             if(msg){#si no hay mensaje entonces predeterminado
               p_valor<-readline('Inserte un p valor, (intro para p=0.05) \n')
@@ -404,11 +404,11 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
       datosts=ts(datos$y,frequency = 12,start = start(elementos$datosts))
     }
     print(
-    autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue",
+    forecast::autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue",
              main="Ruido + Estacionalidad + Tendencia + SerieTemporal ")
     )
     pausa()
-    seasonplot(datosts,col=rainbow(length(datos$y)/frecuencia),year.labels=TRUE,xlab="Tiempo",
+    forecast::seasonplot(datosts,col=rainbow(length(datos$y)/frecuencia),year.labels=TRUE,xlab="Tiempo",
                ylab="Serie de tiempo",main = "Grafico Estacional de la Serie Temp.")
     pausa()
 
@@ -432,7 +432,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
 
     #Promedio Movil simple
 
-    promo<-movavg(datosts, n=frecuencia, type="s")
+    promo<-pracma::movavg(datosts, n=frecuencia, type="s")
 
     plot(datos$periodos,datos$y,type = "l",
          xlab="Periodos",ylab="Valor de la serie",
@@ -442,7 +442,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
 
     #Promedio Movil ponderado
 
-    promopo<-movavg(datosts, n=frecuencia, type="w")
+    promopo<-pracma::movavg(datosts, n=frecuencia, type="w")
 
     plot(datos$periodos,datos$y,type = "l",
          xlab="Periodos",ylab="Valor de la serie",
@@ -452,7 +452,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
 
     #Exponential Smoothing
 
-    pesoses<-ses(datos$y)
+    pesoses<-forecast::ses(datos$y)
 
     summary(pesoses)
     plot(datos$periodos,datos$y,type = "l",
@@ -464,7 +464,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
 
     #Holt's Exponential Smoothing
 
-    pesoholt<- holt(datos$y)
+    pesoholt<- forecast::holt(datos$y)
 
     summary(pesoholt)
     plot(datos$periodos,datos$y,type = "l",
@@ -475,7 +475,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
 
     #Holt-Winters' Exponential Smoothing
 
-    pesohw<- hw(datosts)
+    pesohw<- forecast::hw(datosts)
 
     summary(pesohw)
     #asignamos valores ajustados a una columna
@@ -519,27 +519,27 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     switch(a,
         '1' = {print('Regresion lineal')
             pausa()
-            pronostico<-forecast(datos_rl$fitted.values,h=5,level=c(80,95))
+            pronostico<-forecast::forecast(datos_rl$fitted.values,h=5,level=c(80,95))
             plot(pronostico)},
         '2' = {print('Promedio movil simple')
             pausa()
-            pronostico<-forecast(promo,h=5,level=c(80,95))
+            pronostico<-forecast::forecast(promo,h=5,level=c(80,95))
             plot(pronostico)},
         '3' = {print('Promedio ponderado')
             pausa()
-            pronostico<-forecast(promopo,h=5,level=c(80,95))
+            pronostico<-forecast::forecast(promopo,h=5,level=c(80,95))
             plot(pronostico)},
         '4' = {print('Exponencial simple')
             pausa()
-            pronostico<-forecast(pesoses,h=5,level=c(80,95))
+            pronostico<-forecast::forecast(pesoses,h=5,level=c(80,95))
             plot(pronostico)},
         '5' = {print('Suavizamiento de Holt')
             pausa()
-            pronostico<-forecast(pesoholt,h=5,level=c(80,95))
+            pronostico<-forecast::forecast(pesoholt,h=5,level=c(80,95))
             plot(pronostico)},
         '6' = {print('Suavizamiento de Holt-Winter')
             pausa()
-            pronostico<-forecast(pesohw,h=5,level=c(80,95))
+            pronostico<-forecast::forecast(pesohw,h=5,level=c(80,95))
             plot(pronostico)}
     )
     pausa()
@@ -673,7 +673,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
 
     png("st_descomposicion.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
     print(
-      autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue",
+      forecast::autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue",
                main = "Descomposición de Serie de tiempo")
       )
     cat("Descomposición de Serie de tiempo st_descomposicion.png fue creada y guardada \n")
@@ -685,7 +685,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
     if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
       cat("Graficando...")
       print(
-        autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue",
+        forecast::autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue",
                  main = "Descomposición de Serie de tiempo")
       )
       pausa()
@@ -693,7 +693,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
 
 
     png("st_seasonplot.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
-    print(seasonplot(datosts,col=rainbow(length(datos$y)/frecuencia),year.labels=TRUE,
+    print(forecast::seasonplot(datosts,col=rainbow(length(datos$y)/frecuencia),year.labels=TRUE,
                xlab="Periodos",ylab="Serie de tiempo",
                main = "Grafico Estacional de la serie de tiempo"))
     cat("Temporalidad de Serie de tiempo st_seasonplot.png fue creada y guardada \n")
@@ -704,7 +704,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
     if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
       cat("Graficando...")
       print(
-      seasonplot(datosts,col=rainbow(length(datos$y)/frecuencia),year.labels=TRUE,
+        forecast::seasonplot(datosts,col=rainbow(length(datos$y)/frecuencia),year.labels=TRUE,
                  xlab="Periodos",ylab="Serie de tiempo",
                  main = "Grafico Estacional de la serie de tiempo")
       )
@@ -763,7 +763,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
 
 
     #Promedio Movil simple
-    promo<-movavg(datosts, n=frecuencia, type="s")
+    promo<-pracma::movavg(datosts, n=frecuencia, type="s")
     png("st_prom_movil_simple.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
     datos$promo<-promo
     print(
@@ -798,7 +798,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
 
     #Promedio Movil ponderado
 
-    promopo<-movavg(datosts, n=frecuencia, type="w")
+    promopo<-pracma::movavg(datosts, n=frecuencia, type="w")
 
     png("st_prom_movil_ponderado.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
 
@@ -836,7 +836,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
 
 
     #Exponential Smoothing
-    pesoses<-ses(datos$y)
+    pesoses<-forecast::ses(datos$y)
     #summary(pesoses)
     png("st_ajuste_exponencial.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
 
@@ -873,7 +873,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
 
 
     #Holt's Exponential Smoothing
-    pesoholt<- holt(datos$y)
+    pesoholt<- forecast::holt(datos$y)
     #summary(pesoholt)
     png("st_holt_exponencial.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
 
@@ -908,7 +908,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
 
 
     #Holt-Winters' Exponential Smoothing
-    pesohw<- hw(datosts,seasonal = "additive",h=10,level = 95)
+    pesohw<- forecast::hw(datosts,seasonal = "additive",h=10,level = 95)
     #pesohw$model
 
     #asignamos valores ajustados a una columna
@@ -974,11 +974,11 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
 
 
     #Promedio Movil ponderado
-    pronostico<-forecast(pronosticado,h=20,level=c(80,95))
+    pronostico<-forecast::forecast(pronosticado,h=20,level=c(80,95))
 
     png("st_pronostico_ponderado_80-90.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
     print(
-    autoplot(pronostico)
+      forecast::autoplot(pronostico)
     )
     cat("Pronostico para el mejor ajuste st_pronostico_ponderado_80-90.png fue creada y guardada \n")
 
@@ -990,7 +990,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
     if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
       cat("Graficando...")
       print(
-        autoplot(pronostico)
+        forecast::autoplot(pronostico)
       )
     }
 
@@ -1205,7 +1205,7 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
   numero_diferenciaciones=0
   while(ban){
 
-    prueba<-adf.test(base$y)
+    prueba<-tseries::adf.test(base$y)
     print(prueba)
     if(msg){
       p_valor<-readline('\nInserte un p valor (intro para p=0.05): ')

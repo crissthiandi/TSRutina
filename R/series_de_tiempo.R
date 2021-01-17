@@ -29,7 +29,7 @@ paquetes.tsrutina <- function(){
 #' Repite un texto de forma seriada y se imprime en consola, ideal para hacer una separación entre elementos impresos en consola
 #'
 #'
-#' @param repetidor String, que se repetira, idealmente del tipo "-" "_" "*" etc.
+#' @param repite String, que se repetira, idealmente del tipo "-" "_" "*" etc.
 #' @param num_repetidas Int, Cuantas veces se repite el string anterior.
 #' @param color Color del texto impresa, soportamos red, blue, green, magenta, silver y yellow
 #'
@@ -39,8 +39,14 @@ paquetes.tsrutina <- function(){
 #' @examples
 #'
 #' separador("-",10,"blue")
+#' separador()
 #'
-separador<-function(repetidor="-",num_repetidas=50,color="red"){
+separador<-function(repite="-",num_repetidas=35,color="red"){
+  b=paste0("cat(","crayon::",color,"(",
+           "paste0(rep(","'",repite,"',",num_repetidas,"))","))")
+  a=str2expression(b)
+  a
+  eval(a)
 
 }
 

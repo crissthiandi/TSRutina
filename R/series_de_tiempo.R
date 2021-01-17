@@ -24,6 +24,26 @@ paquetes.tsrutina <- function(){
 
 }
 
+#' Repide un texto y lo imprime en la consola
+#'
+#' Repite un texto de forma seriada y se imprime en consola, ideal para hacer una separación entre elementos impresos en consola
+#'
+#'
+#' @param repetidor String, que se repetira, idealmente del tipo "-" "_" "*" etc.
+#' @param num_repetidas Int, Cuantas veces se repite el string anterior.
+#' @param color Color del texto impresa, soportamos red, blue, green, magenta, silver y yellow
+#'
+#' @return Impresión en cosola
+#' @export
+#'
+#' @examples
+#'
+#' separador("-",10,"blue")
+#'
+separador<-function(repetidor="-",num_repetidas=50,color="red"){
+
+}
+
 #' Pruebas de una serie de tiempo
 #'
 #' Esta funcion incluye el calculo y la decision de dos pruebas estadisticas a una serie de tiempo.

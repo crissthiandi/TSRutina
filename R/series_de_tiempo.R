@@ -83,8 +83,9 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
       pausa()
       conditional.tsrutina(datos)
     }
-    pausa()
     if(!is.ts(datos)){
+        pausa()
+        separador()
 
         if(is.data.frame(datos)){
             base<-datos
@@ -119,6 +120,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
             }
 
 
+            separador()
             sprintf("\n \n")
 
             #Probar Estacionariedad para proceder a los modelos no probabilisticos
@@ -149,6 +151,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
                 }else{
                     message("Se rechaza H0, se obta por H1 = La serie de tiempo es Estacionaria \n")
                 }
+            separador()
         }else{
             stop("El objeto debe ser data frame")
         }

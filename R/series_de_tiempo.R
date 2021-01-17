@@ -444,6 +444,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     boxplot(datosts~cycle(datosts),xlab = "Frecuencias",ylab = "Valores",main="Boxplot por cada valor de la frecuencia")
 
     pausa()
+    separador()
 
     #Modelo de regresion lineal
     datos$periodos<-1:length(datos$x)
@@ -451,6 +452,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     print(summary(datos_rl))
     #Se puede ver cuales variables son significativas en el modelo
     pausa()
+    separador()
 
     #Grafico del modelo de regresion lineal
     plot(datos$periodos,datos$y,type = "l",
@@ -458,6 +460,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
          main="Regresión Lineal")
     lines(datos_rl$fitted.values, col="blue")
     pausa()
+    separador()
 
     #Promedio Movil simple
 
@@ -468,6 +471,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
          main="Promedio movil simple")
     lines(promo,col="blue")
     pausa()
+    separador()
 
     #Promedio Movil ponderado
 
@@ -478,7 +482,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
          main="Promedio movil ponderado")
     lines(promopo,col="blue")
     pausa()
-
+    separador()
     #Exponential Smoothing
 
     pesoses<-forecast::ses(datos$y)
@@ -489,7 +493,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
          main="Suavizamiento Exponencial")
     lines(datos$periodos,pesoses$fitted, col="blue")
     pausa()
-
+    separador()
 
     #Holt's Exponential Smoothing
 
@@ -501,7 +505,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
          main="Suavizamiento Exponencial holt")
     lines(datos$periodos,pesoholt$fitted, col="blue")
     pausa()
-
+    separador()
     #Holt-Winters' Exponential Smoothing
 
     pesohw<- forecast::hw(datosts)
@@ -517,28 +521,28 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     pausa()
     #Ahora, para elegir el mejor modelo de "suavizamiento",
     #usaremos el MSE (error cuadratico medio).
+    separador()
+    cat(crayon::green("\n MSE del modelo de Regresion Lineal \n"))
+    cat(MSE(datos$y, datos_rl$fitted.values))
 
-    cat(crayon::green("MSE del modelo de Regresion Lineal"))
-    print(MSE(datos$y, datos_rl$fitted.values))
+    cat(crayon::green('\n MSE del modelo de Promedios Moviles \n'))
 
-    cat(crayon::green('MSE del modelo de Promedios Moviles'))
+    cat(crayon::green('\n \t Simple \n\t'))
+    cat(MSE(datos$y, promo))
 
-    cat(crayon::green('Simple'))
-    print(MSE(datos$y, promo))
+    cat(crayon::green('\n \t Ponderado \n\t'))
+    cat(MSE(datos$y, promopo))
 
-    cat(crayon::green('Ponderado'))
-    print(MSE(datos$y, promopo))
+    cat(crayon::green('\n MSE del modelo de Exponential Smoothing \n'))
+    cat(MSE(datos$y, pesoses$fitted))
 
-    cat(crayon::green('MSE del modelo de Exponential Smoothing'))
-    print(MSE(datos$y, pesoses$fitted))
+    cat(crayon::green('\n MSE del modelo de Holt \n'))
+    cat(MSE(datos$y, pesoholt$fitted))
 
-    cat(crayon::green('MSE del modelo de Holt'))
-    print(MSE(datos$y, pesoholt$fitted))
+    cat(crayon::green('\n MSE del modelo Holt-Winters \n'))
+    cat(MSE(datos$y, datos$Ajustado))
 
-    cat(crayon::green('MSE del modelo Holt-Winters'))
-    print(MSE(datos$y, datos$Ajustado))
-
-    cat(crayon::yellow('el error minimo se tiene con'))
+    cat(crayon::yellow('\n El error minimo se tiene con \n'))
     a<-which.min(c(MSE(datos$y, datos_rl$fitted.values),
                 MSE(datos$y, promo),
                 MSE(datos$y, promopo),
@@ -571,6 +575,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
             pronostico<-forecast::forecast(pesohw,h=5,level=c(80,95))
             plot(pronostico)}
     )
+    separador()
     pausa()
 
     cat(crayon::green('Supuesto de Normalidad'))
@@ -581,6 +586,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     }else{
         message("Se rechaza H0, se obta por H1: No hay normalidad")
     }
+    separador()
 
 }
 

@@ -108,7 +108,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
             if(p_valor==""){
                     p_valor<-0.05
             }else{
-                    cat(crayon::red(sprintf("El valor de p= %s",p_valor)))
+                    cat(crayon::red(sprintf("El valor de p= %s",p_valor)),"\n")
                     p_valor<-as.numeric(p_valor)
             }
 
@@ -142,7 +142,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
             if(p_valor==""){
                 p_valor<-0.05
             }else{
-                print(sprintf("El valor de p= %s",p_valor))
+                cat(crayon::red(sprintf("El valor de p= %s",p_valor)),"\n")
                 p_valor<-as.numeric(p_valor)
             }
 
@@ -1256,13 +1256,13 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
     if(p_valor==""){
       p_valor<-0.05
     }else{
-      cat(crayon::red(sprintf("El valor de p= %s",p_valor)))
+      cat("\n",crayon::red(sprintf("El valor de p= %s",p_valor)),"\n")
       p_valor<-as.numeric(p_valor)
     }
 
     if(prueba$p.value>p_valor){
-      cat(crayon::yellow("No se puede rechazar H0:Hay presencia de una raiz unitaria\n"))
-      cat(crayon::yellow("No es estacionaria"))
+      cat(crayon::yellow("\nNo se puede rechazar H0:Hay presencia de una raiz unitaria\n"))
+      cat(crayon::yellow("\nNo es estacionaria"))
       pausa()
       differenciado<-diff(base$y,lag = 1,differences = 1)
       base=base[-nrow(base),]
@@ -1271,7 +1271,7 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
 
       cat(crayon::red('\nSe ha diferencio la base de datos para obtener estacionalidad\n'))
     }else{
-      cat(crayon::yellow("Se rechaza H0, se obta por H1: La serie de tiempo es Estacionaria\n"))
+      cat(crayon::yellow("\nSe rechaza H0, se obta por H1: La serie de tiempo es Estacionaria\n"))
       ban=FALSE
     }
     pausa()
@@ -1320,13 +1320,13 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
   mama<-arima(base$y,order = ma)
   rara<-arima(base$y,order = ar)
   if(mama$aic<rara$aic){
-    cat(crayon::yellow(sprintf('El modelo con menor AIC es el MA(%s)',ma[3])))
+    cat(crayon::yellow(sprintf('\nEl modelo con menor AIC es el MA(%s)',ma[3])))
   }else{
-    cat(crayon::yellow(sprintf('El modelo con menor AIC es el AR(%s)',ar[1])))
+    cat(crayon::yellow(sprintf('\nEl modelo con menor AIC es el AR(%s)',ar[1])))
   }
   pausa()
 
-  cat(crayon::green("Prueba de Box-Pierce and Ljung-Box Test"))
+  cat(crayon::green("\nPrueba de Box-Pierce and Ljung-Box Test"))
   for (i in 1:2) {
     modelo=list(mama,rara)
     if(modelo[[i]][["call"]][["order"]]=="ma"){
@@ -1337,7 +1337,7 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
 
     box_test=Box.test(modelo[[i]]$residuals, type ="Ljung-Box")
     print(box_test)
-    cat(crayon::yellow("Box.test(), el p_valor > 0.05 entonces no hay correlacion ruido blanco"))
+    cat(crayon::yellow("\nBox.test(), el p_valor > 0.05 entonces no hay correlacion ruido blanco"))
 
     if(msg){
       p_valor<-readline('Inserte un p valor, (intro para p=0.05):  \n')
@@ -1348,15 +1348,15 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
     if(p_valor==""){
       p_valor<-0.05
     }else{
-      cat(crayon::red(sprintf("El valor de p= %s",p_valor)))
+      cat("\n",crayon::red(sprintf("El valor de p= %s",p_valor)))
       p_valor<-as.numeric(p_valor)
     }
 
 
     if(prueba$p.value>0.05){
-      cat(crayon::yellow("No se puede rechazar H0 = No hay presencia de autocorrelacion "))
+      cat(crayon::yellow("\nNo se puede rechazar H0 = No hay presencia de autocorrelacion "))
     }else{
-      cat(crayon::yellow("Se rechaza H0, se obta por H1 = Hay presencia de autocorrelacion"))
+      cat(crayon::yellow("\nSe rechaza H0, se obta por H1 = Hay presencia de autocorrelacion"))
     }
 
 
@@ -1389,7 +1389,7 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
     cat(crayon::red("\nSe detecto que la base a sido diferenciada al menos una vez\n
             El modelo ARIMA final es de la forma (",arma_order,")"))
   }
-  cat(crayon::green("\nAcontinuación su resumen estadistico"))
+  cat(crayon::green("\nA continuación su resumen estadistico"))
   print(arima(base$y,order = arma_order))
   pausa()
 
@@ -1506,6 +1506,8 @@ Ajuste_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=FALSE
 #' @examples
 #'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #'  Ajuste_ARIMA_rapido(datos=base,frecuencia=4,inicio=2010)
+#'
+#'  Ajuste_ARIMA_rapido(AirPassengers)
 #'
 Ajuste_ARIMA_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=FALSE,pausa_off=1,...){
   paquetes.tsrutina()

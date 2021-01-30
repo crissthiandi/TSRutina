@@ -1094,13 +1094,13 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
     for(i in 1:15){
       if(matriz[1,i]==1){
         order_=i
-        cat("\nProponemos MA(q) con q=:",order_)
+        cat(crayon::yellow("\nProponemos MA(q) con q="),order_)
         break
       }
     }
     #parche para casos donde no hay valor a proponer
     if(is.null(order_)){
-      cat("El valor de la q propuesta es mayor a 15...")
+      cat(crayon::green("El valor de la q propuesta es mayor a 15..."))
       order_=16
     }
   }
@@ -1110,12 +1110,12 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
     for(i in 1:15){
       if(matriz[i,1]==1){
         order_=i
-        cat("\nProponemos AR(p) con p=:",order_)
+        cat(crayon::yellow("\nProponemos AR(p) con p="),order_)
         break
       }
     }
     if(is.null(order_)){
-      cat("El valor de la p propuesta es mayor a 15...")
+      cat(crayon::green("El valor de la p propuesta es mayor a 15..."))
       order_=16
     }
   }
@@ -1146,6 +1146,7 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
 #'
 #' @param time_series Objeto Serie de tiempo
 #' @param print_matrix Indicador, imprimir o no matriz de eacf
+#' @param msg Mostrar mensaje en lugar de vector
 #'
 #' @return Vector de longitud 2, primera entrada valor de \bold{p}, segunda valor de \bold{q}
 #' @export
@@ -1154,7 +1155,7 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
 #'
 #' @examples
 #' recomendaciones_arma(AirPassengers)
-recomendaciones_arma <- function(time_series,print_matrix=TRUE) {
+recomendaciones_arma <- function(time_series,print_matrix=TRUE,msg=FALSE) {
   x=time_series
 
   modelo_arma <- matriz_eacf(x,7,7,print_matrix)
@@ -1174,6 +1175,10 @@ recomendaciones_arma <- function(time_series,print_matrix=TRUE) {
           #condicion algun vecino o diagonal no null
           if(izquierda+abajo+diagonal >2 | diagonal>0){
             vec=c(i,j)
+            if(msg){
+              cat(crayon::yellow("Se recomienda ARMA("),vec[1],",",vec[2],crayon::yellow(")"))
+              return(invisible(NULL))
+            }
             return(vec)
           }
         }

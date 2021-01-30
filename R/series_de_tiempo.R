@@ -71,7 +71,7 @@ separador<-function(repite="-",num_repetidas=35,color="red"){
 #'
 #' @importFrom lmtest dwtest
 #' @importFrom tseries adf.test
-#' @import crayon
+#' @importFrom crayon green red yellow
 #'
 #' @examples
 #'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
@@ -287,7 +287,7 @@ tratamiento.fechas.TRS <- function(fecha_vector){
 #' @return Una lista \code{\link{list}} que contiene dos elementos, la base de datos tratada y un objeto TimeSeries
 #' @export
 #'
-#' @import crayon
+#' @importFrom crayon green red yellow
 #'
 #' @examples
 #' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
@@ -323,7 +323,7 @@ checar_datos <- function(datos,frecuencia,inicio,msg=TRUE) {
 #' @return
 #' @export
 #'
-#' @import crayon
+#' @importFrom crayon green red yellow
 #'
 #' @examples
 #'
@@ -388,7 +388,7 @@ pausa <-function(duracion = Inf){
 #' @importFrom pracma movavg
 #' @importFrom forecast ses hw holt forecast
 #' @importFrom greybox MSE
-#' @import crayon
+#' @importFrom crayon green red yellow
 #'
 #' @examples
 #' serie_tiempo_rutina(sunspot.year,5)
@@ -643,7 +643,7 @@ dev.TRS <- function(){
 #' @importFrom pracma movavg
 #' @importFrom forecast ses hw holt forecast
 #' @importFrom greybox MSE
-#' @import crayon
+#' @importFrom crayon green red yellow
 #'
 #'
 #' @examples
@@ -1046,7 +1046,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
 #' @return Valor del ultimo lag significativo de la funcion de autocorrelacion
 #' @export
 #'
-#' @import crayon
+#' @importFrom crayon green red yellow
 #'
 #' @examples
 #' base=data.frame(x=seq(Sys.Date(),by="days",length=200),y=(rexp(50)+1)*sin(1:50))
@@ -1151,7 +1151,7 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
 #' @return Vector de longitud 2, primera entrada valor de \bold{p}, segunda valor de \bold{q}
 #' @export
 #'
-#' @import crayon
+#' @importFrom crayon green red yellow
 #'
 #' @examples
 #' recomendaciones_arma(AirPassengers)
@@ -1205,7 +1205,7 @@ recomendaciones_arma <- function(time_series,print_matrix=TRUE,msg=FALSE) {
 #'    analisis. El mejor basando en criterio AIC.
 #' @export
 #'
-#' @import crayon
+#' @importFrom crayon green red yellow
 #'
 #' @examples
 #' serie_tiempo_ARIMA(sunspot.year,5)
@@ -1425,7 +1425,8 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
 #'
 #' @export
 #'
-#' @import crayon
+#' @importFrom crayon green red yellow
+#'
 #'
 #' @examples
 #'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
@@ -1540,7 +1541,8 @@ Ajuste_ARIMA_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg
 #' @return PDF report
 #' @export
 #'
-#' @import crayon
+#' @import rmarkdown
+#' @import knitr
 #'
 #' @examples
 #'
@@ -1549,6 +1551,7 @@ Ajuste_ARIMA_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg
 #'
 hacer_reporte <- function(lista){
   #jejeje no tengo perra idea de como hacer esto :c
+  rmarkdown::render("R/reporte.Rmd", "pdf_document")
 
 }
 

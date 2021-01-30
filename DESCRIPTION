@@ -19,4 +19,6 @@ Imports:
     greybox,
     lmtest,
     tseries,
-    crayon
+    crayon,
+    rmarkdown,
+    knitr

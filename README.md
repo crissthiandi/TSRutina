@@ -54,7 +54,7 @@ library('TSRutina')
 ```
 Luego de esto aparecera el mensaje siguiente:
 
-![image](img/update_apps)
+![image](img/update_apps.png)
 
 Como en la imagen selecciona la opción 3 (none) ya que la instalación de todas esas paqueterías puede ser algo tedioso.
 

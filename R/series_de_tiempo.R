@@ -1442,13 +1442,13 @@ init <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=TRUE,pausa_off
     inicio=ifelse(is.null(inicio),elementos$inicio,inicio)
   }
 
-  message("\n Inicio de rutina para tratamiento de una Serie de tiempo \n")
+  cat(crayon::red("\n Inicio de rutina para tratamiento de una Serie de tiempo \n"))
   serie_tiempo_rutina(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_,pausa_off = pausa_off,...)
-  message("\n Inicio de pruebas para tratamiento de una Serie de tiempo \n")
+  cat(crayon::red("\n Inicio de pruebas para tratamiento de una Serie de tiempo \n"))
   serie_tiempo_pruebas(datos = datos,frecuencia = frecuencia,init_ = init_,msg = msg,pausa_off = pausa_off)
-  message("\n Ajuste de un modelo ARIMA para tratamiento de una Serie de tiempo \n")
+  cat(crayon::red("\n Ajuste de un modelo ARIMA para tratamiento de una Serie de tiempo \n"))
   serie_tiempo_ARIMA(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_,msg = msg,pausa_off = pausa_off)
-  message("\n Varios suavizamientos de una Serie de tiempo creación en workdir \n")
+  cat(crayon::red("\n Varios suavizamientos de una Serie de tiempo creación en workdir \n"))
   serie_tiempo_plots(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_,pausa_off = pausa_off)
 
 }

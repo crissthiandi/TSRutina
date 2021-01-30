@@ -4,12 +4,14 @@
 \alias{recomendaciones_arma}
 \title{Recomendación de modelo ARMA}
 \usage{
-recomendaciones_arma(time_series, print_matrix = TRUE)
+recomendaciones_arma(time_series, print_matrix = TRUE, msg = FALSE)
 }
 \arguments{
 \item{time_series}{Objeto Serie de tiempo}
 
 \item{print_matrix}{Indicador, imprimir o no matriz de eacf}
+
+\item{msg}{Mostrar mensaje en lugar de vector}
 }
 \value{
 Vector de longitud 2, primera entrada valor de \bold{p}, segunda valor de \bold{q}

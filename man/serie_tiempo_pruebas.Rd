@@ -35,7 +35,7 @@ Se debe meter un dataframe de dos columnas, la primera el tiempo y la segunda el
 Tambien soporta el uso de objetos TimeSeries
 }
 \examples{
- base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+ base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
  serie_tiempo_pruebas(datos=base,frecuencia=4)
 
 }

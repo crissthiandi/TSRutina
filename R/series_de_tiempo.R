@@ -24,6 +24,32 @@ paquetes.tsrutina <- function(){
 
 }
 
+#' Repide un texto y lo imprime en la consola
+#'
+#' Repite un texto de forma seriada y se imprime en consola, ideal para hacer una separación entre elementos impresos en consola
+#'
+#'
+#' @param repite String, que se repetira, idealmente del tipo "-" "_" "*" etc.
+#' @param num_repetidas Int, Cuantas veces se repite el string anterior.
+#' @param color Color del texto impresa, soportamos red, blue, green, magenta, silver y yellow
+#'
+#' @return Impresión en cosola
+#' @export
+#'
+#' @examples
+#'
+#' separador("-",10,"blue")
+#' separador()
+#'
+separador<-function(repite="-",num_repetidas=35,color="red"){
+  b=paste0("cat(","crayon::",color,"(",
+           "paste0(rep(","'",repite,"',",num_repetidas,"))","))")
+  a=str2expression(b)
+  a
+  eval(a)
+
+}
+
 #' Pruebas de una serie de tiempo
 #'
 #' Esta funcion incluye el calculo y la decision de dos pruebas estadisticas a una serie de tiempo.
@@ -45,9 +71,10 @@ paquetes.tsrutina <- function(){
 #'
 #' @importFrom lmtest dwtest
 #' @importFrom tseries adf.test
+#' @import crayon
 #'
 #' @examples
-#'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+#'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #'  serie_tiempo_pruebas(datos=base,frecuencia=4)
 #'
 serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa_off=1){
@@ -56,8 +83,9 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
       pausa()
       conditional.tsrutina(datos)
     }
-    pausa()
     if(!is.ts(datos)){
+        pausa()
+        separador()
 
         if(is.data.frame(datos)){
             base<-datos
@@ -67,9 +95,9 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
             base2$xx<-1:length(base$x)
 
             regresion<-lm(y~xx,base2)
-            cat("\n Prueba de presencia de autocorrelación Durbin-Watson Test \n")
-            cat("\n (Prueba aplicada los residuos de una regresión lineal) \n")
-            prueba<-dwtest(regresion)
+            cat(crayon::green("\n Prueba de presencia de autocorrelación Durbin-Watson Test \n"))
+            cat(crayon::green("\n (Prueba aplicada los residuos de una regresión lineal) \n"))
+            prueba<-lmtest::dwtest(regresion)
             print(prueba)
             if(msg){
               p_valor<-readline('Inserte un p valor, (intro para p=0.05):  \n')
@@ -80,7 +108,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
             if(p_valor==""){
                     p_valor<-0.05
             }else{
-                    print(sprintf("El valor de p= %s",p_valor))
+                    cat(crayon::red(sprintf("El valor de p= %s",p_valor)),"\n")
                     p_valor<-as.numeric(p_valor)
             }
 
@@ -92,6 +120,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
             }
 
 
+            separador()
             sprintf("\n \n")
 
             #Probar Estacionariedad para proceder a los modelos no probabilisticos
@@ -100,9 +129,9 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
             #H1: La serie de tiempo es Estacionaria.
             #No se rechaza H0 pues pvalor=0.467 es mayor que 0.05 (No se rechaza H0)
             basets<-ts(base$y,frequency=frecuencia)
-            cat("\n Prueba de presencia de Estacionalidad Dickey-Fuller Test \n")
+            cat(crayon::green("\n Prueba de presencia de Estacionalidad Dickey-Fuller Test \n"))
 
-            prueba<-adf.test(basets)
+            prueba<-tseries::adf.test(basets)
             print(prueba)
             if(msg){#si no hay mensaje entonces predeterminado
               p_valor<-readline('Inserte un p valor, (intro para p=0.05) \n')
@@ -113,7 +142,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
             if(p_valor==""){
                 p_valor<-0.05
             }else{
-                print(sprintf("El valor de p= %s",p_valor))
+                cat(crayon::red(sprintf("El valor de p= %s",p_valor)),"\n")
                 p_valor<-as.numeric(p_valor)
             }
 
@@ -122,6 +151,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
                 }else{
                     message("Se rechaza H0, se obta por H1 = La serie de tiempo es Estacionaria \n")
                 }
+            separador()
         }else{
             stop("El objeto debe ser data frame")
         }
@@ -257,8 +287,10 @@ tratamiento.fechas.TRS <- function(fecha_vector){
 #' @return Una lista \code{\link{list}} que contiene dos elementos, la base de datos tratada y un objeto TimeSeries
 #' @export
 #'
+#' @import crayon
+#'
 #' @examples
-#' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+#' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #' checar_datos(datos=base,frecuencia=4,inicio=2010)
 #'
 checar_datos <- function(datos,frecuencia,inicio,msg=TRUE) {
@@ -290,6 +322,8 @@ checar_datos <- function(datos,frecuencia,inicio,msg=TRUE) {
 #'
 #' @return
 #' @export
+#'
+#' @import crayon
 #'
 #' @examples
 #'
@@ -354,11 +388,12 @@ pausa <-function(duracion = Inf){
 #' @importFrom pracma movavg
 #' @importFrom forecast ses hw holt forecast
 #' @importFrom greybox MSE
+#' @import crayon
 #'
 #' @examples
 #' serie_tiempo_rutina(sunspot.year,5)
 #'
-#' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+#' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #' serie_tiempo_rutina(datos=base,frecuencia=4,inicio=2010)
 #'
 serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa_off=1){
@@ -398,17 +433,18 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
       datosts=ts(datos$y,frequency = 12,start = start(elementos$datosts))
     }
     print(
-    autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue",
+    forecast::autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue",
              main="Ruido + Estacionalidad + Tendencia + SerieTemporal ")
     )
     pausa()
-    seasonplot(datosts,col=rainbow(length(datos$y)/frecuencia),year.labels=TRUE,xlab="Tiempo",
+    forecast::seasonplot(datosts,col=rainbow(length(datos$y)/frecuencia),year.labels=TRUE,xlab="Tiempo",
                ylab="Serie de tiempo",main = "Grafico Estacional de la Serie Temp.")
     pausa()
 
     boxplot(datosts~cycle(datosts),xlab = "Frecuencias",ylab = "Valores",main="Boxplot por cada valor de la frecuencia")
 
     pausa()
+    separador()
 
     #Modelo de regresion lineal
     datos$periodos<-1:length(datos$x)
@@ -416,6 +452,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     print(summary(datos_rl))
     #Se puede ver cuales variables son significativas en el modelo
     pausa()
+    separador()
 
     #Grafico del modelo de regresion lineal
     plot(datos$periodos,datos$y,type = "l",
@@ -423,30 +460,32 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
          main="Regresión Lineal")
     lines(datos_rl$fitted.values, col="blue")
     pausa()
+    separador()
 
     #Promedio Movil simple
 
-    promo<-movavg(datosts, n=frecuencia, type="s")
+    promo<-pracma::movavg(datosts, n=frecuencia, type="s")
 
     plot(datos$periodos,datos$y,type = "l",
          xlab="Periodos",ylab="Valor de la serie",
          main="Promedio movil simple")
     lines(promo,col="blue")
     pausa()
+    separador()
 
     #Promedio Movil ponderado
 
-    promopo<-movavg(datosts, n=frecuencia, type="w")
+    promopo<-pracma::movavg(datosts, n=frecuencia, type="w")
 
     plot(datos$periodos,datos$y,type = "l",
          xlab="Periodos",ylab="Valor de la serie",
          main="Promedio movil ponderado")
     lines(promopo,col="blue")
     pausa()
-
+    separador()
     #Exponential Smoothing
 
-    pesoses<-ses(datos$y)
+    pesoses<-forecast::ses(datos$y)
 
     summary(pesoses)
     plot(datos$periodos,datos$y,type = "l",
@@ -454,11 +493,11 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
          main="Suavizamiento Exponencial")
     lines(datos$periodos,pesoses$fitted, col="blue")
     pausa()
-
+    separador()
 
     #Holt's Exponential Smoothing
 
-    pesoholt<- holt(datos$y)
+    pesoholt<- forecast::holt(datos$y)
 
     summary(pesoholt)
     plot(datos$periodos,datos$y,type = "l",
@@ -466,10 +505,10 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
          main="Suavizamiento Exponencial holt")
     lines(datos$periodos,pesoholt$fitted, col="blue")
     pausa()
-
+    separador()
     #Holt-Winters' Exponential Smoothing
 
-    pesohw<- hw(datosts)
+    pesohw<- forecast::hw(datosts)
 
     summary(pesohw)
     #asignamos valores ajustados a una columna
@@ -482,28 +521,28 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     pausa()
     #Ahora, para elegir el mejor modelo de "suavizamiento",
     #usaremos el MSE (error cuadratico medio).
+    separador()
+    cat(crayon::green("\n MSE del modelo de Regresion Lineal \n"))
+    cat(MSE(datos$y, datos_rl$fitted.values))
 
-    print("MSE del modelo de Regresion Lineal")
-    print(MSE(datos$y, datos_rl$fitted.values))
+    cat(crayon::green('\n MSE del modelo de Promedios Moviles \n'))
 
-    print('MSE del modelo de Promedios Moviles')
+    cat(crayon::green('\n \t Simple \n\t'))
+    cat(MSE(datos$y, promo))
 
-    print('Simple')
-    print(MSE(datos$y, promo))
+    cat(crayon::green('\n \t Ponderado \n\t'))
+    cat(MSE(datos$y, promopo))
 
-    print('Ponderado')
-    print(MSE(datos$y, promopo))
+    cat(crayon::green('\n MSE del modelo de Exponential Smoothing \n'))
+    cat(MSE(datos$y, pesoses$fitted))
 
-    print('MSE del modelo de Exponential Smoothing')
-    print(MSE(datos$y, pesoses$fitted))
+    cat(crayon::green('\n MSE del modelo de Holt \n'))
+    cat(MSE(datos$y, pesoholt$fitted))
 
-    print('MSE del modelo de Holt')
-    print(MSE(datos$y, pesoholt$fitted))
+    cat(crayon::green('\n MSE del modelo Holt-Winters \n'))
+    cat(MSE(datos$y, datos$Ajustado))
 
-    print('MSE del modelo Holt-Winters')
-    print(MSE(datos$y, datos$Ajustado))
-
-    print('el error minimo se tiene con')
+    cat(crayon::yellow('\n El error minimo se tiene con \n'))
     a<-which.min(c(MSE(datos$y, datos_rl$fitted.values),
                 MSE(datos$y, promo),
                 MSE(datos$y, promopo),
@@ -511,34 +550,35 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
                 MSE(datos$y, pesoholt$fitted),
                 MSE(datos$y, datos$Ajustado)))
     switch(a,
-        '1' = {print('Regresion lineal')
+        '1' = {cat(crayon::green('Regresion lineal'))
             pausa()
-            pronostico<-forecast(datos_rl$fitted.values,h=5,level=c(80,95))
+            pronostico<-forecast::forecast(datos_rl$fitted.values,h=5,level=c(80,95))
             plot(pronostico)},
-        '2' = {print('Promedio movil simple')
+        '2' = {cat(crayon::green('Promedio movil simple'))
             pausa()
-            pronostico<-forecast(promo,h=5,level=c(80,95))
+            pronostico<-forecast::forecast(promo,h=5,level=c(80,95))
             plot(pronostico)},
-        '3' = {print('Promedio ponderado')
+        '3' = {cat(crayon::green('Promedio ponderado'))
             pausa()
-            pronostico<-forecast(promopo,h=5,level=c(80,95))
+            pronostico<-forecast::forecast(promopo,h=5,level=c(80,95))
             plot(pronostico)},
-        '4' = {print('Exponencial simple')
+        '4' = {cat(crayon::green('Exponencial simple'))
             pausa()
-            pronostico<-forecast(pesoses,h=5,level=c(80,95))
+            pronostico<-forecast::forecast(pesoses,h=5,level=c(80,95))
             plot(pronostico)},
-        '5' = {print('Suavizamiento de Holt')
+        '5' = {cat(crayon::green('Suavizamiento de Holt'))
             pausa()
-            pronostico<-forecast(pesoholt,h=5,level=c(80,95))
+            pronostico<-forecast::forecast(pesoholt,h=5,level=c(80,95))
             plot(pronostico)},
-        '6' = {print('Suavizamiento de Holt-Winter')
+        '6' = {cat(crayon::green('Suavizamiento de Holt-Winter'))
             pausa()
-            pronostico<-forecast(pesohw,h=5,level=c(80,95))
+            pronostico<-forecast::forecast(pesohw,h=5,level=c(80,95))
             plot(pronostico)}
     )
+    separador()
     pausa()
 
-    print('Supuesto de Normalidad')
+    cat(crayon::green('Supuesto de Normalidad'))
     prueba<-shapiro.test(pesohw$residuals)
     print(prueba)
     if(prueba$p.value>0.05){
@@ -546,6 +586,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     }else{
         message("Se rechaza H0, se obta por H1: No hay normalidad")
     }
+    separador()
 
 }
 
@@ -602,12 +643,13 @@ dev.TRS <- function(){
 #' @importFrom pracma movavg
 #' @importFrom forecast ses hw holt forecast
 #' @importFrom greybox MSE
+#' @import crayon
 #'
 #'
 #' @examples
 #' serie_tiempo_rutina(sunspot.year,5)
 #'
-#' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+#' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #' serie_tiempo_rutina(datos=base,frecuencia=4,inicio=2010)
 #'
 serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa_off=1){
@@ -645,13 +687,13 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
         theme(plot.title = element_text(color = "Black",hjust = 0.5))
     )
     dev.off(4)
-    cat("Serie de tiempo serie_de_tiempo.png fue creada y guardada \n")
+    cat(crayon::green("Serie de tiempo serie_de_tiempo.png fue creada y guardada \n"))
 
     message("¿Deseas ver en el grafico o seguir generando los siguientes graficos? \n")
     imprime = readline(" [Sí/Intro]:")
 
     if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
-      cat("Graficando...")
+      cat(crayon::yellow("Graficando..."))
       dev.TRS() #Regulador de device graphics
       print(
       ggplot(datos, aes(x, y)) +
@@ -666,19 +708,19 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
 
     png("st_descomposicion.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
     print(
-      autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue",
+      forecast::autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue",
                main = "Descomposición de Serie de tiempo")
       )
-    cat("Descomposición de Serie de tiempo st_descomposicion.png fue creada y guardada \n")
+    cat(crayon::green("Descomposición de Serie de tiempo st_descomposicion.png fue creada y guardada \n"))
 
     dev.off(4)
     message("¿Deseas ver en el grafico o seguir generando los siguientes graficos? \n")
     imprime = readline(" [Sí/Intro]:")
 
     if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
-      cat("Graficando...")
+      cat(crayon::yellow("Graficando..."))
       print(
-        autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue",
+        forecast::autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue",
                  main = "Descomposición de Serie de tiempo")
       )
       pausa()
@@ -686,18 +728,18 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
 
 
     png("st_seasonplot.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
-    print(seasonplot(datosts,col=rainbow(length(datos$y)/frecuencia),year.labels=TRUE,
+    print(forecast::seasonplot(datosts,col=rainbow(length(datos$y)/frecuencia),year.labels=TRUE,
                xlab="Periodos",ylab="Serie de tiempo",
                main = "Grafico Estacional de la serie de tiempo"))
-    cat("Temporalidad de Serie de tiempo st_seasonplot.png fue creada y guardada \n")
+    cat(crayon::green("Temporalidad de Serie de tiempo st_seasonplot.png fue creada y guardada \n"))
     dev.off()
     message("¿Deseas ver en el grafico o seguir generando los siguientes graficos? \n")
     imprime = readline(" [Sí/Intro]:")
 
     if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
-      cat("Graficando...")
+      cat(crayon::yellow("Graficando..."))
       print(
-      seasonplot(datosts,col=rainbow(length(datos$y)/frecuencia),year.labels=TRUE,
+        forecast::seasonplot(datosts,col=rainbow(length(datos$y)/frecuencia),year.labels=TRUE,
                  xlab="Periodos",ylab="Serie de tiempo",
                  main = "Grafico Estacional de la serie de tiempo")
       )
@@ -707,13 +749,13 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
 
     png("st_boxes_plot.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
     print(boxplot(datosts~cycle(datosts),xlab = "Frecuencias",ylab = "Valores",main="Boxplot por cada valor de la frecuencia"))
-    cat("Temporalidad de Serie de tiempo st_boxes_plot.png fue creada y guardada \n")
+    cat(crayon::green("Temporalidad de Serie de tiempo st_boxes_plot.png fue creada y guardada \n"))
     dev.off()
     message("¿Deseas ver el grafico o seguir generando los siguientes graficos? \n")
     imprime = readline(" [Sí/Intro]:")
 
     if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
-      cat("Graficando...")
+      cat(crayon::yellow("Graficando..."))
       print(
         boxplot(datosts~cycle(datosts),xlab = "Frecuencias",ylab = "Valores",main="Boxplot por cada valor de la frecuencia")
       )
@@ -735,13 +777,13 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
         theme(plot.title = element_text(color = "Black",hjust = 0.5))+
         geom_line(aes(x,lineal), col="blue")
     )
-    cat("Ajuste de regresión lineal st_regresion_lineal.png fue creada y guardada \n")
+    cat(crayon::green("Ajuste de regresión lineal st_regresion_lineal.png fue creada y guardada \n"))
     dev.off()
     message("¿Deseas ver en el grafico o seguir generando los siguientes graficos? \n")
     imprime = readline(" [Sí/Intro]:")
 
     if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
-      cat("Graficando...")
+      cat(crayon::yellow("Graficando..."))
       print(
       ggplot(datos, aes(x,y)) +
         geom_point()+geom_line()+
@@ -756,7 +798,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
 
 
     #Promedio Movil simple
-    promo<-movavg(datosts, n=frecuencia, type="s")
+    promo<-pracma::movavg(datosts, n=frecuencia, type="s")
     png("st_prom_movil_simple.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
     datos$promo<-promo
     print(
@@ -766,7 +808,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
         theme(plot.title = element_text(color = "Black",hjust = 0.5))+
         geom_line(aes(x,promo), col="blue")
     )
-    cat("Promedio Movil simple st_prom_movil_simple.png fue creada y guardada \n")
+    cat(crayon::green("Promedio Movil simple st_prom_movil_simple.png fue creada y guardada \n"))
 
     dev.off()
 
@@ -774,7 +816,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
     imprime = readline(" [Sí/Intro]:")
 
     if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
-      cat("Graficando...")
+      cat(crayon::yellow("Graficando..."))
       print(
         ggplot(datos, aes(x,y)) +
           geom_point()+geom_line()+
@@ -791,7 +833,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
 
     #Promedio Movil ponderado
 
-    promopo<-movavg(datosts, n=frecuencia, type="w")
+    promopo<-pracma::movavg(datosts, n=frecuencia, type="w")
 
     png("st_prom_movil_ponderado.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
 
@@ -803,7 +845,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
         theme(plot.title = element_text(color = "Black",hjust = 0.5))+
         geom_line(aes(x,promopo), col="blue")
     )
-    cat("Promedio Movil ponderado st_prom_movil_ponderado.png fue creada y guardada \n")
+    cat(crayon::green("Promedio Movil ponderado st_prom_movil_ponderado.png fue creada y guardada \n"))
 
     dev.off()
 
@@ -811,7 +853,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
     imprime = readline(" [Sí/Intro]:")
 
     if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
-      cat("Graficando...")
+      cat(crayon::yellow("Graficando..."))
       print(
         ggplot(datos, aes(x,y)) +
           geom_point()+geom_line()+
@@ -829,7 +871,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
 
 
     #Exponential Smoothing
-    pesoses<-ses(datos$y)
+    pesoses<-forecast::ses(datos$y)
     #summary(pesoses)
     png("st_ajuste_exponencial.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
 
@@ -841,7 +883,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
         theme(plot.title = element_text(color = "Black",hjust = 0.5))+
         geom_line(aes(x,sess), col="blue")
     )
-    cat("Suavizamiento Exponencial st_ajuste_exponencial.png fue creada y guardada \n")
+    cat(crayon::green("Suavizamiento Exponencial st_ajuste_exponencial.png fue creada y guardada \n"))
 
     dev.off()
 
@@ -849,7 +891,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
     imprime = readline(" [Sí/Intro]:")
 
     if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
-      cat("Graficando...")
+      cat(crayon::yellow("Graficando..."))
       print(
         ggplot(datos, aes(x,y)) +
           geom_point()+geom_line()+
@@ -866,7 +908,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
 
 
     #Holt's Exponential Smoothing
-    pesoholt<- holt(datos$y)
+    pesoholt<- forecast::holt(datos$y)
     #summary(pesoholt)
     png("st_holt_exponencial.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
 
@@ -878,14 +920,14 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
         theme(plot.title = element_text(color = "Black",hjust = 0.5))+
         geom_line(aes(x,holtt), col="blue")
     )
-    cat("Suavizamiento Holt st_holt_exponencial.png fue creada y guardada \n")
+    cat(crayon::green("Suavizamiento Holt st_holt_exponencial.png fue creada y guardada \n"))
     dev.off()
 
     message("¿Deseas ver en el grafico o seguir generando los siguientes graficos? \n")
     imprime = readline(" [Sí/Intro]:")
 
     if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
-      cat("Graficando...")
+      cat(crayon::yellow("Graficando..."))
       print(
         ggplot(datos, aes(x,y)) +
           geom_point()+geom_line()+
@@ -901,7 +943,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
 
 
     #Holt-Winters' Exponential Smoothing
-    pesohw<- hw(datosts,seasonal = "additive",h=10,level = 95)
+    pesohw<- forecast::hw(datosts,seasonal = "additive",h=10,level = 95)
     #pesohw$model
 
     #asignamos valores ajustados a una columna
@@ -915,7 +957,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
         theme(plot.title = element_text(color = "Black",hjust = 0.5))+
         geom_line(aes(x,Ajustado), col="blue")
     )
-    cat("Suavizamiento Holt-Winters st_holt-winter_exponencial.png fue creada y guardada \n")
+    cat(crayon::green("Suavizamiento Holt-Winters st_holt-winter_exponencial.png fue creada y guardada \n"))
 
     dev.off()
 
@@ -923,7 +965,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
     imprime = readline(" [Sí/Intro]:")
 
     if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
-      cat("Graficando...")
+      cat(crayon::yellow("Graficando..."))
       print(
         ggplot(datos, aes(x,y)) +
           geom_point()+geom_line()+
@@ -942,24 +984,24 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
                   MSE(datos$y, pesoses$fitted),
                   MSE(datos$y, pesoholt$fitted),
                   MSE(datos$y, datos$Ajustado)))
-    print('El ajuste con menor MSE es: ')
+    cat(crayon::green('El ajuste con menor MSE es: '))
     switch(a,
-           '1' = {print('Regresion lineal')
+           '1' = {cat(crayon::yellow('Regresion lineal'))
                pausa()
                pronosticado<-datos_rl$fitted.values},
-           '2' = {print('Promedio movil simple')
+           '2' = {cat(crayon::yellow('Promedio movil simple'))
                pausa()
                pronosticado<-promo},
-           '3' = {print('Promedio ponderado')
+           '3' = {cat(crayon::yellow('Promedio ponderado'))
                pausa()
                pronosticado<-promopo},
-           '4' = {print('Exponencial simple')
+           '4' = {cat(crayon::yellow('Exponencial simple'))
                pausa()
                pronosticado<-pesoses$model},
-           '5' = {print('Ajuste de Holt')
+           '5' = {cat(crayon::yellow('Ajuste de Holt'))
                pausa()
                pronosticado<-pesoholt$model},
-           '6' = {print('Holt-Winter')
+           '6' = {cat(crayon::yellow('Holt-Winter'))
                pausa()
                pronosticado<-pesohw$model}
     )
@@ -967,13 +1009,13 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
 
 
     #Promedio Movil ponderado
-    pronostico<-forecast(pronosticado,h=20,level=c(80,95))
+    pronostico<-forecast::forecast(pronosticado,h=20,level=c(80,95))
 
     png("st_pronostico_ponderado_80-90.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
     print(
-    autoplot(pronostico)
+      forecast::autoplot(pronostico)
     )
-    cat("Pronostico para el mejor ajuste st_pronostico_ponderado_80-90.png fue creada y guardada \n")
+    cat(crayon::green("Pronostico para el mejor ajuste st_pronostico_ponderado_80-90.png fue creada y guardada \n"))
 
     dev.off()
 
@@ -981,9 +1023,9 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
     imprime = readline(" [Sí/Intro]:")
 
     if(imprime %in% c("si","Sí","SI","yes","YES","Si","Yes","s","1")){
-      cat("Graficando...")
+      cat(crayon::yellow("Graficando..."))
       print(
-        autoplot(pronostico)
+        forecast::autoplot(pronostico)
       )
     }
 
@@ -1004,8 +1046,10 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
 #' @return Valor del ultimo lag significativo de la funcion de autocorrelacion
 #' @export
 #'
+#' @import crayon
+#'
 #' @examples
-#' base=data.frame(x=seq(Sys.Date(),by="days",length=200),y=1:20*3+runif(20))
+#' base=data.frame(x=seq(Sys.Date(),by="days",length=200),y=(rexp(50)+1)*sin(1:50))
 #' recomendacion_autocorrelaciones(acf(base$y,plot = FALSE))
 #'
 recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
@@ -1050,28 +1094,28 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
     for(i in 1:15){
       if(matriz[1,i]==1){
         order_=i
-        cat("\nProponemos MA(q) con q=:",order_)
+        cat(crayon::yellow("\nProponemos MA(q) con q="),order_)
         break
       }
     }
     #parche para casos donde no hay valor a proponer
     if(is.null(order_)){
-      cat("El valor de la q propuesta es mayor a 15...")
+      cat(crayon::green("El valor de la q propuesta es mayor a 15..."))
       order_=16
     }
   }
   if(objeto_cf$type=="correlation"){
-    matriz=TSRutina::matriz_eacf(serie,ar.max = 15,ma.max = 1,print_matrix = FALSE)
+    matriz=matriz_eacf(serie,ar.max = 15,ma.max = 1,print_matrix = FALSE)
     matriz=matriz$symbol=="o"
     for(i in 1:15){
       if(matriz[i,1]==1){
         order_=i
-        cat("\nProponemos AR(p) con p=:",order_)
+        cat(crayon::yellow("\nProponemos AR(p) con p="),order_)
         break
       }
     }
     if(is.null(order_)){
-      cat("El valor de la p propuesta es mayor a 15...")
+      cat(crayon::green("El valor de la p propuesta es mayor a 15..."))
       order_=16
     }
   }
@@ -1102,13 +1146,16 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
 #'
 #' @param time_series Objeto Serie de tiempo
 #' @param print_matrix Indicador, imprimir o no matriz de eacf
+#' @param msg Mostrar mensaje en lugar de vector
 #'
 #' @return Vector de longitud 2, primera entrada valor de \bold{p}, segunda valor de \bold{q}
 #' @export
 #'
+#' @import crayon
+#'
 #' @examples
 #' recomendaciones_arma(AirPassengers)
-recomendaciones_arma <- function(time_series,print_matrix=TRUE) {
+recomendaciones_arma <- function(time_series,print_matrix=TRUE,msg=FALSE) {
   x=time_series
 
   modelo_arma <- matriz_eacf(x,7,7,print_matrix)
@@ -1128,6 +1175,10 @@ recomendaciones_arma <- function(time_series,print_matrix=TRUE) {
           #condicion algun vecino o diagonal no null
           if(izquierda+abajo+diagonal >2 | diagonal>0){
             vec=c(i,j)
+            if(msg){
+              cat(crayon::yellow("Se recomienda ARMA("),vec[1],",",vec[2],crayon::yellow(")"))
+              return(invisible(NULL))
+            }
             return(vec)
           }
         }
@@ -1154,10 +1205,12 @@ recomendaciones_arma <- function(time_series,print_matrix=TRUE) {
 #'    analisis. El mejor basando en criterio AIC.
 #' @export
 #'
+#' @import crayon
+#'
 #' @examples
 #' serie_tiempo_ARIMA(sunspot.year,5)
 #'
-#' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(20))
+#' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=50),valores=(rexp(50)+1)*sin(1:50))
 #' serie_tiempo_ARIMA(datos=base,frecuencia=4,inicio=2010)
 #'
 #' serie_tiempo_ARIMA(wineind)
@@ -1186,13 +1239,13 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
   datos=elementos$datos
   #datosts=elementos$datosts #No se usa en la rutina
 
-
+  separador()
   base=datos
   ban=TRUE
   numero_diferenciaciones=0
   while(ban){
 
-    prueba<-adf.test(base$y)
+    prueba<-tseries::adf.test(base$y)
     print(prueba)
     if(msg){
       p_valor<-readline('\nInserte un p valor (intro para p=0.05): ')
@@ -1203,22 +1256,22 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
     if(p_valor==""){
       p_valor<-0.05
     }else{
-      print(sprintf("El valor de p= %s",p_valor))
+      cat("\n",crayon::red(sprintf("El valor de p= %s",p_valor)),"\n")
       p_valor<-as.numeric(p_valor)
     }
 
     if(prueba$p.value>p_valor){
-      cat("No se puede rechazar H0:Hay presencia de una raiz unitaria\n")
-      cat("No es estacionaria")
+      cat(crayon::yellow("\nNo se puede rechazar H0:Hay presencia de una raiz unitaria\n"))
+      cat(crayon::yellow("\nNo es estacionaria"))
       pausa()
       differenciado<-diff(base$y,lag = 1,differences = 1)
       base=base[-nrow(base),]
       base$y=differenciado
       numero_diferenciaciones=numero_diferenciaciones+1 #contador de diferenciaciones
 
-      message('\nSe ha diferencio la base de datos para obtener estacionalidad\n')
+      cat(crayon::red('\nSe ha diferencio la base de datos para obtener estacionalidad\n'))
     }else{
-      cat("Se rechaza H0, se obta por H1: La serie de tiempo es Estacionaria\n")
+      cat(crayon::yellow("\nSe rechaza H0, se obta por H1: La serie de tiempo es Estacionaria\n"))
       ban=FALSE
     }
     pausa()
@@ -1257,34 +1310,34 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
   }
   pausa()
   #imprime arimas
-  message("\nResumen estadistico de modelo AR(",ar[1],")")
+  cat(crayon::green("\nResumen estadistico de modelo AR(",ar[1],")"))
   print(arima(base$y,order = ar))
   pausa()
-  message("\nResumen estadistico de modelo MA(",ma[3],")")
+  cat(crayon::green("\nResumen estadistico de modelo MA(",ma[3],")"))
   print(arima(base$y,order = ma))
   pausa()
   #compara arimas
   mama<-arima(base$y,order = ma)
   rara<-arima(base$y,order = ar)
   if(mama$aic<rara$aic){
-    message(sprintf('El modelo con menor AIC es el MA(%s)',ma[3]))
+    cat(crayon::yellow(sprintf('\nEl modelo con menor AIC es el MA(%s)',ma[3])))
   }else{
-    message(sprintf('El modelo con menor AIC es el AR(%s)',ar[1]))
+    cat(crayon::yellow(sprintf('\nEl modelo con menor AIC es el AR(%s)',ar[1])))
   }
   pausa()
 
-  cat("Prueba de Box-Pierce and Ljung-Box Test")
+  cat(crayon::green("\nPrueba de Box-Pierce and Ljung-Box Test"))
   for (i in 1:2) {
     modelo=list(mama,rara)
     if(modelo[[i]][["call"]][["order"]]=="ma"){
-      message(sprintf("\nAnalisis de correlación en el modelo para Ma(%s)",ma[3]))
+      cat(crayon::green(sprintf("\nAnalisis de correlación en el modelo para Ma(%s)",ma[3])))
     }else{
-      message(sprintf("\nAnalisis de correlación en el modelo para AR(%s)",ar[1]))
+      cat(crayon::green(sprintf("\nAnalisis de correlación en el modelo para AR(%s)",ar[1])))
     }
 
     box_test=Box.test(modelo[[i]]$residuals, type ="Ljung-Box")
     print(box_test)
-    cat("Box.test(), el p_valor > 0.05 entonces no hay correlacion ruido blanco")
+    cat(crayon::yellow("\nBox.test(), el p_valor > 0.05 entonces no hay correlacion ruido blanco"))
 
     if(msg){
       p_valor<-readline('Inserte un p valor, (intro para p=0.05):  \n')
@@ -1295,15 +1348,15 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
     if(p_valor==""){
       p_valor<-0.05
     }else{
-      print(sprintf("El valor de p= %s",p_valor))
+      cat("\n",crayon::red(sprintf("El valor de p= %s",p_valor)))
       p_valor<-as.numeric(p_valor)
     }
 
 
     if(prueba$p.value>0.05){
-      cat("No se puede rechazar H0 = No hay presencia de autocorrelacion ")
+      cat(crayon::yellow("\nNo se puede rechazar H0 = No hay presencia de autocorrelacion "))
     }else{
-      cat("Se rechaza H0, se obta por H1 = Hay presencia de autocorrelacion")
+      cat(crayon::yellow("\nSe rechaza H0, se obta por H1 = Hay presencia de autocorrelacion"))
     }
 
 
@@ -1314,7 +1367,7 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
   datosts=ts(base$y)
 
   rec=recomendaciones_arma(datosts) #checar como el objeto obtiene los symbol de la lista
-  cat("\nSe recomienda el modelo ARMA(p,q) con p=",rec[1]," q=",rec[2])
+  cat(crayon::red("\nSe recomienda el modelo ARMA(p,q) con p=",rec[1]," q=",rec[2]))
   if(msg){
     cat("\nQue ARMA(p,q) sospechas?, inserte el valor de p,q separado por comas: ")
     arma_pq<-readline('Ejemplo: 3,4 \t')
@@ -1333,10 +1386,10 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
   }
   #se imprime el modelo arma
   if(numero_diferenciaciones>0){
-    message("\nSe detecto que la base a sido diferenciada al menos una vez\n
-            El modelo ARIMA final es de la forma (",arma_order,")")
+    cat(crayon::red("\nSe detecto que la base a sido diferenciada al menos una vez\n
+            El modelo ARIMA final es de la forma (",arma_order,")"))
   }
-  message("\nAcontinuación su resumen estadistico")
+  cat(crayon::green("\nA continuación su resumen estadistico"))
   print(arima(base$y,order = arma_order))
   pausa()
 
@@ -1372,8 +1425,10 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
 #'
 #' @export
 #'
+#' @import crayon
+#'
 #' @examples
-#'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+#'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #'  init(datos=base,frecuencia=4,inicio=2010)
 init <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=TRUE,pausa_off=1,...){
   paquetes.tsrutina()
@@ -1387,13 +1442,13 @@ init <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=TRUE,pausa_off
     inicio=ifelse(is.null(inicio),elementos$inicio,inicio)
   }
 
-  message("\n Inicio de rutina para tratamiento de una Serie de tiempo \n")
+  cat(crayon::red("\n Inicio de rutina para tratamiento de una Serie de tiempo \n"))
   serie_tiempo_rutina(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_,pausa_off = pausa_off,...)
-  message("\n Inicio de pruebas para tratamiento de una Serie de tiempo \n")
+  cat(crayon::red("\n Inicio de pruebas para tratamiento de una Serie de tiempo \n"))
   serie_tiempo_pruebas(datos = datos,frecuencia = frecuencia,init_ = init_,msg = msg,pausa_off = pausa_off)
-  message("\n Ajuste de un modelo ARIMA para tratamiento de una Serie de tiempo \n")
+  cat(crayon::red("\n Ajuste de un modelo ARIMA para tratamiento de una Serie de tiempo \n"))
   serie_tiempo_ARIMA(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_,msg = msg,pausa_off = pausa_off)
-  message("\n Varios suavizamientos de una Serie de tiempo creación en workdir \n")
+  cat(crayon::red("\n Varios suavizamientos de una Serie de tiempo creación en workdir \n"))
   serie_tiempo_plots(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_,pausa_off = pausa_off)
 
 }
@@ -1422,7 +1477,7 @@ init <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=TRUE,pausa_off
 #' @export
 #'
 #' @examples
-#'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+#'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #'  Ajuste_rapido(datos=base,frecuencia=4,inicio=2010)
 #'
 Ajuste_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=FALSE,pausa_off=1,...){
@@ -1449,8 +1504,10 @@ Ajuste_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=FALSE
 #' @export
 #'
 #' @examples
-#'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+#'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #'  Ajuste_ARIMA_rapido(datos=base,frecuencia=4,inicio=2010)
+#'
+#'  Ajuste_ARIMA_rapido(AirPassengers)
 #'
 Ajuste_ARIMA_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=FALSE,pausa_off=1,...){
   paquetes.tsrutina()
@@ -1482,6 +1539,8 @@ Ajuste_ARIMA_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg
 #'
 #' @return PDF report
 #' @export
+#'
+#' @import crayon
 #'
 #' @examples
 #'

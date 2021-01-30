@@ -45,6 +45,6 @@ Se realiza las rutinas que verifican si la serie es o no estacionaria, si existe
 , luego se ajusta un modelo ARIMA y se guardan los graficos importantes en el directorio
 }
 \examples{
- base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+ base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
  init(datos=base,frecuencia=4,inicio=2010)
 }

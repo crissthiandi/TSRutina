@@ -1,4 +1,4 @@
-# TSRutina V3.1 Taby
+# TSRutina V3.1 Tabi
 
 Asistente para el análisis de series de tiempo basado en los modelos simples para series de tiempo univariadas.
 
@@ -34,15 +34,30 @@ Ejemplo de uso y salidas
 
 ### Instalación
 
-Primeros pasos, instalación y uso:
+Primeros pasos, instalación de la versión tabi 3.0
 ```r
 #Previos
 install.packages('devtools')
 library('devtools')
 #TSRutina
-install_github("crissthiandi/TSRutina@v3.0",force = TRUE)
+install_github("crissthiandi/TSRutina@3.0",force = TRUE)
 library('TSRutina')
 ```
+Instalación de **la versión más reciente**
+```r
+#Previos
+install.packages('devtools')
+library('devtools')
+#TSRutina
+install_github("crissthiandi/TSRutina")
+library('TSRutina')
+```
+Luego de esto aparecera el mensaje siguiente:
+
+![image](img/update_apps)
+
+Como en la imagen selecciona la opción 3 (none) ya que la instalación de todas esas paqueterías puede ser algo tedioso.
+
 ### Rutina init()
 
 La idea principal es solo correr una función a la cual *se le pasaran la menor cantidad de parámetros posibles*. Parámetros con los que la función realizara todo el proceso de análisis. ```init()``` es la función encargada de esta tarea.

@@ -38,7 +38,7 @@ A diferencia de otras funciones esta utiliza el conocimiento del experto para aj
 \examples{
 serie_tiempo_ARIMA(sunspot.year,5)
 
-base=data.frame(tiempo=seq(Sys.Date(),by="days",length=50),valores=(rexp(50)+1)^rexp(20))
+base=data.frame(tiempo=seq(Sys.Date(),by="days",length=50),valores=(rexp(50)+1)*sin(1:50))
 serie_tiempo_ARIMA(datos=base,frecuencia=4,inicio=2010)
 
 serie_tiempo_ARIMA(wineind)

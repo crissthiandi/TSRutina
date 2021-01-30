@@ -74,7 +74,7 @@ separador<-function(repite="-",num_repetidas=35,color="red"){
 #' @import crayon
 #'
 #' @examples
-#'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+#'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #'  serie_tiempo_pruebas(datos=base,frecuencia=4)
 #'
 serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa_off=1){
@@ -290,7 +290,7 @@ tratamiento.fechas.TRS <- function(fecha_vector){
 #' @import crayon
 #'
 #' @examples
-#' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+#' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #' checar_datos(datos=base,frecuencia=4,inicio=2010)
 #'
 checar_datos <- function(datos,frecuencia,inicio,msg=TRUE) {
@@ -393,7 +393,7 @@ pausa <-function(duracion = Inf){
 #' @examples
 #' serie_tiempo_rutina(sunspot.year,5)
 #'
-#' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+#' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #' serie_tiempo_rutina(datos=base,frecuencia=4,inicio=2010)
 #'
 serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa_off=1){
@@ -649,7 +649,7 @@ dev.TRS <- function(){
 #' @examples
 #' serie_tiempo_rutina(sunspot.year,5)
 #'
-#' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+#' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #' serie_tiempo_rutina(datos=base,frecuencia=4,inicio=2010)
 #'
 serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa_off=1){
@@ -1049,7 +1049,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa
 #' @import crayon
 #'
 #' @examples
-#' base=data.frame(x=seq(Sys.Date(),by="days",length=200),y=1:20*3+runif(20))
+#' base=data.frame(x=seq(Sys.Date(),by="days",length=200),y=(rexp(50)+1)*sin(1:50))
 #' recomendacion_autocorrelaciones(acf(base$y,plot = FALSE))
 #'
 recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
@@ -1428,7 +1428,7 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
 #' @import crayon
 #'
 #' @examples
-#'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+#'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #'  init(datos=base,frecuencia=4,inicio=2010)
 init <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=TRUE,pausa_off=1,...){
   paquetes.tsrutina()
@@ -1477,7 +1477,7 @@ init <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=TRUE,pausa_off
 #' @export
 #'
 #' @examples
-#'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+#'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #'  Ajuste_rapido(datos=base,frecuencia=4,inicio=2010)
 #'
 Ajuste_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=FALSE,pausa_off=1,...){
@@ -1504,7 +1504,7 @@ Ajuste_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=FALSE
 #' @export
 #'
 #' @examples
-#'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+#'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #'  Ajuste_ARIMA_rapido(datos=base,frecuencia=4,inicio=2010)
 #'
 Ajuste_ARIMA_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=FALSE,pausa_off=1,...){

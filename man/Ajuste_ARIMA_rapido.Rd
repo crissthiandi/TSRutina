@@ -37,7 +37,7 @@ La salida no es como tal un objeto, si no una serie de impresiones de varios
 Ajuste ARIMA con pruebas estadisticas
 }
 \examples{
- base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+ base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
  Ajuste_ARIMA_rapido(datos=base,frecuencia=4,inicio=2010)
 
 }

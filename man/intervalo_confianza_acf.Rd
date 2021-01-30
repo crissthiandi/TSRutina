@@ -57,7 +57,7 @@ Esta pensado para su uso en Rutinas de la paqueteria TSRutina, aunque su uso com
 deberia ser sencillo, se recomienda usarse solo si se conoce sobre el codigo y el tema.
 }
 \examples{
-base=data.frame(x=seq(Sys.Date(),by="days",length=20),y=1:20*3+runif(1))
+base=data.frame(x=seq(Sys.Date(),by="days",length=20),y=(rexp(50)+1)*sin(1:50))
 p=acf(base$y,plot=FALSE)
 intervalo_confianza_acf(p) #0.4382613
 }

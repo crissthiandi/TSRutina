@@ -23,7 +23,7 @@
 #' @export
 #'
 #' @examples
-#' base=data.frame(x=seq(Sys.Date(),by="days",length=20),y=1:20*3+runif(1))
+#' base=data.frame(x=seq(Sys.Date(),by="days",length=20),y=(rexp(50)+1)*sin(1:50))
 #' p=acf(base$y,plot=FALSE)
 #' intervalo_confianza_acf(p) #0.4382613
 intervalo_confianza_acf=function (x, ci = 0.95, type = "h", xlab = "Lag", ylab = NULL,

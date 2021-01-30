@@ -41,7 +41,7 @@ Esta función considera que las recomendaciones de la paqueteria seran tomandas 
 Esta función comparte los mismos detalles que \code{\link{init}}
 }
 \examples{
- base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=1:20*3+runif(1))
+ base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
  Ajuste_rapido(datos=base,frecuencia=4,inicio=2010)
 
 }

@@ -40,4 +40,6 @@ Ajuste ARIMA con pruebas estadisticas
  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
  Ajuste_ARIMA_rapido(datos=base,frecuencia=4,inicio=2010)
 
+ Ajuste_ARIMA_rapido(AirPassengers)
+
 }

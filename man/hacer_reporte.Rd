@@ -4,10 +4,10 @@
 \alias{hacer_reporte}
 \title{De lista a reporte PDF}
 \usage{
-hacer_reporte(lista)
+hacer_reporte(datos)
 }
 \arguments{
-\item{lista}{objeto lista a usar para el reporte, only output}
+\item{datos}{Time Series a analizar}
 }
 \value{
 PDF report

@@ -55,7 +55,7 @@ separador<-function(repite="-",num_repetidas=35,color="red"){
 #' Esta funcion incluye el calculo y la decision de dos pruebas estadisticas a una serie de tiempo.
 #'
 #' Realiza las siguientes pruebas:
-#' La prueba de estacionalidad (Dickey-Fuller)
+#' La prueba de estacionariedad (Dickey-Fuller)
 #'
 #' La prueba de autocorrelacion (Durbin-Watson)
 #'
@@ -129,7 +129,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
             #H1: La serie de tiempo es Estacionaria.
             #No se rechaza H0 pues pvalor=0.467 es mayor que 0.05 (No se rechaza H0)
             basets<-ts(base$y,frequency=frecuencia)
-            cat(crayon::green("\n Prueba de presencia de Estacionalidad Dickey-Fuller Test \n"))
+            cat(crayon::green("\n Prueba de presencia de estacionariedad Dickey-Fuller Test \n"))
 
             prueba<-tseries::adf.test(basets)
             print(prueba)
@@ -1269,7 +1269,7 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
       base$y=differenciado
       numero_diferenciaciones=numero_diferenciaciones+1 #contador de diferenciaciones
 
-      cat(crayon::red('\nSe ha diferencio la base de datos para obtener estacionalidad\n'))
+      cat(crayon::red('\nSe ha diferencio la base de datos para obtener estacionariedad\n'))
     }else{
       cat(crayon::yellow("\nSe rechaza H0, se obta por H1: La serie de tiempo es Estacionaria\n"))
       ban=FALSE
@@ -1522,7 +1522,7 @@ Ajuste_ARIMA_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg
     inicio=ifelse(is.null(inicio),elementos$inicio,inicio)
   }
 
-  #solo se hace ajuste arima y prueba de estacionalidad
+  #solo se hace ajuste arima y prueba de estacionariedad
 
   serie_tiempo_pruebas(datos,frecuencia,init_,msg,pausa_off)
   serie_tiempo_ARIMA(datos,frecuencia,inicio,init_,msg,pausa_off)
@@ -1536,7 +1536,7 @@ Ajuste_ARIMA_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg
 #'
 #' En desarrollo probablemente en uso hasta la version 3.1< de la tabby verse
 #'
-#' @param lista objeto lista a usar para el reporte, only output
+#' @param datos Time Series a analizar
 #'
 #' @return PDF report
 #' @export
@@ -1549,9 +1549,17 @@ Ajuste_ARIMA_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg
 #' a=TSRutina::Ajuste_ARIMA_rapido(AirPassengers,pausa_off = 0)
 #' hacer_reporte(a)
 #'
-hacer_reporte <- function(lista){
+hacer_reporte <- function(datos){
+  #actual directorio del archivo
+  actual=getwd()
+  file_direccion=dirname(rstudioapi::getSourceEditorContext()$path)
+
+  setwd(file_direccion)
+  readr::write_csv(datos,"datos_temporales.csv")
+
   #jejeje no tengo perra idea de como hacer esto :c
-  rmarkdown::render("R/reporte.Rmd", "pdf_document")
+  # rmarkdown::render("R/reporte.Rmd", "pdf_document")
+  # rmarkdown::render("R/reporte.Rmd", "pdf_document")
 
 }
 

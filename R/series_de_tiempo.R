@@ -1073,8 +1073,13 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
   }
   #si la salida es un vector de 3 elementos entonces hay dos parametros
   #serie=tryCatch(get(objeto_cf$series),error= function(e){message(e," \nSe busca otra entrada..."); return(NULL)})
-  serie=get("base",envir = parent.frame())
+  # serie=get("base",envir = parent.frame())
   #se corrigio el uso de envir
+  serie <- tryCatch(expr = get("base",envir = parent.frame()), error = function(e) {
+    message("\n Se intentara conectar con el objeto de llamado: ",
+            as.character(llamada[[2]][[2]]),"\n")#llamada[[2]][[2]] contempla que hay un objeto a llamar dentro de acf(*objeto)
+    get(as.character(llamada[[2]][[2]]),envir = parent.frame())
+  })
 
   #en caso de serie NULL
   # if(is.null(serie)){
@@ -1085,7 +1090,8 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
   #   cat("\nLos primeros 6 valores de este vector son:\n")
   #   print(head(serie))
   # }
-  serie=ts(serie$y)
+  try(serie <- ts(serie$y),silent = 1)
+  stopifnot(class(serie) == class(ts()))
 
   order_=NULL
   if(objeto_cf$type=="partial"){

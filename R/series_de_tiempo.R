@@ -423,31 +423,39 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     elementos=checar_datos(datos,frecuencia,inicio)
     datos=elementos$datos
     datosts=elementos$datosts
+    reporte_data <- list()
 
 
     #Graficos para ver si es estacional
-    print(
-    ggplot(datos, aes(x,y)) +
+    p <- ggplot(datos, aes(x,y)) +
         geom_point()+geom_line()+
         ggtitle("Serie de tiempo Visualización")+
-        theme(plot.title = element_text(color = "Black",hjust = 0.5))
-    )
+        theme(plot.title = element_text(color = "Black",hjust = 0.5)) -> reporte_data$plots$General
+    print(p)
     pausa()
     if(frecuencia==1){
       message("La frecuencia de la serie de tiempo es 1, usaremos frecuencia 12 para los siguientes 2 graficos")
       frecuencia=12
       datosts=ts(datos$y,frequency = 12,start = start(elementos$datosts))
     }
-    print(
-    forecast::autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue",
-             main="Ruido + Estacionalidad + Tendencia + SerieTemporal ")
-    )
-    pausa()
-    forecast::seasonplot(datosts,col=rainbow(length(datos$y)/frecuencia),year.labels=TRUE,xlab="Tiempo",
-               ylab="Serie de tiempo",main = "Grafico Estacional de la Serie Temp.")
+
+    p <- forecast::autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue",
+             main="Ruido + Estacionalidad + Tendencia + SerieTemporal ") -> reporte_data$plots$autoplot
+    print(p)
     pausa()
 
-    boxplot(datosts~cycle(datosts),xlab = "Frecuencias",ylab = "Valores",main="Boxplot por cada valor de la frecuencia")
+    p <- forecast::ggseasonplot(datosts,col=rainbow(length(datos$y)/frecuencia),year.labels=TRUE,xlab="Tiempo",
+               ylab="Serie de tiempo",main = "Grafico Estacional de la Serie Temp.") -> reporte_data$plots$ggseason
+    print(p)
+    pausa()
+
+    ### Abajo remplazo en formato ggplot
+    # boxplot(datosts~cycle(datosts),xlab = "Frecuencias",ylab = "Valores",main="Boxplot por cada valor de la frecuencia")
+    p <- ggplot(fortify(datosts) %>%
+                  dplyr::mutate(mes = months(Index,F),
+                                mes_num = lubridate::month(Index))) +
+      geom_boxplot(aes(x = reorder(mes,mes_num), y = Data, color = mes)) -> reporte_data$plots$boxplots
+    print(p)
 
     pausa()
     separador()
@@ -455,7 +463,8 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     #Modelo de regresion lineal
     datos$periodos<-1:length(datos$x)
     datos_rl<-lm(y~x, data=datos)
-    print(summary(datos_rl))
+    reporte_data$lm <- summary(datos_rl)
+    print(reporte_data$lm)
     #Se puede ver cuales variables son significativas en el modelo
     pausa()
     separador()
@@ -465,6 +474,9 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
          xlab="Periodos",ylab="Valor de la serie",
          main="Regresión Lineal")
     lines(datos_rl$fitted.values, col="blue")
+
+
+
     pausa()
     separador()
 

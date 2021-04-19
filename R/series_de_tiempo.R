@@ -90,6 +90,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
         if(is.data.frame(datos)){
             base<-datos
             names(base)<-c("x","y")
+            report_data <- list()
 
             base2<-base
             base2$xx<-1:length(base$x)
@@ -99,6 +100,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
             cat(crayon::green("\n (Prueba aplicada los residuos de una regresión lineal) \n"))
             prueba<-lmtest::dwtest(regresion)
             print(prueba)
+            report_data$prueba_dwtest <- prueba
             if(msg){
               p_valor<-readline('Inserte un p valor, (intro para p=0.05):  \n')
             }else{
@@ -113,10 +115,11 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
             }
 
 
+            report_data$prueba_dwtest_msg <-
             if(prueba$p.value>0.05){
-                message("No se puede rechazar \"H0 = No hay presencia de autocorrelacion en los residuos\" \n")
+              mensaje("No se puede rechazar \"H0 = No hay presencia de autocorrelacion en los residuos\" \n")
             }else{
-                message("Se rechaza H0, se obta por \"H1 = Hay presencia de autocorrelacion en los residuos\" \n")
+              mensaje("Se rechaza H0, se obta por \"H1 = Hay presencia de autocorrelacion en los residuos\" \n")
             }
 
 
@@ -133,6 +136,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
 
             prueba<-tseries::adf.test(basets)
             print(prueba)
+            report_data$prueba_adf.test <- prueba
             if(msg){#si no hay mensaje entonces predeterminado
               p_valor<-readline('Inserte un p valor, (intro para p=0.05) \n')
             }else{
@@ -146,12 +150,14 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
                 p_valor<-as.numeric(p_valor)
             }
 
-                if(prueba$p.value>p_valor){
-                    message("No se puede rechazar H0 = Hay presencia de una raiz unitaria \n")
+            report_data$prueba_adf.test_msg <-
+              if(prueba$p.value>p_valor){
+                    mensaje("No se puede rechazar H0 = Hay presencia de una raiz unitaria \n")
                 }else{
-                    message("Se rechaza H0, se obta por H1 = La serie de tiempo es Estacionaria \n")
+                    mensaje("Se rechaza H0, se obta por H1 = La serie de tiempo es Estacionaria \n")
                 }
             separador()
+            return(invisible(report_data))
         }else{
             stop("El objeto debe ser data frame")
         }
@@ -163,7 +169,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
         if(is.ts(datos)){
           elementos = tratamiento.ts_set(datos)
           frecuencia=ifelse(is.null(frecuencia),elementos$frecu,frecuencia)
-          serie_tiempo_pruebas(elementos$data,frecuencia,init_ = TRUE)
+          serie_tiempo_pruebas(elementos$data,frecuencia,init_ = TRUE,msg = msg,pausa_off = pausa_off)
           }else{
           stop("El objeto debe ser un data frame con dos elementos o una serie de tiempo")
         }

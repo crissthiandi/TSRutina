@@ -9,7 +9,8 @@ serie_tiempo_rutina(
   frecuencia = NULL,
   inicio = NULL,
   init_ = FALSE,
-  pausa_off = 1
+  pausa_off = 1,
+  msg = TRUE
 )
 }
 \arguments{
@@ -21,6 +22,10 @@ dia-mes-year. La versión 2.1 soporta objetos de la clase TS (time series)}
 ,mensual = 12, etc.}
 
 \item{inicio}{Este es el year a iniciar la serie de tiempo}
+
+\item{pausa_off}{Logical ¿Desea quitar las pausas en la rutina?}
+
+\item{msg}{Logical ¿Desea ignorar las preguntas de la rutina y tomar los valores por defecto?}
 }
 \value{
 La salida no es como tal un objeto, si no una serie de impresiones de varios

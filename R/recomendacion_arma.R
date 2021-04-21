@@ -18,6 +18,7 @@
 #' matriz_eacf(AirPassengers)
 matriz_eacf <- function (z, ar.max = 7, ma.max = 13,print_matrix=TRUE)
 {
+  # codigo original antes de modificaciónes por Kung-Sik Chan
   lag1 <- function(z, lag = 1) {
     c(rep(NA, lag), z[1:(length(z) - lag)])
   }

@@ -4,7 +4,7 @@
 \alias{separador}
 \title{Repide un texto y lo imprime en la consola}
 \usage{
-separador(repite = "-", num_repetidas = 35, color = "red")
+separador(repite = "-", num_repetidas = 45, color = "red")
 }
 \arguments{
 \item{repite}{String, que se repetira, idealmente del tipo "-" "_" "*" etc.}

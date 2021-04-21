@@ -27,7 +27,7 @@ Esta funcion incluye el calculo y la decision de dos pruebas estadisticas a una 
 }
 \details{
 Realiza las siguientes pruebas:
-La prueba de estacionalidad (Dickey-Fuller)
+La prueba de estacionariedad (Dickey-Fuller)
 
 La prueba de autocorrelacion (Durbin-Watson)
 

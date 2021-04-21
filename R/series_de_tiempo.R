@@ -90,6 +90,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
         if(is.data.frame(datos)){
             base<-datos
             names(base)<-c("x","y")
+            report_data <- list()
 
             base2<-base
             base2$xx<-1:length(base$x)
@@ -99,6 +100,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
             cat(crayon::green("\n (Prueba aplicada los residuos de una regresión lineal) \n"))
             prueba<-lmtest::dwtest(regresion)
             print(prueba)
+            report_data$prueba_dwtest <- prueba
             if(msg){
               p_valor<-readline('Inserte un p valor, (intro para p=0.05):  \n')
             }else{
@@ -113,10 +115,11 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
             }
 
 
+            report_data$prueba_dwtest_msg <-
             if(prueba$p.value>0.05){
-                message("No se puede rechazar \"H0 = No hay presencia de autocorrelacion en los residuos\" \n")
+              mensaje("No se puede rechazar \"H0 = No hay presencia de autocorrelacion en los residuos\" \n")
             }else{
-                message("Se rechaza H0, se obta por \"H1 = Hay presencia de autocorrelacion en los residuos\" \n")
+              mensaje("Se rechaza H0, se obta por \"H1 = Hay presencia de autocorrelacion en los residuos\" \n")
             }
 
 
@@ -133,6 +136,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
 
             prueba<-tseries::adf.test(basets)
             print(prueba)
+            report_data$prueba_adf.test <- prueba
             if(msg){#si no hay mensaje entonces predeterminado
               p_valor<-readline('Inserte un p valor, (intro para p=0.05) \n')
             }else{
@@ -146,12 +150,14 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
                 p_valor<-as.numeric(p_valor)
             }
 
-                if(prueba$p.value>p_valor){
-                    message("No se puede rechazar H0 = Hay presencia de una raiz unitaria \n")
+            report_data$prueba_adf.test_msg <-
+              if(prueba$p.value>p_valor){
+                    mensaje("No se puede rechazar H0 = Hay presencia de una raiz unitaria \n")
                 }else{
-                    message("Se rechaza H0, se obta por H1 = La serie de tiempo es Estacionaria \n")
+                    mensaje("Se rechaza H0, se obta por H1 = La serie de tiempo es Estacionaria \n")
                 }
             separador()
+            return(invisible(report_data))
         }else{
             stop("El objeto debe ser data frame")
         }
@@ -163,7 +169,7 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
         if(is.ts(datos)){
           elementos = tratamiento.ts_set(datos)
           frecuencia=ifelse(is.null(frecuencia),elementos$frecu,frecuencia)
-          serie_tiempo_pruebas(elementos$data,frecuencia,init_ = TRUE)
+          serie_tiempo_pruebas(elementos$data,frecuencia,init_ = TRUE,msg = msg,pausa_off = pausa_off)
           }else{
           stop("El objeto debe ser un data frame con dos elementos o una serie de tiempo")
         }
@@ -371,6 +377,10 @@ pausa <-function(duracion = Inf){
 #'   ,mensual = 12, etc.
 #' @param  inicio Este es el year a iniciar la serie de tiempo
 #'
+#' @param pausa_off Logical ¿Desea quitar las pausas en la rutina?
+#'
+#' @param msg Logical ¿Desea ignorar las preguntas de la rutina y tomar los valores por defecto?
+#'
 #' @return La salida no es como tal un objeto, si no una serie de impresiones de varios
 #'   varios analisis.
 #'   \itemize{\item{\bold{Plost}}{  Arroja una lista de plots que ayudan a ver el comportamiento de la serie y como ciertos ajustes se aproximan mejor a ella}}
@@ -396,7 +406,7 @@ pausa <-function(duracion = Inf){
 #' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #' serie_tiempo_rutina(datos=base,frecuencia=4,inicio=2010)
 #'
-serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa_off=1){
+serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa_off=1,msg = TRUE){
 
     if(!init_){
       paquetes.tsrutina()
@@ -417,31 +427,39 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     elementos=checar_datos(datos,frecuencia,inicio)
     datos=elementos$datos
     datosts=elementos$datosts
+    reporte_data <- list()
 
 
     #Graficos para ver si es estacional
-    print(
-    ggplot(datos, aes(x,y)) +
+    p <- ggplot(datos, aes(x,y)) +
         geom_point()+geom_line()+
         ggtitle("Serie de tiempo Visualización")+
-        theme(plot.title = element_text(color = "Black",hjust = 0.5))
-    )
+        theme(plot.title = element_text(color = "Black",hjust = 0.5)) -> reporte_data$plots$General
+    print(p)
     pausa()
     if(frecuencia==1){
-      message("La frecuencia de la serie de tiempo es 1, usaremos frecuencia 12 para los siguientes 2 graficos")
+      message("La frecuencia de la serie de tiempo es 1,\nusaremos frecuencia 12 para los siguientes 2 graficos")
       frecuencia=12
       datosts=ts(datos$y,frequency = 12,start = start(elementos$datosts))
     }
-    print(
-    forecast::autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue",
-             main="Ruido + Estacionalidad + Tendencia + SerieTemporal ")
-    )
-    pausa()
-    forecast::seasonplot(datosts,col=rainbow(length(datos$y)/frecuencia),year.labels=TRUE,xlab="Tiempo",
-               ylab="Serie de tiempo",main = "Grafico Estacional de la Serie Temp.")
+
+    p <- forecast::autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue",
+             main="Ruido + Estacionalidad + Tendencia + SerieTemporal ") -> reporte_data$plots$descomposicion
+    print(p)
     pausa()
 
-    boxplot(datosts~cycle(datosts),xlab = "Frecuencias",ylab = "Valores",main="Boxplot por cada valor de la frecuencia")
+    p <- forecast::ggseasonplot(datosts,col=rainbow(length(datos$y)/frecuencia),year.labels=TRUE,xlab="Tiempo",
+               ylab="Serie de tiempo",main = "Grafico Estacional de la Serie Temp.") -> reporte_data$plots$ggseason
+    print(p)
+    pausa()
+
+    ### Abajo remplazo en formato ggplot
+    # boxplot(datosts~cycle(datosts),xlab = "Frecuencias",ylab = "Valores",main="Boxplot por cada valor de la frecuencia")
+    p <- ggplot(fortify(datosts) %>%
+                  dplyr::mutate(mes = months(Index,F),
+                                mes_num = lubridate::month(Index))) +
+      geom_boxplot(aes(x = reorder(mes,mes_num), y = Data, color = mes)) -> reporte_data$plots$boxplots
+    print(p)
 
     pausa()
     separador()
@@ -449,16 +467,23 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     #Modelo de regresion lineal
     datos$periodos<-1:length(datos$x)
     datos_rl<-lm(y~x, data=datos)
-    print(summary(datos_rl))
+    reporte_data$lm <- summary(datos_rl)
+    print(reporte_data$lm)
     #Se puede ver cuales variables son significativas en el modelo
     pausa()
     separador()
 
     #Grafico del modelo de regresion lineal
-    plot(datos$periodos,datos$y,type = "l",
-         xlab="Periodos",ylab="Valor de la serie",
-         main="Regresión Lineal")
-    lines(datos_rl$fitted.values, col="blue")
+    # plot(datos$periodos,datos$y,type = "l",
+    #      xlab="Periodos",ylab="Valor de la serie",
+    #      main="Regresión Lineal")
+    # lines(datos_rl$fitted.values, col="blue")
+
+    p <- ggplot(datos,aes(x=periodos, y=y)) +
+      geom_line() + geom_smooth(method = "lm",formula = y ~ x) +
+      labs(x = "Periodos", y = "Valor de la serie", title = "Regresión Lineal") -> reporte_data$smooth$lm
+    print(p)
+
     pausa()
     separador()
 
@@ -466,10 +491,17 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
 
     promo<-pracma::movavg(datosts, n=frecuencia, type="s")
 
-    plot(datos$periodos,datos$y,type = "l",
-         xlab="Periodos",ylab="Valor de la serie",
-         main="Promedio movil simple")
-    lines(promo,col="blue")
+    # plot(datos$periodos,datos$y,type = "l",
+    #      xlab="Periodos",ylab="Valor de la serie",
+    #      main="Promedio movil simple")
+    # lines(promo,col="blue")
+
+    p <- ggplot(datos,aes(x=periodos, y=y)) +
+      geom_line()+
+      geom_line(aes(y=promo),color = "#7171f5")+
+      labs(x="Periodos", y= "Valor de la serie", title = "Promedio movil simple") -> reporte_data$smooth$promedio_movil
+    print(p)
+
     pausa()
     separador()
 
@@ -481,6 +513,13 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
          xlab="Periodos",ylab="Valor de la serie",
          main="Promedio movil ponderado")
     lines(promopo,col="blue")
+
+    p <- ggplot(datos,aes(x=periodos, y=y)) +
+      geom_line()+
+      geom_line(aes(y=promopo),color = "#7171f5")+
+      labs(x="Periodos", y= "Valor de la serie", title = "Promedio movil Ponderado") -> reporte_data$smooth$promedio_movil_ponderado
+    print(p)
+
     pausa()
     separador()
     #Exponential Smoothing
@@ -488,10 +527,17 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     pesoses<-forecast::ses(datos$y)
 
     summary(pesoses)
-    plot(datos$periodos,datos$y,type = "l",
-         xlab="Periodos",ylab="Valor de la serie",
-         main="Suavizamiento Exponencial")
-    lines(datos$periodos,pesoses$fitted, col="blue")
+    # plot(datos$periodos,datos$y,type = "l",
+    #      xlab="Periodos",ylab="Valor de la serie",
+    #      main="Suavizamiento Exponencial")
+    # lines(datos$periodos,pesoses$fitted, col="blue")
+
+    p <- ggplot(datos,aes(x=periodos, y=y)) +
+      geom_line()+
+      geom_line(aes(y=pesoses$fitted),color = "#7171f5")+
+      labs(x="Periodos", y= "Valor de la serie", title = "Suavizamiento exponencial") -> reporte_data$smooth$smooth_exponencial
+    print(p)
+
     pausa()
     separador()
 
@@ -500,10 +546,18 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     pesoholt<- forecast::holt(datos$y)
 
     summary(pesoholt)
-    plot(datos$periodos,datos$y,type = "l",
-         xlab="Periodos",ylab="Valor de la serie",
-         main="Suavizamiento Exponencial holt")
-    lines(datos$periodos,pesoholt$fitted, col="blue")
+    # plot(datos$periodos,datos$y,type = "l",
+    #      xlab="Periodos",ylab="Valor de la serie",
+    #      main="Suavizamiento Exponencial holt")
+    # lines(datos$periodos,pesoholt$fitted, col="blue")
+
+    p <- ggplot(datos,aes(x=periodos, y=y)) +
+      geom_line()+
+      geom_line(aes(y=pesoholt$fitted),color = "#7171f5")+
+      labs(x="Periodos", y= "Valor de la serie", title = "Suavizamiento Exponencial de Holt") -> reporte_data$smooth$holt
+    print(p)
+
+
     pausa()
     separador()
     #Holt-Winters' Exponential Smoothing
@@ -513,11 +567,20 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     summary(pesohw)
     #asignamos valores ajustados a una columna
     datos$Ajustadohw<-as.numeric(pesohw$fitted)
+    #
+    # # plot(datos$periodos,datos$y,type = "l",
+    # #      xlab="Periodos",ylab="Valor de la serie",
+    # #      main="Suavizamiento Exponencial holt-winter")
+    # # lines(datos$periodos, datos$Ajustadohw, col="red", type="l")
+    # # lines(datos$periodos, pesohw$fitted, col="blue", type="l")
 
-    plot(datos$periodos,datos$y,type = "l",
-         xlab="Periodos",ylab="Valor de la serie",
-         main="Suavizamiento Exponencial holt-winter")
-    lines(datos$periodos, datos$Ajustadohw, col="red", type="l")
+    p <- ggplot(datos,aes(x=periodos, y=y)) +
+      geom_line()+
+      geom_line(aes(y=as.numeric(pesohw$fitted)),color = "#7171f5")+
+      labs(x="Periodos", y= "Valor de la serie", title = "Suavizamiento Exponencial Holt-Winter") -> reporte_data$smooth$holt_winter
+    print(p)
+
+
     pausa()
     #Ahora, para elegir el mejor modelo de "suavizamiento",
     #usaremos el MSE (error cuadratico medio).
@@ -549,32 +612,46 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
                 MSE(datos$y, pesoses$fitted),
                 MSE(datos$y, pesoholt$fitted),
                 MSE(datos$y, datos$Ajustado)))
+
+    if(msg){#si no hay mensaje entonces predeterminado
+      h_pronostico <- readline('Inserte el número de periodos a pronosticar: \n(intro para 12 periodos) \n')
+      h_pronostico <- as.integer(h_pronostico)
+    }else{
+      h_pronostico <- 12L
+    }
+
     switch(a,
         '1' = {cat(crayon::green('Regresion lineal'))
             pausa()
-            pronostico<-forecast::forecast(datos_rl$fitted.values,h=5,level=c(80,95))
-            plot(pronostico)},
+            pronostico<-forecast::forecast(datos_rl$fitted.values,
+                                           h=h_pronostico,level=c(80,95))
+            },
         '2' = {cat(crayon::green('Promedio movil simple'))
             pausa()
-            pronostico<-forecast::forecast(promo,h=5,level=c(80,95))
-            plot(pronostico)},
+            pronostico<-forecast::forecast(promo,h=h_pronostico,level=c(80,95))
+            },
         '3' = {cat(crayon::green('Promedio ponderado'))
             pausa()
-            pronostico<-forecast::forecast(promopo,h=5,level=c(80,95))
-            plot(pronostico)},
+            pronostico<-forecast::forecast(promopo,h=h_pronostico,level=c(80,95))
+            },
         '4' = {cat(crayon::green('Exponencial simple'))
             pausa()
-            pronostico<-forecast::forecast(pesoses,h=5,level=c(80,95))
-            plot(pronostico)},
+            pronostico<-forecast::forecast(pesoses,h=h_pronostico,level=c(80,95))
+            },
         '5' = {cat(crayon::green('Suavizamiento de Holt'))
             pausa()
-            pronostico<-forecast::forecast(pesoholt,h=5,level=c(80,95))
-            plot(pronostico)},
+            pronostico<-forecast::forecast(pesoholt,h=h_pronostico,level=c(80,95))
+            },
         '6' = {cat(crayon::green('Suavizamiento de Holt-Winter'))
             pausa()
-            pronostico<-forecast::forecast(pesohw,h=5,level=c(80,95))
-            plot(pronostico)}
+            pronostico<-forecast::forecast(pesohw,h=h_pronostico,level=c(80,95))
+            }
     )
+    # plot(pronostico)
+    reporte_data$pronosticos$modelo <- pronostico
+    p <- autoplot(pronostico) + labs(title = paste0("Ajuste por ",pronostico$method)) -> reporte_data$pronosticos$plot
+    print(p)
+
     separador()
     pausa()
 
@@ -588,6 +665,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     }
     separador()
 
+    return(invisible(reporte_data))
 }
 
 #' Depurador de dispositivos graficos
@@ -1568,5 +1646,4 @@ hacer_reporte <- function(datos){
   # rmarkdown::render("R/reporte.Rmd", "pdf_document")
 
 }
-
 

@@ -377,6 +377,10 @@ pausa <-function(duracion = Inf){
 #'   ,mensual = 12, etc.
 #' @param  inicio Este es el year a iniciar la serie de tiempo
 #'
+#' @param pausa_off Logical ¿Desea quitar las pausas en la rutina?
+#'
+#' @param msg Logical ¿Desea ignorar las preguntas de la rutina y tomar los valores por defecto?
+#'
 #' @return La salida no es como tal un objeto, si no una serie de impresiones de varios
 #'   varios analisis.
 #'   \itemize{\item{\bold{Plost}}{  Arroja una lista de plots que ayudan a ver el comportamiento de la serie y como ciertos ajustes se aproximan mejor a ella}}
@@ -402,7 +406,7 @@ pausa <-function(duracion = Inf){
 #' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #' serie_tiempo_rutina(datos=base,frecuencia=4,inicio=2010)
 #'
-serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa_off=1){
+serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa_off=1,msg = TRUE){
 
     if(!init_){
       paquetes.tsrutina()
@@ -434,7 +438,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     print(p)
     pausa()
     if(frecuencia==1){
-      message("La frecuencia de la serie de tiempo es 1, usaremos frecuencia 12 para los siguientes 2 graficos")
+      message("La frecuencia de la serie de tiempo es 1,\nusaremos frecuencia 12 para los siguientes 2 graficos")
       frecuencia=12
       datosts=ts(datos$y,frequency = 12,start = start(elementos$datosts))
     }
@@ -609,34 +613,45 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
                 MSE(datos$y, pesoholt$fitted),
                 MSE(datos$y, datos$Ajustado)))
 
-
+    if(msg){#si no hay mensaje entonces predeterminado
+      h_pronostico <- readline('Inserte el número de periodos a pronosticar: \n(intro para 12 periodos) \n')
+      h_pronostico <- as.integer(h_pronostico)
+    }else{
+      h_pronostico <- 12L
+    }
 
     switch(a,
         '1' = {cat(crayon::green('Regresion lineal'))
             pausa()
-            pronostico<-forecast::forecast(datos_rl$fitted.values,h=5,level=c(80,95))
-            plot(pronostico)},
+            pronostico<-forecast::forecast(datos_rl$fitted.values,
+                                           h=h_pronostico,level=c(80,95))
+            },
         '2' = {cat(crayon::green('Promedio movil simple'))
             pausa()
-            pronostico<-forecast::forecast(promo,h=5,level=c(80,95))
-            plot(pronostico)},
+            pronostico<-forecast::forecast(promo,h=h_pronostico,level=c(80,95))
+            },
         '3' = {cat(crayon::green('Promedio ponderado'))
             pausa()
-            pronostico<-forecast::forecast(promopo,h=5,level=c(80,95))
-            plot(pronostico)},
+            pronostico<-forecast::forecast(promopo,h=h_pronostico,level=c(80,95))
+            },
         '4' = {cat(crayon::green('Exponencial simple'))
             pausa()
-            pronostico<-forecast::forecast(pesoses,h=5,level=c(80,95))
-            plot(pronostico)},
+            pronostico<-forecast::forecast(pesoses,h=h_pronostico,level=c(80,95))
+            },
         '5' = {cat(crayon::green('Suavizamiento de Holt'))
             pausa()
-            pronostico<-forecast::forecast(pesoholt,h=5,level=c(80,95))
-            plot(pronostico)},
+            pronostico<-forecast::forecast(pesoholt,h=h_pronostico,level=c(80,95))
+            },
         '6' = {cat(crayon::green('Suavizamiento de Holt-Winter'))
             pausa()
-            pronostico<-forecast::forecast(pesohw,h=5,level=c(80,95))
-            plot(pronostico)}
+            pronostico<-forecast::forecast(pesohw,h=h_pronostico,level=c(80,95))
+            }
     )
+    # plot(pronostico)
+    reporte_data$pronosticos$modelo <- pronostico
+    p <- autoplot(pronostico) + labs(title = paste0("Ajuste por ",pronostico$method)) -> reporte_data$pronosticos$plot
+    print(p)
+
     separador()
     pausa()
 
@@ -650,6 +665,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     }
     separador()
 
+    return(invisible(reporte_data))
 }
 
 #' Depurador de dispositivos graficos

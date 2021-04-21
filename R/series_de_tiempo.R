@@ -470,12 +470,15 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     separador()
 
     #Grafico del modelo de regresion lineal
-    plot(datos$periodos,datos$y,type = "l",
-         xlab="Periodos",ylab="Valor de la serie",
-         main="Regresión Lineal")
-    lines(datos_rl$fitted.values, col="blue")
+    # plot(datos$periodos,datos$y,type = "l",
+    #      xlab="Periodos",ylab="Valor de la serie",
+    #      main="Regresión Lineal")
+    # lines(datos_rl$fitted.values, col="blue")
 
-
+    p <- ggplot(datos,aes(x=periodos, y=y)) +
+      geom_line() + geom_smooth(method = "lm",formula = y ~ x) +
+      labs(x = "Periodos", y = "Valor de la serie", title = "Regresión Lineal") -> reporte_data$smooth$lm
+    print(p)
 
     pausa()
     separador()
@@ -484,10 +487,17 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
 
     promo<-pracma::movavg(datosts, n=frecuencia, type="s")
 
-    plot(datos$periodos,datos$y,type = "l",
-         xlab="Periodos",ylab="Valor de la serie",
-         main="Promedio movil simple")
-    lines(promo,col="blue")
+    # plot(datos$periodos,datos$y,type = "l",
+    #      xlab="Periodos",ylab="Valor de la serie",
+    #      main="Promedio movil simple")
+    # lines(promo,col="blue")
+
+    p <- ggplot(datos,aes(x=periodos, y=y)) +
+      geom_line()+
+      geom_line(aes(y=promo),color = "#7171f5")+
+      labs(x="Periodos", y= "Valor de la serie", title = "Promedio movil simple") -> reporte_data$smooth$promedio_movil
+    print(p)
+
     pausa()
     separador()
 
@@ -499,6 +509,13 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
          xlab="Periodos",ylab="Valor de la serie",
          main="Promedio movil ponderado")
     lines(promopo,col="blue")
+
+    p <- ggplot(datos,aes(x=periodos, y=y)) +
+      geom_line()+
+      geom_line(aes(y=promopo),color = "#7171f5")+
+      labs(x="Periodos", y= "Valor de la serie", title = "Promedio movil Ponderado") -> reporte_data$smooth$promedio_movil_ponderado
+    print(p)
+
     pausa()
     separador()
     #Exponential Smoothing
@@ -506,10 +523,17 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     pesoses<-forecast::ses(datos$y)
 
     summary(pesoses)
-    plot(datos$periodos,datos$y,type = "l",
-         xlab="Periodos",ylab="Valor de la serie",
-         main="Suavizamiento Exponencial")
-    lines(datos$periodos,pesoses$fitted, col="blue")
+    # plot(datos$periodos,datos$y,type = "l",
+    #      xlab="Periodos",ylab="Valor de la serie",
+    #      main="Suavizamiento Exponencial")
+    # lines(datos$periodos,pesoses$fitted, col="blue")
+
+    p <- ggplot(datos,aes(x=periodos, y=y)) +
+      geom_line()+
+      geom_line(aes(y=pesoses$fitted),color = "#7171f5")+
+      labs(x="Periodos", y= "Valor de la serie", title = "Suavizamiento exponencial") -> reporte_data$smooth$smooth_exponencial
+    print(p)
+
     pausa()
     separador()
 
@@ -518,10 +542,18 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     pesoholt<- forecast::holt(datos$y)
 
     summary(pesoholt)
-    plot(datos$periodos,datos$y,type = "l",
-         xlab="Periodos",ylab="Valor de la serie",
-         main="Suavizamiento Exponencial holt")
-    lines(datos$periodos,pesoholt$fitted, col="blue")
+    # plot(datos$periodos,datos$y,type = "l",
+    #      xlab="Periodos",ylab="Valor de la serie",
+    #      main="Suavizamiento Exponencial holt")
+    # lines(datos$periodos,pesoholt$fitted, col="blue")
+
+    p <- ggplot(datos,aes(x=periodos, y=y)) +
+      geom_line()+
+      geom_line(aes(y=pesoholt$fitted),color = "#7171f5")+
+      labs(x="Periodos", y= "Valor de la serie", title = "Suavizamiento Exponencial de Holt") -> reporte_data$smooth$holt
+    print(p)
+
+
     pausa()
     separador()
     #Holt-Winters' Exponential Smoothing
@@ -531,11 +563,20 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     summary(pesohw)
     #asignamos valores ajustados a una columna
     datos$Ajustadohw<-as.numeric(pesohw$fitted)
+    #
+    # # plot(datos$periodos,datos$y,type = "l",
+    # #      xlab="Periodos",ylab="Valor de la serie",
+    # #      main="Suavizamiento Exponencial holt-winter")
+    # # lines(datos$periodos, datos$Ajustadohw, col="red", type="l")
+    # # lines(datos$periodos, pesohw$fitted, col="blue", type="l")
 
-    plot(datos$periodos,datos$y,type = "l",
-         xlab="Periodos",ylab="Valor de la serie",
-         main="Suavizamiento Exponencial holt-winter")
-    lines(datos$periodos, datos$Ajustadohw, col="red", type="l")
+    p <- ggplot(datos,aes(x=periodos, y=y)) +
+      geom_line()+
+      geom_line(aes(y=as.numeric(pesohw$fitted)),color = "#7171f5")+
+      labs(x="Periodos", y= "Valor de la serie", title = "Suavizamiento Exponencial Holt-Winter") -> reporte_data$smooth$holt_winter
+    print(p)
+
+
     pausa()
     #Ahora, para elegir el mejor modelo de "suavizamiento",
     #usaremos el MSE (error cuadratico medio).
@@ -567,6 +608,9 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
                 MSE(datos$y, pesoses$fitted),
                 MSE(datos$y, pesoholt$fitted),
                 MSE(datos$y, datos$Ajustado)))
+
+
+
     switch(a,
         '1' = {cat(crayon::green('Regresion lineal'))
             pausa()

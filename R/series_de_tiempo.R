@@ -444,7 +444,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     }
 
     p <- forecast::autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue",
-             main="Ruido + Estacionalidad + Tendencia + SerieTemporal ") -> reporte_data$plots$autoplot
+             main="Ruido + Estacionalidad + Tendencia + SerieTemporal ") -> reporte_data$plots$descomposicion
     print(p)
     pausa()
 
@@ -1646,5 +1646,4 @@ hacer_reporte <- function(datos){
   # rmarkdown::render("R/reporte.Rmd", "pdf_document")
 
 }
-
 

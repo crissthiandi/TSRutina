@@ -13,13 +13,13 @@
 #' paquetes.tsrutina()
 paquetes.tsrutina <- function(){
   require('tseries',warn.conflicts = F,quietly = F)
-  library('lmtest',warn.conflicts = F,quietly = F)
-  library('pracma',warn.conflicts = F,quietly = F)
-  library('ggfortify',warn.conflicts = F,quietly = F)
-  library('forecast',warn.conflicts = F,quietly = F,)
-  library('tseries',warn.conflicts = F,quietly = F)
-  library('greybox',warn.conflicts = F,quietly = F)
-  library('readr',warn.conflicts = F,quietly = F)
+  require('lmtest',warn.conflicts = F,quietly = F)
+  require('pracma',warn.conflicts = F,quietly = F)
+  require('ggfortify',warn.conflicts = F,quietly = F)
+  require('forecast',warn.conflicts = F,quietly = F,)
+  require('tseries',warn.conflicts = F,quietly = F)
+  require('greybox',warn.conflicts = F,quietly = F)
+  require('readr',warn.conflicts = F,quietly = F)
   message("Se han cargado los paquetes necesarios")
 
 }
@@ -41,11 +41,12 @@ paquetes.tsrutina <- function(){
 #' separador("-",10,"blue")
 #' separador()
 #'
-separador<-function(repite="-",num_repetidas=35,color="red"){
+separador<-function(repite="-",num_repetidas=45,color="red"){
   b=paste0("cat(","crayon::",color,"(",
-           "paste0(rep(","'",repite,"',",num_repetidas,"))","))")
+           "paste0(rep(","'",repite,"',",num_repetidas,")",")","),'\n')")
+
   a=str2expression(b)
-  a
+
   eval(a)
 
 }

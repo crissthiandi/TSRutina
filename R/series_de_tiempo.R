@@ -233,11 +233,26 @@ tratamiento.ts_set <- function(datosts){
     "12" = 'month',
     "4" = '3 month',
     "54" = '7 days',
-    "3" = '4 month'
+    "3" = '4 month',
+    "365" = 'days',
+    T = FALSE
+  )
+  try(if(avance){
+    cat(crayon::red("No se encontro frecuencia compatible con función Seq() \n
+                    Ingrese el nombre del vector con las fechas de tu serie de tiempo. \n"))
+    fecha_secuencia <- readline("El vector debe existir en tu Enviroment: ")
+  }
+    ,silent = 1)
+
+  fecha_secuencia=tryCatch(expr = seq(fecha_inicio, by=avance, length=nrow(datos_conver)),
+                           error = function(e) {
+                             message("\n Se intentara conectar con el objeto de llamado: \n",
+                                     fecha_secuencia,"\n")# De no exitir hay error
+                             busqueda <- try(get(fecha_secuencia,envir = parent.frame()),outFile = cat("Error, no se encontro el vector ",fecha_secuencia))
+                              return(busqueda)
+                           }
   )
 
-
-  fecha_secuencia=seq(fecha_inicio, by=avance, length=nrow(datos_conver))
   datos_conver=data.frame(x = fecha_secuencia,y = datos_conver$x)
   elementos=list()
   elementos$data=datos_conver

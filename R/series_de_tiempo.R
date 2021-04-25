@@ -471,10 +471,28 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
 
     ### Abajo remplazo en formato ggplot
     # boxplot(datosts~cycle(datosts),xlab = "Frecuencias",ylab = "Valores",main="Boxplot por cada valor de la frecuencia")
-    p <- ggplot(fortify(datosts) %>%
-                  dplyr::mutate(mes = months(Index,F),
-                                mes_num = lubridate::month(Index))) +
-      geom_boxplot(aes(x = reorder(mes,mes_num), y = Data, color = mes)) -> reporte_data$plots$boxplots
+
+    if(frecuencia == 12){
+      p <- ggplot(fortify(datosts) %>%
+                    dplyr::mutate(mes = months(Index,F),
+                                  mes_num = lubridate::month(Index))) +
+        geom_boxplot(aes(x = reorder(mes,mes_num), y = Data, color = mes)) -> reporte_data$plots$boxplots
+    }else {
+      minimo <- which.min(c(end(datosts)[1] - start(datosts)[1],frecuencia))
+      if(minimo == 1L){
+        datos_by <- datos %>%
+          mutate(year = lubridate::year(x))
+        ggplot(datos_by,aes(x = year, y = y, color = year,group = year))+
+          geom_boxplot(show.legend = F) + labs(main = "Boxplot por año",x ="Año",y="")
+      }else{
+        datos_by <- datos %>% arrange(x) %>%
+          mutate(grupo = as.numeric(cycle({datosts})))
+        ggplot(datos_by,aes(x = grupo, y = y, color = grupo,group = grupo))+
+          geom_boxplot(show.legend = F) + labs(main = "Boxplot por frecuencia",x ="Frecuencia",y="")
+
+      }
+    }
+
     print(p)
 
     pausa()

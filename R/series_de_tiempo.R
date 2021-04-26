@@ -482,13 +482,18 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
       if(minimo == 1L){
         datos_by <- datos %>%
           mutate(year = lubridate::year(x))
-        ggplot(datos_by,aes(x = year, y = y, color = year,group = year))+
-          geom_boxplot(show.legend = F) + labs(main = "Boxplot por año",x ="Año",y="")
+        p <- ggplot(datos_by,aes(x = year, y = y, color = year,group = year))+
+          geom_boxplot(show.legend = F) +
+          labs(main = "Boxplot por año",x ="Año",y="") -> reporte_data$plots$boxplots
+        print(p)
+
       }else{
         datos_by <- datos %>% arrange(x) %>%
           mutate(grupo = as.numeric(cycle({datosts})))
-        ggplot(datos_by,aes(x = grupo, y = y, color = grupo,group = grupo))+
-          geom_boxplot(show.legend = F) + labs(main = "Boxplot por frecuencia",x ="Frecuencia",y="")
+        p <- ggplot(datos_by,aes(x = grupo, y = y, color = grupo,group = grupo))+
+          geom_boxplot(show.legend = F) +
+          labs(main = "Boxplot por frecuencia",x ="Frecuencia",y="") -> reporte_data$plots$boxplots
+        print(p)
 
       }
     }
@@ -568,7 +573,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
 
     p <- ggplot(datos,aes(x=periodos, y=y)) +
       geom_line()+
-      geom_line(aes(y=pesoses$fitted),color = "#7171f5")+
+      geom_line(aes(y=pesoses$fitted),color = "#7171f5",type = "dashes")+
       labs(x="Periodos", y= "Valor de la serie", title = "Suavizamiento exponencial") -> reporte_data$smooth$smooth_exponencial
     print(p)
 
@@ -596,11 +601,24 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     separador()
     #Holt-Winters' Exponential Smoothing
 
-    pesohw<- forecast::hw(datosts)
+    tryCatch({
+      pesohw <- forecast::hw(datosts)
+      summary(pesohw)
+      #asignamos valores ajustados a una columna
+      datos$Ajustadohw<-as.numeric(pesohw$fitted)
+      },
+      error = function(e) {
+        cat(crayon::red("El ajuste por Hol-Winter fracasó por el método 1 ¿desea intentar usar ajuste por el método 2?"))
+        otro_metodo <- readline("\nRespuesta [TRUE/FALSE]: ")
+        if(as.logical(otro_metodo)){
+          mensaje("\nIniciando proceso Hol-Winter por metodo 2: \n")
+          pesohw <- stats::HoltWinters(datosts)
+          print(pesohw)
+          datos$Ajustadohw <- pesohw$fitted %>% as.data.frame() %$% c(rep(NA,frecuencia),xhat)
+        }
 
-    summary(pesohw)
-    #asignamos valores ajustados a una columna
-    datos$Ajustadohw<-as.numeric(pesohw$fitted)
+        })
+
     #
     # # plot(datos$periodos,datos$y,type = "l",
     # #      xlab="Periodos",ylab="Valor de la serie",
@@ -610,9 +628,11 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
 
     p <- ggplot(datos,aes(x=periodos, y=y)) +
       geom_line()+
-      geom_line(aes(y=as.numeric(pesohw$fitted)),color = "#7171f5")+
+      geom_line(aes(y=Ajustadohw),color = "#7171f5")+
       labs(x="Periodos", y= "Valor de la serie", title = "Suavizamiento Exponencial Holt-Winter") -> reporte_data$smooth$holt_winter
     print(p)
+
+
 
 
     pausa()

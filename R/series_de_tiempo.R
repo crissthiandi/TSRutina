@@ -415,6 +415,7 @@ pausa <-function(duracion = Inf){
 #' @importFrom forecast ses hw holt forecast
 #' @importFrom greybox MSE
 #' @importFrom crayon green red yellow
+#' @importFrom magrittr `%$%`
 #'
 #' @examples
 #' serie_tiempo_rutina(sunspot.year,5)
@@ -601,7 +602,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     separador()
     #Holt-Winters' Exponential Smoothing
 
-    tryCatch({
+    datos$Ajustadohw <- tryCatch({
       pesohw <- forecast::hw(datosts)
       summary(pesohw)
       #asignamos valores ajustados a una columna
@@ -615,6 +616,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
           pesohw <- stats::HoltWinters(datosts)
           print(pesohw)
           datos$Ajustadohw <- pesohw$fitted %>% as.data.frame() %$% c(rep(NA,frecuencia),xhat)
+          return(datos$Ajustadohw)
         }
 
         })
@@ -669,7 +671,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
 
     if(msg){#si no hay mensaje entonces predeterminado
       h_pronostico <- readline('Inserte el número de periodos a pronosticar: \n(intro para 12 periodos) \n')
-      h_pronostico <- as.integer(h_pronostico)
+      h_pronostico <- ifelse(h_pronostico != "",as.integer(h_pronostico),12)
     }else{
       h_pronostico <- 12L
     }
@@ -690,27 +692,38 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
             },
         '4' = {cat(crayon::green('Exponencial simple'))
             pausa()
-            pronostico<-forecast::forecast(pesoses,h=h_pronostico,level=c(80,95))
+            pronostico<-forecast::ses(datos$y,h=h_pronostico,level=c(80,95))
             },
         '5' = {cat(crayon::green('Suavizamiento de Holt'))
             pausa()
-            pronostico<-forecast::forecast(pesoholt,h=h_pronostico,level=c(80,95))
+            pronostico<-forecast::holt(datos$y,h=h_pronostico,level=c(80,95))
             },
         '6' = {cat(crayon::green('Suavizamiento de Holt-Winter'))
             pausa()
-            pronostico<-forecast::forecast(pesohw,h=h_pronostico,level=c(80,95))
+            pronostico<- tryCatch({
+              pesohw <- forecast::hw(datosts,h = h_pronostico,level=c(80,95))
+              pesohw
+            },
+            error = function(e) {
+                pesohw <- stats::HoltWinters(datosts)
+                pesohw_forecast <- stats:::predict.HoltWinters(pesohw,n.ahead = h_pronostico,prediction.interval = T,level = 0.95)
+
+                return(pesohw_forecast)
+              })
             }
     )
     # plot(pronostico)
     reporte_data$pronosticos$modelo <- pronostico
-    p <- autoplot(pronostico) + labs(title = paste0("Ajuste por ",pronostico$method)) -> reporte_data$pronosticos$plot
+    p <- autoplot(pronostico) +
+      lims(x = c(end(pronostico$x)[1]-1,NA))+
+      labs(title = paste0("Ajuste por ",pronostico$method)) -> reporte_data$pronosticos$plot
     print(p)
 
     separador()
     pausa()
 
     cat(crayon::green('Supuesto de Normalidad'))
-    prueba<-shapiro.test(pesohw$residuals)
+    prueba<-shapiro.test(pronostico$residuals)
     print(prueba)
     if(prueba$p.value>0.05){
         message("No se puede rechazar H0:Hay Normalidad")

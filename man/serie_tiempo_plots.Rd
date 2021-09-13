@@ -2,7 +2,7 @@
 % Please edit documentation in R/series_de_tiempo.R
 \name{serie_tiempo_plots}
 \alias{serie_tiempo_plots}
-\title{Grafica de ajuste de TimeSeries en PNG}
+\title{Grafica de ajuste de TimeSeries en PNG (low computational cost)}
 \usage{
 serie_tiempo_plots(
   datos,

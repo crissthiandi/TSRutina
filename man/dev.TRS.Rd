@@ -12,6 +12,9 @@ NULL return
 \description{
 Depura el espacio de dispositivos graficos atravez de dev.off() y dev.new(). Checando dev.list().
 }
+\details{
+Equivalente a un reinicio de la dev.list
+}
 \examples{
 dev.TRS()
 #Se limpia los datos, consulte dev.list()

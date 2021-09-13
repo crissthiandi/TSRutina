@@ -50,7 +50,7 @@ intervalo_confianza_acf(
 Valor numerico que representa el limite del intervalo de confianza
 }
 \description{
-Atravez del metodo usado en Stats se obtiene el valor de los intervalos de confianza
+Atravez del método usado en Stats se obtiene el valor de los intervalos de confianza
 }
 \details{
 Esta pensado para su uso en Rutinas de la paqueteria TSRutina, aunque su uso como función independiente

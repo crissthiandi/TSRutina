@@ -16,11 +16,23 @@ a data.frame object
 Convierte un objeto serie de tiempo a data.frame con dos columnas
   x => variable fecha
   y => variable valor
-  La variable fecha inicia con el inicio de la serie y termina con el numero de
+  La variable fecha es inicializada con el valor start() de la serie de tiempo y termina con el numero de
   frecuencias que se pueden hacer
+}
+\details{
+Si el objeto TS contiene una frecuencia no compatible con las programadas, se te pedira ingresar el nombre del vector
+  (previamente creado en tu enviroment a.k.a entorno de desarrollo) con las fechas a usar. Mira el ejemplo 2.
 }
 \examples{
 
 tratamiento.ts_set(sunspot.year)
+
+## Ejemplo 2
+\dontrun{
+  ### Se crea el vector con las fechas
+  fechas <- c("2021-05-01","2020-10-05") \%>\% as.Date()
+  ### al correr tratamiento.ts_set(datos) se ingresa el nombre : fechas
+}
+
 
 }

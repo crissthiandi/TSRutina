@@ -1,8 +1,8 @@
-#Trabajo hecho y en mantenimiento por @crissthiandi <albertocenaa@gmail.com>
+# Dudas a @crissthiandi <albertocenaa@gmail.com>
 
 #' Carga paquetes para un analisis de series de tiempo
 #'
-#' Proximamento en desuso en las funciones de TSRutina pero ideal para usarse en procesos
+#' Ideal para usar en trabajos similar a tidyverse
 #' escribir codigo para analisis de series de tiempo
 #'
 #' @return Mensage si todo sale bien
@@ -51,17 +51,18 @@ separador<-function(repite="-",num_repetidas=45,color="red"){
 
 }
 
-#' Pruebas de una serie de tiempo
+#' Pruebas estadisticas a una serie de tiempo
 #'
-#' Esta funcion incluye el calculo y la decision de dos pruebas estadisticas a una serie de tiempo.
+#' Esta funcion incluye el calculo y la decision de dos pruebas estadisticas.
 #'
 #' Realiza las siguientes pruebas:
-#' La prueba de estacionariedad (Dickey-Fuller)
+#'    \itemize{\item{Dickey-Fuller:}{ La prueba de estacionariedad}}
+#'    \itemize{\item{Durbin-Watson:}{ La prueba de autocorrelacion}}
 #'
-#' La prueba de autocorrelacion (Durbin-Watson)
+#' Recibe un dataframe de dos columnas, la primera el tiempo y
+#' la segunda el valor de la serie.
 #'
-#' Se debe meter un dataframe de dos columnas, la primera el tiempo y la segunda el valor de la serie
-#' Tambien soporta el uso de objetos TimeSeries
+#' Tambien soporta el uso de objetos TimeSeries.
 #'
 #' @param datos Data.frame o objeto TS a analizar
 #' @param frecuencia Frecuencia de los datos, en caso de TS sobrescribe los valores
@@ -210,8 +211,11 @@ conditional.tsrutina <- function(datos){
 #' @description Convierte un objeto serie de tiempo a data.frame con dos columnas
 #'   x => variable fecha
 #'   y => variable valor
-#'   La variable fecha inicia con el inicio de la serie y termina con el numero de
+#'   La variable fecha es inicializada con el valor start() de la serie de tiempo y termina con el numero de
 #'   frecuencias que se pueden hacer
+#'
+#' @details Si el objeto TS contiene una frecuencia no compatible con las programadas, se te pedira ingresar el nombre del vector
+#'   (previamente creado en tu enviroment a.k.a entorno de desarrollo) con las fechas a usar. Mira el ejemplo 2.
 #'
 #' @return a data.frame object
 #' @export
@@ -219,6 +223,14 @@ conditional.tsrutina <- function(datos){
 #' @examples
 #'
 #' tratamiento.ts_set(sunspot.year)
+#'
+#' ## Ejemplo 2
+#' \dontrun{
+#'   ### Se crea el vector con las fechas
+#'   fechas <- c("2021-05-01","2020-10-05") %>% as.Date()
+#'   ### al correr tratamiento.ts_set(datos) se ingresa el nombre : fechas
+#' }
+#'
 #'
 tratamiento.ts_set <- function(datosts){
   datos_conver=as.data.frame(datosts)
@@ -246,9 +258,10 @@ tratamiento.ts_set <- function(datosts){
 
   fecha_secuencia=tryCatch(expr = seq(fecha_inicio, by=avance, length=nrow(datos_conver)),
                            error = function(e) {
-                             message("\n Se intentara conectar con el objeto de llamado: \n",
+                             message("\n Se intentara conectar con el objeto/vector llamado: \n",
                                      fecha_secuencia,"\n")# De no exitir hay error
-                             busqueda <- try(get(fecha_secuencia,envir = parent.frame()),outFile = cat("Error, no se encontro el vector ",fecha_secuencia))
+                             busqueda <- try(get(fecha_secuencia,envir = parent.frame()),
+                                             outFile = cat("Error, no se encontro el vector ",fecha_secuencia))
                               return(busqueda)
                            }
   )
@@ -274,28 +287,32 @@ tratamiento.ts_set <- function(datosts){
 #' @return Vector en formato fecha estandar de R
 #' @export
 #'
+#' @importFrom  readr parse_date
+#'
 #' @examples
 #' tiempo=seq(Sys.Date(),by="days",length=20)
 #' tratamiento.fechas.TRS(tiempo)
 #'
 tratamiento.fechas.TRS <- function(fecha_vector){
 
-  fecha_vector_tratamiento<-as.Date(fecha_vector,format("%d/%m/%Y"))  #Y debe ser mayuscula
+  fecha_vector_tratamiento<-as.Date(fecha_vector,format("%d/%m/%Y"))  #Y debe ser mayuscula para 4 digitos de año
+  fecha_vector_tratamiento<- readr::parse_date(fecha_vector,"%d%.%m%.%Y")  #Y debe ser mayuscula para 4 digitos de año
+
   if(is.na(fecha_vector_tratamiento[1])){
-    fecha_vector_tratamiento=as.Date(fecha_vector,format("%d-%m-%Y"))
+    fecha_vector_tratamiento<- readr::parse_date(fecha_vector,"%Y%.%m%.%d")  #Y debe ser mayuscula para 4 digitos de año
   }
   if(is.na(fecha_vector_tratamiento[1])){
-    fecha_vector_tratamiento=as.Date(fecha_vector,format("%Y-%m-%d"))
+    fecha_vector_tratamiento<- readr::parse_date(fecha_vector,"%m%.%Y%.%d")  #Y debe ser mayuscula para 4 digitos de año
   }
   if(is.na(fecha_vector_tratamiento[1])){
-    message("\n Si la variable tiempo es fecha, use el formato dia-mes-year: \n
+    message("\n Si la variable tiempo es fecha, use el formato year-month-day: \n
             \"%Y-%m-%d\" ")
   }
 
   return(fecha_vector_tratamiento)
 }
 
-#' Checa los datos en rutina TSR
+#' Mensaje de validación de los datos en rutina TSR
 #'
 #' Imprime un head de los datos y te pregunta si todo esta bien.
 #'
@@ -306,7 +323,7 @@ tratamiento.fechas.TRS <- function(fecha_vector){
 #' @param frecuencia Frecuencia de la serie de tiempo
 #' @param inicio Inicio de la serie de tiempo
 #'
-#' @return Una lista \code{\link{list}} que contiene dos elementos, la base de datos tratada y un objeto TimeSeries
+#' @return Una lista \code{\link{list}} que contiene dos elementos, la base de datos tratada y su versión en un objeto TimeSeries
 #' @export
 #'
 #' @importFrom crayon green red yellow
@@ -328,7 +345,7 @@ checar_datos <- function(datos,frecuencia,inicio,msg=TRUE) {
       stop("Corrige el error")
   }
 
-  #creando el objeto series
+  #creando el objeto time series
   datosts<-ts(data = datos$y,frequency =  frecuencia,start=inicio)
 
   return(list(datos=datos,datosts=datosts))
@@ -738,6 +755,9 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
 #' Depurador de dispositivos graficos
 #'
 #' Depura el espacio de dispositivos graficos atravez de dev.off() y dev.new(). Checando dev.list().
+#'
+#' Equivalente a un reinicio de la dev.list
+#'
 #' @return NULL return
 #' @export
 #'
@@ -760,7 +780,7 @@ dev.TRS <- function(){
 
 }
 
-#' Grafica de ajuste de TimeSeries en PNG
+#' Grafica de ajuste de TimeSeries en PNG (low computational cost)
 #'
 #' Obten archivos .png de tus graficos de serie de tiempo en tu directorio
 #'

@@ -10,7 +10,7 @@ paquetes.tsrutina()
 Mensage si todo sale bien
 }
 \description{
-Proximamento en desuso en las funciones de TSRutina pero ideal para usarse en procesos
+Ideal para usar en trabajos similar a tidyverse
 escribir codigo para analisis de series de tiempo
 }
 \examples{

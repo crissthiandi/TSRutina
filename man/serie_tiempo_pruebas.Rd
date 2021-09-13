@@ -2,7 +2,7 @@
 % Please edit documentation in R/series_de_tiempo.R
 \name{serie_tiempo_pruebas}
 \alias{serie_tiempo_pruebas}
-\title{Pruebas de una serie de tiempo}
+\title{Pruebas estadisticas a una serie de tiempo}
 \usage{
 serie_tiempo_pruebas(
   datos,
@@ -23,16 +23,17 @@ serie_tiempo_pruebas(
 Solo arroja la decicion a tomar, por defecto con respecto a p=0.05
 }
 \description{
-Esta funcion incluye el calculo y la decision de dos pruebas estadisticas a una serie de tiempo.
+Esta funcion incluye el calculo y la decision de dos pruebas estadisticas.
 }
 \details{
 Realiza las siguientes pruebas:
-La prueba de estacionariedad (Dickey-Fuller)
+   \itemize{\item{Dickey-Fuller:}{ La prueba de estacionariedad}}
+   \itemize{\item{Durbin-Watson:}{ La prueba de autocorrelacion}}
 
-La prueba de autocorrelacion (Durbin-Watson)
+Recibe un dataframe de dos columnas, la primera el tiempo y
+la segunda el valor de la serie.
 
-Se debe meter un dataframe de dos columnas, la primera el tiempo y la segunda el valor de la serie
-Tambien soporta el uso de objetos TimeSeries
+Tambien soporta el uso de objetos TimeSeries.
 }
 \examples{
  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))

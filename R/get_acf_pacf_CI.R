@@ -1,8 +1,8 @@
-#Trabajo hecho y en mantenimiento por @crissthiandi <albertocenaa@gmail.com>
+# Dudas con @crissthiandi <albertocenaa@gmail.com>
 
 #' Obten el intervalo de confianza de un objeto ACF o PACF
 #'
-#' Atravez del metodo usado en Stats se obtiene el valor de los intervalos de confianza
+#' Atravez del método usado en Stats se obtiene el valor de los intervalos de confianza
 #'
 #'
 #' Esta pensado para su uso en Rutinas de la paqueteria TSRutina, aunque su uso como función independiente

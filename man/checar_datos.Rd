@@ -2,7 +2,7 @@
 % Please edit documentation in R/series_de_tiempo.R
 \name{checar_datos}
 \alias{checar_datos}
-\title{Checa los datos en rutina TSR}
+\title{Mensaje de validación de los datos en rutina TSR}
 \usage{
 checar_datos(datos, frecuencia, inicio, msg = TRUE)
 }
@@ -14,7 +14,7 @@ checar_datos(datos, frecuencia, inicio, msg = TRUE)
 \item{inicio}{Inicio de la serie de tiempo}
 }
 \value{
-Una lista \code{\link{list}} que contiene dos elementos, la base de datos tratada y un objeto TimeSeries
+Una lista \code{\link{list}} que contiene dos elementos, la base de datos tratada y su versión en un objeto TimeSeries
 }
 \description{
 Imprime un head de los datos y te pregunta si todo esta bien.

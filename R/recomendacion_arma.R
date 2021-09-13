@@ -1,4 +1,4 @@
-#Trabajo hecho y en mantenimiento por @crissthiandi <albertocenaa@gmail.com>
+# Dudas a @crissthiandi <albertocenaa@gmail.com>
 
 #' Matriz extendida de acf
 #'

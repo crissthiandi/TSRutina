@@ -291,9 +291,9 @@ tratamiento.ts_set <- function(datosts){
 #'
 #' @examples
 #' tiempo=seq(Sys.Date(),by="days",length=20)
-#' tratamiento.fechas.TRS(tiempo)
+#' tratamiento.fechas.TSR(tiempo)
 #'
-tratamiento.fechas.TRS <- function(fecha_vector){
+tratamiento.fechas.TSR <- function(fecha_vector){
   #En caso de que el vector ya sea fecha, es necesario abortar
   if(class(fecha_vector) == "Date"){
     return(fecha_vector)
@@ -322,7 +322,7 @@ tratamiento.fechas.TRS <- function(fecha_vector){
 #' Ideal para usarse en las rutinas de TSRutina que deben preguntar si se interpretaron
 #' bien los datos.
 #'
-#' @param datos Data.Frame de 2 columnas, fecha y valores respectivamente. (se hace tratamiento de fechas con \code{\link{tratamiento.fechas.TRS}})
+#' @param datos Data.Frame de 2 columnas, fecha y valores respectivamente. (se hace tratamiento de fechas con \code{\link{tratamiento.fechas.TSR}})
 #' @param frecuencia Frecuencia de la serie de tiempo
 #' @param inicio Inicio de la serie de tiempo
 #'
@@ -337,7 +337,7 @@ tratamiento.fechas.TRS <- function(fecha_vector){
 #'
 checar_datos <- function(datos,frecuencia,inicio,msg=TRUE) {
   names(datos)<-c("x","y")
-  datos$x <- tratamiento.fechas.TRS(datos$x)
+  datos$x <- tratamiento.fechas.TSR(datos$x)
   print(head(datos))
   if(msg){
     message("\n ¿Estan bien los datos a usar? \n

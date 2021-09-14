@@ -7,7 +7,7 @@
 checar_datos(datos, frecuencia, inicio, msg = TRUE)
 }
 \arguments{
-\item{datos}{Data.Frame de 2 columnas, fecha y valores respectivamente. (se hace tratamiento de fechas con \code{\link{tratamiento.fechas.TRS}})}
+\item{datos}{Data.Frame de 2 columnas, fecha y valores respectivamente. (se hace tratamiento de fechas con \code{\link{tratamiento.fechas.TSR}})}
 
 \item{frecuencia}{Frecuencia de la serie de tiempo}
 

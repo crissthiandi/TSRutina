@@ -294,8 +294,11 @@ tratamiento.ts_set <- function(datosts){
 #' tratamiento.fechas.TRS(tiempo)
 #'
 tratamiento.fechas.TRS <- function(fecha_vector){
+  #En caso de que el vector ya sea fecha, es necesario abortar
+  if(class(fecha_vector) == "Date"){
+    return(fecha_vector)
+  }
 
-  fecha_vector_tratamiento<-as.Date(fecha_vector,format("%d/%m/%Y"))  #Y debe ser mayuscula para 4 digitos de año
   fecha_vector_tratamiento<- readr::parse_date(fecha_vector,"%d%.%m%.%Y")  #Y debe ser mayuscula para 4 digitos de año
 
   if(is.na(fecha_vector_tratamiento[1])){

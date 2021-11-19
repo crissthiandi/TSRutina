@@ -194,6 +194,8 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
 conditional.tsrutina <- function(datos){
   if(is.ts(datos)){
     return(NULL)
+  } else if(is.mts(datos)) {
+    stop("Esta paqueteria no soporta series de tiempo multivariadas")
   }
 
   if(ncol(datos)!=2)

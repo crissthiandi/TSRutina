@@ -66,7 +66,7 @@ separador<-function(repite="-",num_repetidas=45,color="red"){
 #'
 #' @param datos Data.frame o objeto TS a analizar
 #' @param frecuencia Frecuencia de los datos, en caso de TS sobrescribe los valores
-#' @param init_ Indicador para verificar los datos [True/False]
+#' @param validar_ Indicador para verificar los datos [True/False]
 #'
 #' @return Solo arroja la desición a tomar, por defecto con respecto a p=0.05
 #' @export
@@ -79,10 +79,10 @@ separador<-function(repite="-",num_repetidas=45,color="red"){
 #'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #'  serie_tiempo_pruebas(datos=base,frecuencia=4)
 #'
-serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,
+serie_tiempo_pruebas <-function(datos,frecuencia=NULL,validar_=FALSE,
                                 msg=TRUE,pausa_off=1){
-  # TODO Cambiar los valores INIT_ a TRUE por default y condicional sin !
-    if(!init_){
+
+    if(validar_){
       paquetes.tsrutina()
       pausa()
       conditional.tsrutina(datos)
@@ -173,7 +173,9 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,
         if(is.ts(datos) & !is.mts(datos)){
           elementos = tratamiento.ts_set(datos)
           frecuencia=ifelse(is.null(frecuencia),elementos$frecu,frecuencia)
-          serie_tiempo_pruebas(elementos$data,frecuencia,init_ = TRUE,msg = msg,pausa_off = pausa_off)
+          serie_tiempo_pruebas(elementos$data,frecuencia,
+                               validar_ = validar_,msg = msg,
+                               pausa_off = pausa_off)
           }else{
           stop("El objeto debe ser un data frame con dos elementos o una serie de tiempo univariada")
         }
@@ -447,9 +449,9 @@ pausa <-function(duracion = Inf){
 #' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #' serie_tiempo_rutina(datos=base,frecuencia=4,inicio=2010)
 #'
-serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa_off=1,msg = TRUE){
+serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,validar_=FALSE,pausa_off=1,msg = TRUE){
 
-    if(!init_){
+    if(validar_){
       paquetes.tsrutina()
       pausa()
       conditional.tsrutina(datos)
@@ -800,7 +802,7 @@ dev.TRS <- function(){
 #' @param frecuencia  Este es el periodo de la serie, trimestral = 3, cuatrimestral = 4
 #'    ,mensual = 12, etc.
 #' @param inicio Este es el year a iniciar la serie de tiempo
-#' @param init_ Boleano, True/False indica di se vericaran los datos
+#' @param validar_ Boleano, True/False indica si se vericarán los datos
 #'
 #' @return  La salida no es como tal un objeto, si no una serie de impresiones de varios
 #'    analisis.
@@ -825,8 +827,8 @@ dev.TRS <- function(){
 #' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #' serie_tiempo_rutina(datos=base,frecuencia=4,inicio=2010)
 #'
-serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,pausa_off=1){
-    if(!init_){
+serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,validar_=FALSE,pausa_off=1){
+    if(validar_){
       paquetes.tsrutina()
       pausa()
       conditional.tsrutina(datos)
@@ -1378,7 +1380,7 @@ recomendaciones_arma <- function(time_series,print_matrix=TRUE,msg=FALSE) {
 #' @param frecuencia  Este es el periodo de la serie, trimestral = 3, cuatrimestral = 4
 #'    ,mensual = 12, etc.
 #' @param inicio Este es el year a iniciar la serie de tiempo
-#' @param init_ Boleano, True/False indica di se vericaran los datos
+#' @param validar_ Boleano, True/False indica si se vericarán los datos
 #'
 #' @return La salida no es como tal un objeto, si no una serie de impresiones de varios
 #'    analisis. El mejor basando en criterio AIC.
@@ -1394,8 +1396,9 @@ recomendaciones_arma <- function(time_series,print_matrix=TRUE,msg=FALSE) {
 #'
 #' serie_tiempo_ARIMA(wineind)
 #'
-serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=TRUE,pausa_off=1){
-  if(!init_){
+serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,
+                             validar_=FALSE,msg=TRUE,pausa_off=1){
+  if(validar_){
     paquetes.tsrutina()
     pausa()
     conditional.tsrutina(datos)
@@ -1593,7 +1596,7 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
 #'   reescribir la frecuencia cuando datos es un objeto ts
 #' @param inicio Inicio de la serie de tiempo, igual que frecuencia
 #'   sobreescribe valores de objetos ts
-#' @param init_ (True or False) validar el parametro datos
+#' @param validar_ (True or False) validar los datos
 #' @param ... Not work
 #'
 #' @return La salida no es como tal un objeto, si no una serie de impresiones de varios
@@ -1610,7 +1613,9 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,msg=T
 #' @examples
 #'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #'  init(datos=base,frecuencia=4,inicio=2010)
-init <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=TRUE,pausa_off=1,...){
+init <- function(datos,frecuencia=NULL,inicio=NULL,validar_=FALSE,
+                 msg=TRUE,pausa_off=1,...){
+  # Parte de validar integrada directamente en init() function
   paquetes.tsrutina()
   pausa()
   conditional.tsrutina(datos)
@@ -1623,13 +1628,17 @@ init <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=TRUE,pausa_off
   }
 
   cat(crayon::red("\n Inicio de rutina para tratamiento de una Serie de tiempo \n"))
-  serie_tiempo_rutina(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_,pausa_off = pausa_off,...)
+  serie_tiempo_rutina(datos = datos,frecuencia = frecuencia,
+                      inicio = inicio,validar_ = validar_,
+                      pausa_off = pausa_off,...)
   cat(crayon::red("\n Inicio de pruebas para tratamiento de una Serie de tiempo \n"))
-  serie_tiempo_pruebas(datos = datos,frecuencia = frecuencia,init_ = init_,msg = msg,pausa_off = pausa_off)
+  serie_tiempo_pruebas(datos = datos,frecuencia = frecuencia,
+                       validar_ = validar_,
+                       msg = msg,pausa_off = pausa_off)
   cat(crayon::red("\n Ajuste de un modelo ARIMA para tratamiento de una Serie de tiempo \n"))
-  serie_tiempo_ARIMA(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_,msg = msg,pausa_off = pausa_off)
+  serie_tiempo_ARIMA(datos = datos,frecuencia = frecuencia,inicio = inicio,validar_ = validar_,msg = msg,pausa_off = pausa_off)
   cat(crayon::red("\n Varios suavizamientos de una Serie de tiempo creación en workdir \n"))
-  serie_tiempo_plots(datos = datos,frecuencia = frecuencia,inicio = inicio,init_ = init_,pausa_off = pausa_off)
+  serie_tiempo_plots(datos = datos,frecuencia = frecuencia,inicio = inicio,validar_ = validar_,pausa_off = pausa_off)
 
 }
 
@@ -1645,7 +1654,7 @@ init <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=TRUE,pausa_off
 #'   reescribir la frecuencia cuando datos es un objeto ts
 #' @param inicio Inicio de la serie de tiempo, igual que frecuencia
 #'   sobreescribe valores de objetos ts
-#' @param init_ (True or False) validar el parametro datos
+#' @param validar_ (True or False) validar los datos
 #' @param ... Not work
 #'
 #' @return La salida no es como tal un objeto, si no una serie de impresiones de varios
@@ -1660,10 +1669,11 @@ init <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=TRUE,pausa_off
 #'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #'  Ajuste_rapido(datos=base,frecuencia=4,inicio=2010)
 #'
-Ajuste_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=FALSE,pausa_off=1,...){
+Ajuste_rapido <- function(datos,frecuencia=NULL,inicio=NULL,
+                          validar_=FALSE,msg=FALSE,pausa_off=1,...){
  #Función para hacer el proceso de forma directa con las sugerencias como respuestas
   #Probablemente se deba agregar en el futuro la opción de reporte
-  init(datos,frecuencia,inicio,init_,msg,pausa_off)
+  init(datos,frecuencia,inicio,validar_,msg,pausa_off)
 }
 
 #' Ajuste ARIMA con pruebas estadisticas
@@ -1672,7 +1682,7 @@ Ajuste_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=FALSE
 #' @param frecuencia Frecuencia de los datos, en caso de TS sobrescribe los valores
 #' @param inicio Inicio de la serie de tiempo, igual que frecuencia
 #'   sobreescribe valores de objetos ts
-#' @param init_ Indicador para verificar los datos [True/False]
+#' @param validar_ Indicador para verificar los datos [True/False]
 #' @param ...
 #'
 #' @return La salida no es como tal un objeto, si no una serie de impresiones de varios
@@ -1689,7 +1699,9 @@ Ajuste_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=FALSE
 #'
 #'  Ajuste_ARIMA_rapido(AirPassengers)
 #'
-Ajuste_ARIMA_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg=FALSE,pausa_off=1,...){
+Ajuste_ARIMA_rapido <- function(datos,frecuencia=NULL,inicio=NULL,
+                                validar_=FALSE,msg=FALSE,pausa_off=1,...){
+  ## validador integrado
   paquetes.tsrutina()
   pausa()
   conditional.tsrutina(datos)
@@ -1703,8 +1715,8 @@ Ajuste_ARIMA_rapido <- function(datos,frecuencia=NULL,inicio=NULL,init_=TRUE,msg
 
   #solo se hace ajuste arima y prueba de estacionariedad
 
-  serie_tiempo_pruebas(datos,frecuencia,init_,msg,pausa_off)
-  serie_tiempo_ARIMA(datos,frecuencia,inicio,init_,msg,pausa_off)
+  serie_tiempo_pruebas(datos,frecuencia,validar_,msg,pausa_off)
+  serie_tiempo_ARIMA(datos,frecuencia,inicio,validar_,msg,pausa_off)
 }
 
 

@@ -51,9 +51,9 @@ separador<-function(repite="-",num_repetidas=45,color="red"){
 
 }
 
-#' Pruebas estadisticas a una serie de tiempo
+#' Pruebas estadísticas a una serie de tiempo
 #'
-#' Esta funcion incluye el calculo y la decision de dos pruebas estadisticas.
+#' Esta función incluye el calculo y la decisión de dos pruebas estadísticas.
 #'
 #' Realiza las siguientes pruebas:
 #'    \itemize{\item{Dickey-Fuller:}{ La prueba de estacionariedad}}
@@ -68,7 +68,7 @@ separador<-function(repite="-",num_repetidas=45,color="red"){
 #' @param frecuencia Frecuencia de los datos, en caso de TS sobrescribe los valores
 #' @param init_ Indicador para verificar los datos [True/False]
 #'
-#' @return Solo arroja la decicion a tomar, por defecto con respecto a p=0.05
+#' @return Solo arroja la desición a tomar, por defecto con respecto a p=0.05
 #' @export
 #'
 #' @importFrom lmtest dwtest
@@ -79,13 +79,15 @@ separador<-function(repite="-",num_repetidas=45,color="red"){
 #'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #'  serie_tiempo_pruebas(datos=base,frecuencia=4)
 #'
-serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa_off=1){
+serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,
+                                msg=TRUE,pausa_off=1){
+  # TODO Cambiar los valores INIT_ a TRUE por default y condicional sin !
     if(!init_){
       paquetes.tsrutina()
       pausa()
       conditional.tsrutina(datos)
     }
-    if(!is.ts(datos)){
+    if(is.data.frame(datos)){
         pausa()
         separador()
 
@@ -167,13 +169,13 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,init_=FALSE,msg=TRUE,pausa
     }else{
 
 
-
-        if(is.ts(datos)){
+  # TODO remorver recursividad en funciones (?)
+        if(is.ts(datos) & !is.mts(datos)){
           elementos = tratamiento.ts_set(datos)
           frecuencia=ifelse(is.null(frecuencia),elementos$frecu,frecuencia)
           serie_tiempo_pruebas(elementos$data,frecuencia,init_ = TRUE,msg = msg,pausa_off = pausa_off)
           }else{
-          stop("El objeto debe ser un data frame con dos elementos o una serie de tiempo")
+          stop("El objeto debe ser un data frame con dos elementos o una serie de tiempo univariada")
         }
     }
 }
@@ -200,13 +202,13 @@ conditional.tsrutina <- function(datos){
 
   if(ncol(datos)!=2)
     stop("Los datos deben tener solo dos columnas, tiempo y valor en ese orden")
-  if(!is.numeric(datos[,2]))
-    stop("La segunda columna deben ser los valores, la primera el tiempo")
+  if(!is.numeric(datos[,2])){
+    stop("La segunda columna deben ser los valores, la primera el tiempo")}
   message("\n Primera columna => variable de Tiempo
       \n Segunda columna => variable de valor \n")
 }
 
-#' From ts to data.frame
+#' Convert ts to data.frame
 #'
 #' @param datosts objeto ts a tranformar en data.frame class
 #'
@@ -216,7 +218,7 @@ conditional.tsrutina <- function(datos){
 #'   La variable fecha es inicializada con el valor start() de la serie de tiempo y termina con el numero de
 #'   frecuencias que se pueden hacer
 #'
-#' @details Si el objeto TS contiene una frecuencia no compatible con las programadas, se te pedira ingresar el nombre del vector
+#' @details Si el objeto TS contiene una frecuencia no compatible con las programadas, se te pedirá ingresar el nombre del vector
 #'   (previamente creado en tu enviroment a.k.a entorno de desarrollo) con las fechas a usar. Mira el ejemplo 2.
 #'
 #' @return a data.frame object
@@ -476,6 +478,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
         theme(plot.title = element_text(color = "Black",hjust = 0.5)) -> reporte_data$plots$General
     print(p)
     pausa()
+
     if(frecuencia==1){
       message("La frecuencia de la serie de tiempo es 1,\nusaremos frecuencia 12 para los siguientes 2 graficos")
       frecuencia=12
@@ -535,7 +538,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     pausa()
     separador()
 
-    #Grafico del modelo de regresion lineal
+    # Grafico del modelo de regresion lineal
     # plot(datos$periodos,datos$y,type = "l",
     #      xlab="Periodos",ylab="Valor de la serie",
     #      main="Regresión Lineal")
@@ -549,7 +552,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,init_=FALSE,paus
     pausa()
     separador()
 
-    #Promedio Movil simple
+    # Promedio Movil simple
 
     promo<-pracma::movavg(datosts, n=frecuencia, type="s")
 

@@ -96,26 +96,26 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,validar_=FALSE,
             names(base) <- c("x","y")
             report_data <- list()
 
-            base2<-base
-            base2$xx<-1:length(base$x)
+            base2 <- base
+            base2$xx <- 1:length(base$x)
 
-            regresion<-lm(y~xx,base2)
+            regresion <- lm(y~xx,base2)
             cat(crayon::green("\n Prueba de presencia de autocorrelación Durbin-Watson Test \n"))
             cat(crayon::green("\n (Prueba aplicada los residuos de una regresión lineal) \n"))
-            prueba<-lmtest::dwtest(regresion)
+            prueba <- lmtest::dwtest(regresion)
             print(prueba)
             report_data$prueba_dwtest <- prueba
             if(msg){
-              p_valor<-readline('Inserte un p valor, (intro para p=0.05):  \n')
+              p_valor <- readline('Inserte un p valor, (intro para p=0.05):  \n')
             }else{
-              p_valor<-0.05
+              p_valor <- 0.05
             }
 
             if(p_valor==""){
-                    p_valor<-0.05
+                    p_valor <- 0.05
             }else{
                     cat(crayon::red(sprintf("El valor de p= %s",p_valor)),"\n")
-                    p_valor<-as.numeric(p_valor)
+                    p_valor <- as.numeric(p_valor)
             }
 
 
@@ -305,13 +305,13 @@ tratamiento.fechas.TSR <- function(fecha_vector){
     return(fecha_vector)
   }
 
-  fecha_vector_tratamiento<- readr::parse_date(fecha_vector,"%d%.%m%.%Y")  #Y debe ser mayuscula para 4 digitos de año
+  fecha_vector_tratamiento <- readr::parse_date(fecha_vector,"%d%.%m%.%Y")  #Y debe ser mayuscula para 4 digitos de año
 
   if(is.na(fecha_vector_tratamiento[1])){
-    fecha_vector_tratamiento<- readr::parse_date(fecha_vector,"%Y%.%m%.%d")  #Y debe ser mayuscula para 4 digitos de año
+    fecha_vector_tratamiento <- readr::parse_date(fecha_vector,"%Y%.%m%.%d")  #Y debe ser mayuscula para 4 digitos de año
   }
   if(is.na(fecha_vector_tratamiento[1])){
-    fecha_vector_tratamiento<- readr::parse_date(fecha_vector,"%m%.%Y%.%d")  #Y debe ser mayuscula para 4 digitos de año
+    fecha_vector_tratamiento <- readr::parse_date(fecha_vector,"%m%.%Y%.%d")  #Y debe ser mayuscula para 4 digitos de año
   }
   if(is.na(fecha_vector_tratamiento[1])){
     message("\n Si la variable tiempo es fecha, use el formato year-month-day: \n
@@ -342,7 +342,7 @@ tratamiento.fechas.TSR <- function(fecha_vector){
 #' checar_datos(datos=base,frecuencia=4,inicio=2010)
 #'
 checar_datos <- function(datos,frecuencia,inicio,msg=TRUE) {
-  names(datos)<-c("x","y")
+  names(datos) <- c("x","y")
   datos$x <- tratamiento.fechas.TSR(datos$x)
   print(head(datos))
   if(msg){
@@ -378,7 +378,7 @@ checar_datos <- function(datos,frecuencia,inicio,msg=TRUE) {
 #' #para 10 segundos
 #' pausa(10)
 #'
-pausa <-function(duracion = Inf){
+pausa <- function(duracion = Inf){
         #parche para control de pausa
         a <- try(get("pausa_off",envir = parent.frame()),1)
         if(a==0){
@@ -449,7 +449,7 @@ pausa <-function(duracion = Inf){
 #' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #' serie_tiempo_rutina(datos=base,frecuencia=4,inicio=2010)
 #'
-serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,validar_=FALSE,pausa_off=1,msg = TRUE){
+serie_tiempo_rutina <- function(datos,frecuencia=NULL,inicio=NULL,validar_=FALSE,pausa_off=1,msg = TRUE){
 
     if(validar_){
       paquetes.tsrutina()
@@ -487,8 +487,8 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,validar_=FALSE,p
       datosts <- ts(datos$y,frequency = 12,start = start(elementos$datosts))
     }
 
-    p <- forecast::autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue",
-             main="Ruido + Estacionalidad + Tendencia + SerieTemporal ") -> reporte_data$plots$descomposicion
+    p <- forecast::autoplot(stl(datosts, s.window = "periodic"),
+          ts.colour="blue",main="Ruido + Estacionalidad + Tendencia + SerieTemporal ") -> reporte_data$plots$descomposicion
     print(p)
     pausa()
 
@@ -591,7 +591,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,validar_=FALSE,p
     separador()
     #Exponential Smoothing
 
-    pesoses<-forecast::ses(datos$y)
+    pesoses <- forecast::ses(datos$y)
 
     summary(pesoses)
     # plot(datos$periodos,datos$y,type = "l",
@@ -610,7 +610,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,validar_=FALSE,p
 
     #Holt's Exponential Smoothing
 
-    pesoholt<- forecast::holt(datos$y)
+    pesoholt <- forecast::holt(datos$y)
 
     summary(pesoholt)
     # plot(datos$periodos,datos$y,type = "l",
@@ -633,7 +633,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,validar_=FALSE,p
       pesohw <- forecast::hw(datosts)
       summary(pesohw)
       #asignamos valores ajustados a una columna
-      datos$Ajustadohw<-as.numeric(pesohw$fitted)
+      datos$Ajustadohw <- as.numeric(pesohw$fitted)
       },
       error = function(e) {
         cat(crayon::red("El ajuste por Hol-Winter fracasó por el método 1 ¿desea intentar usar ajuste por el método 2?"))
@@ -689,7 +689,7 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,validar_=FALSE,p
     cat(MSE(datos$y, datos$Ajustado))
 
     cat(crayon::yellow('\n El error minimo se tiene con \n'))
-    a<-which.min(c(MSE(datos$y, datos_rl$fitted.values),
+    a <- which.min(c(MSE(datos$y, datos_rl$fitted.values),
                 MSE(datos$y, promo),
                 MSE(datos$y, promopo),
                 MSE(datos$y, pesoses$fitted),
@@ -706,28 +706,28 @@ serie_tiempo_rutina<-function(datos,frecuencia=NULL,inicio=NULL,validar_=FALSE,p
     switch(a,
         '1' = {cat(crayon::green('Regresion lineal'))
             pausa()
-            pronostico<-forecast::forecast(datos_rl$fitted.values,
+            pronostico <- forecast::forecast(datos_rl$fitted.values,
                                            h=h_pronostico,level=c(80,95))
             },
         '2' = {cat(crayon::green('Promedio movil simple'))
             pausa()
-            pronostico<-forecast::forecast(promo,h=h_pronostico,level=c(80,95))
+            pronostico <- forecast::forecast(promo,h=h_pronostico,level=c(80,95))
             },
         '3' = {cat(crayon::green('Promedio ponderado'))
             pausa()
-            pronostico<-forecast::forecast(promopo,h=h_pronostico,level=c(80,95))
+            pronostico <- forecast::forecast(promopo,h=h_pronostico,level=c(80,95))
             },
         '4' = {cat(crayon::green('Exponencial simple'))
             pausa()
-            pronostico<-forecast::ses(datos$y,h=h_pronostico,level=c(80,95))
+            pronostico <- forecast::ses(datos$y,h=h_pronostico,level=c(80,95))
             },
         '5' = {cat(crayon::green('Suavizamiento de Holt'))
             pausa()
-            pronostico<-forecast::holt(datos$y,h=h_pronostico,level=c(80,95))
+            pronostico <- forecast::holt(datos$y,h=h_pronostico,level=c(80,95))
             },
         '6' = {cat(crayon::green('Suavizamiento de Holt-Winter'))
             pausa()
-            pronostico<- tryCatch({
+            pronostico <- tryCatch({
               pesohw <- forecast::hw(datosts,h = h_pronostico,level=c(80,95))
               pesohw
             },
@@ -827,7 +827,7 @@ dev.TRS <- function(){
 #' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #' serie_tiempo_rutina(datos=base,frecuencia=4,inicio=2010)
 #'
-serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,validar_=FALSE,pausa_off=1){
+serie_tiempo_plots <- function(datos,frecuencia=NULL,inicio=NULL,validar_=FALSE,pausa_off=1){
     if(validar_){
       paquetes.tsrutina()
       pausa()
@@ -944,7 +944,7 @@ serie_tiempo_plots<-function(datos,frecuencia=NULL,inicio=NULL,validar_=FALSE,pa
     #Grafico del modelo de regresion lineal
     png("st_regresion_lineal.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
 
-    datos$lineal<-datos_rl$fitted.values
+    datos$lineal <- datos_rl$fitted.values
     print(
     ggplot(datos, aes(x,y)) +
         geom_point()+geom_line()+

@@ -244,7 +244,8 @@ tratamiento.ts_set <- function(datosts){
   mes <- start(datosts)[2L]
   dia <- start(datosts)[3L]
   dia <- ifelse(test = is.na(dia),yes = 1,no = dia)
-  fecha_inicio <- as.Date(paste(dia,mes,year, sep = "-"),format = "%d-%m-%Y")
+  fecha_inicio <- as.Date(paste(dia,mes,year, sep = "-"),
+                          format = "%d-%m-%Y")
   frecuencia <- frequency(datosts)
   avance <- switch(as.character(frecuencia),
     "1" = 'year',
@@ -257,19 +258,20 @@ tratamiento.ts_set <- function(datosts){
   )
   try(if(avance){
     cat(crayon::red("No se encontro frecuencia compatible con función Seq() \n
-                    Ingrese el nombre del vector con las fechas de tu serie de tiempo. \n"))
+    Ingrese el nombre del vector con las fechas de tu serie de tiempo. \n"))
     fecha_secuencia <- readline("El vector debe existir en tu Enviroment: ")
-  }
-    ,silent = 1)
+  },silent = 1)
 
-  fecha_secuencia <- tryCatch(expr = seq(fecha_inicio, by=avance, length=nrow(datos_conver)),
-                           error = function(e) {
-                             message("\n Se intentara conectar con el objeto/vector llamado: \n",
-                                     fecha_secuencia,"\n")# De no exitir hay error
-                             busqueda <- try(get(fecha_secuencia,envir = parent.frame()),
-                                             outFile = cat("Error, no se encontro el vector ",fecha_secuencia))
-                              return(busqueda)
-                           }
+  fecha_secuencia <- tryCatch(
+    expr = seq(fecha_inicio, by=avance, length=nrow(datos_conver)),
+    error = function(e) {
+      message("\n Se intentara conectar con el objeto/vector llamado: \n",
+        fecha_secuencia,"\n")# De no exitir hay error
+      busqueda <- try(get(fecha_secuencia,envir = parent.frame()),
+        outFile = cat("Error, no se encontro el vector ",fecha_secuencia))
+
+      return(busqueda)
+    }
   )
 
   datos_conver <- data.frame(x = fecha_secuencia,y = datos_conver$x)
@@ -1215,26 +1217,28 @@ serie_tiempo_plots <- function(datos,frecuencia=NULL,inicio=NULL,validar_=FALSE,
 #'
 #' El valor IC se calcula siguiendo la metodologia de la paqueteria Stats en a función acf(). Se retorna el valor positivo talque el intervalo se forma con (IC,-IC)
 #'
-#' @param objeto_cf objeto ACF o PACF
-#' @param print_IC Indicador True/False para mostrar valos absoluto de intervalo de confianza ver details
+#' @param objeto_acf objeto ACF o PACF
+#' @param print_IC Indicador True/False para mostrar valor absoluto de intervalo de confianza ver details
 #'
 #' @return Valor del ultimo lag significativo de la funcion de autocorrelacion
 #' @export
 #'
 #' @importFrom crayon green red yellow
 #'
+#' @details El intervalo de confianza (IC) de un gráfico ACF/PACF son las bandas a partir de las que una auto-correlación se considera significativas. Cuando las autocorrelaciones para cada lag resultan no significativas, se dice que no hay auto-correlación
+#'
 #' @examples
 #' base=data.frame(x=seq(Sys.Date(),by="days",length=200),y=(rexp(50)+1)*sin(1:50))
 #' recomendacion_autocorrelaciones(acf(base$y,plot = FALSE))
 #'
-recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
+recomendacion_autocorrelaciones <- function(objeto_acf,print_IC=FALSE) {
   llamada <- match.call()
-  ruta <- match(c("objeto_cf"),names(llamada))
+  ruta <- match(c("objeto_acf"),names(llamada))
 
 
   if(ruta!=2){#chequeo de que se agregaron bien los parametros
     #stopifnot(ruta!=2)
-    message("Objeto_cf no encontrado o hay más de un parametro en la función")
+    message("Objeto_acf no encontrado o hay más de un parametro en la función")
     stop()
   }
 
@@ -1247,7 +1251,7 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
     ?recomendacion_autocorrelaciones
   }
   #si la salida es un vector de 3 elementos entonces hay dos parametros
-  #serie=tryCatch(get(objeto_cf$series),error= function(e){message(e," \nSe busca otra entrada..."); return(NULL)})
+  #serie=tryCatch(get(objeto_acf$series),error= function(e){message(e," \nSe busca otra entrada..."); return(NULL)})
   # serie=get("base",envir = parent.frame())
   #se corrigio el uso de envir
   serie <- tryCatch(expr = get("base",envir = parent.frame()), error = function(e) {
@@ -1269,7 +1273,7 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
   stopifnot(class(serie) == class(ts()))
 
   order_ <- NULL
-  if(objeto_cf$type=="partial"){
+  if(objeto_acf$type=="partial"){
     matriz <- matriz_eacf(serie,ar.max = 1, ma.max = 15,
                           print_matrix = FALSE)
     matriz <- matriz$symbol=="o"
@@ -1286,7 +1290,7 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
       order_ <- 16
     }
   }
-  if(objeto_cf$type=="correlation"){
+  if(objeto_acf$type=="correlation"){
     matriz=matriz_eacf(serie,ar.max = 15,ma.max = 1,print_matrix = FALSE)
     matriz=matriz$symbol=="o"
     for(i in 1:15){
@@ -1305,10 +1309,10 @@ recomendacion_autocorrelaciones <- function(objeto_cf,print_IC=FALSE) {
 
 
   #obtener los intervalos de confianza dando el objeto
-  IC <- intervalo_confianza_acf(objeto_cf)
-  #mayores=abs(objeto_cf$acf)>IC
+  IC <- intervalo_confianza_acf(objeto_acf)
+  #mayores=abs(objeto_acf$acf)>IC
   #cat("\nLos siguientes elementos son propuestas de r: ")
-  #posibles_lags=objeto_cf$lag[mayores]
+  #posibles_lags=objeto_acf$lag[mayores]
   #cat(posibles_lags)
   #cat("\nProponemos que r sea:",posibles_lags[length(posibles_lags)])
 
@@ -1440,14 +1444,14 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,
       p_valor<-0.05
     }else{
       cat("\n",crayon::red(sprintf("El valor de p= %s",p_valor)),"\n")
-      p_valor<-as.numeric(p_valor)
+      p_valor <- as.numeric(p_valor)
     }
 
     if(prueba$p.value>p_valor){
       cat(crayon::yellow("\nNo se puede rechazar H0:Hay presencia de una raiz unitaria\n"))
       cat(crayon::yellow("\nNo es estacionaria"))
       pausa()
-      differenciado<-diff(base$y,lag = 1,differences = 1)
+      differenciado <- diff(base$y,lag = 1,differences = 1)
       base <- base[-nrow(base),]
       base$y <- differenciado
       numero_diferenciaciones <- numero_diferenciaciones+1 #contador de diferenciaciones
@@ -1632,21 +1636,24 @@ init <- function(datos,frecuencia=NULL,inicio=NULL,validar_=FALSE,
   serie_tiempo_rutina(datos = datos,frecuencia = frecuencia,
                       inicio = inicio,validar_ = validar_,
                       pausa_off = pausa_off,...)
+
   cat(crayon::red("\n Inicio de pruebas para tratamiento de una Serie de tiempo \n"))
   serie_tiempo_pruebas(datos = datos,frecuencia = frecuencia,
                        validar_ = validar_,
                        msg = msg,pausa_off = pausa_off)
+
   cat(crayon::red("\n Ajuste de un modelo ARIMA para tratamiento de una Serie de tiempo \n"))
   serie_tiempo_ARIMA(datos = datos,frecuencia = frecuencia,inicio = inicio,validar_ = validar_,msg = msg,pausa_off = pausa_off)
+
   cat(crayon::red("\n Varios suavizamientos de una Serie de tiempo creación en workdir \n"))
   serie_tiempo_plots(datos = datos,frecuencia = frecuencia,inicio = inicio,validar_ = validar_,pausa_off = pausa_off)
 
 }
 
 
-#' Realiza analisis de manera directa
+#' Realiza análisis de manera directa
 #'
-#' Esta función considera que las recomendaciones de la paqueteria seran tomandas como los valores a usar
+#' Esta función considera que las recomendaciones de la paquetería serán tomadas como los valores a usar
 #'
 #' Esta función comparte los mismos detalles que \code{\link{init}}
 #'
@@ -1677,17 +1684,17 @@ Ajuste_rapido <- function(datos,frecuencia=NULL,inicio=NULL,
   init(datos,frecuencia,inicio,validar_,msg,pausa_off)
 }
 
-#' Ajuste ARIMA con pruebas estadisticas
+#' Ajuste ARIMA con pruebas estadísticas
 #'
 #' @param datos Data.frame o objeto TS a analizar
 #' @param frecuencia Frecuencia de los datos, en caso de TS sobrescribe los valores
 #' @param inicio Inicio de la serie de tiempo, igual que frecuencia
-#'   sobreescribe valores de objetos ts
+#'   sobrescribe valores de objetos ts
 #' @param validar_ Indicador para verificar los datos [True/False]
 #' @param ...
 #'
 #' @return La salida no es como tal un objeto, si no una serie de impresiones de varios
-#'   analisis. La siguiente lista detalla alguno de ellos:
+#'   análisis. La siguiente lista detalla alguno de ellos:
 #'   \itemize{\item{\bold{Plost}}{  Arroja una lista de plots que ayudan a ver el comportamiento de la serie y como ciertos ajustes se aproximan mejor a ella}}
 #'   \itemize{\item{\bold{Resumenes}}{  Arroja ciertos resumenes de ciertos ajustes o pruebas que se hacen}}
 #'   \itemize{\item{\bold{Modelo}}{  Modelo con el menor MSE(Error cuadratico medio)}}
@@ -1726,7 +1733,7 @@ Ajuste_ARIMA_rapido <- function(datos,frecuencia=NULL,inicio=NULL,
 #'
 #' Haz un reporte de tus objetos lista para poder analizar en formato de lectura tu serie de tiempo
 #'
-#' En desarrollo probablemente en uso hasta la version 3.1< de la tabby verse
+#' En desarrollo probablemente en uso hasta la versión 3.1< de la tabby verse
 #'
 #' @param datos Time Series a analizar
 #'

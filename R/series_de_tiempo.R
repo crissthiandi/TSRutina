@@ -356,7 +356,8 @@ checar_datos <- function(datos,frecuencia,inicio,msg=TRUE) {
       stop("Corrige el error")
   }
 
-  #creando el objeto time series
+  #creando el objeto time series y si inicio no es el minimo de fecha
+  inicio <- min(datos$x)
   datosts <- ts(data = datos$y,frequency =  frecuencia,start=inicio)
 
   return(list(datos=datos,datosts=datosts))
@@ -475,7 +476,7 @@ serie_tiempo_rutina <- function(datos,frecuencia=NULL,inicio=NULL,validar_=FALSE
     reporte_data <- list()
 
 
-    #Graficos para ver si es estacional
+    #Gráficos para ver si es estacional
     p <- ggplot(datos, aes(x,y)) +
         geom_point()+geom_line()+
         ggtitle("Serie de tiempo Visualización")+
@@ -489,8 +490,11 @@ serie_tiempo_rutina <- function(datos,frecuencia=NULL,inicio=NULL,validar_=FALSE
       datosts <- ts(datos$y,frequency = 12,start = start(elementos$datosts))
     }
 
-    p <- forecast::autoplot(stl(datosts, s.window = "periodic"),
-          ts.colour="blue",main="Ruido + Estacionalidad + Tendencia + SerieTemporal ") -> reporte_data$plots$descomposicion
+    p <- try(
+      forecast::autoplot(stl(datosts, s.window = "periodic"),
+          ts.colour="blue",main="Ruido + Estacionalidad + Tendencia + SerieTemporal "),
+      silent = T
+    ) -> reporte_data$plots$descomposicion
     print(p)
     pausa()
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/series_de_tiempo.R
 \name{tratamiento.ts_set}
 \alias{tratamiento.ts_set}
-\title{From ts to data.frame}
+\title{Convert ts to data.frame}
 \usage{
 tratamiento.ts_set(datosts)
 }
@@ -20,7 +20,7 @@ Convierte un objeto serie de tiempo a data.frame con dos columnas
   frecuencias que se pueden hacer
 }
 \details{
-Si el objeto TS contiene una frecuencia no compatible con las programadas, se te pedira ingresar el nombre del vector
+Si el objeto TS contiene una frecuencia no compatible con las programadas, se te pedirá ingresar el nombre del vector
   (previamente creado en tu enviroment a.k.a entorno de desarrollo) con las fechas a usar. Mira el ejemplo 2.
 }
 \examples{

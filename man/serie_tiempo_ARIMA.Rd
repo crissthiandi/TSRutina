@@ -8,7 +8,7 @@ serie_tiempo_ARIMA(
   datos,
   frecuencia = NULL,
   inicio = NULL,
-  init_ = FALSE,
+  validar_ = FALSE,
   msg = TRUE,
   pausa_off = 1
 )
@@ -23,7 +23,7 @@ dia-mes-year. La versión 2.1 soporta objetos de la clase TS (time series)}
 
 \item{inicio}{Este es el year a iniciar la serie de tiempo}
 
-\item{init_}{Boleano, True/False indica di se vericaran los datos}
+\item{validar_}{Boleano, True/False indica si se vericarán los datos}
 }
 \value{
 La salida no es como tal un objeto, si no una serie de impresiones de varios

@@ -16,7 +16,7 @@ PDF report
 Haz un reporte de tus objetos lista para poder analizar en formato de lectura tu serie de tiempo
 }
 \details{
-En desarrollo probablemente en uso hasta la version 3.1< de la tabby verse
+En desarrollo probablemente en uso hasta la versión 3.1< de la tabby verse
 }
 \examples{
 

@@ -2,13 +2,13 @@
 % Please edit documentation in R/series_de_tiempo.R
 \name{Ajuste_rapido}
 \alias{Ajuste_rapido}
-\title{Realiza analisis de manera directa}
+\title{Realiza análisis de manera directa}
 \usage{
 Ajuste_rapido(
   datos,
   frecuencia = NULL,
   inicio = NULL,
-  init_ = TRUE,
+  validar_ = FALSE,
   msg = FALSE,
   pausa_off = 1,
   ...
@@ -23,7 +23,7 @@ reescribir la frecuencia cuando datos es un objeto ts}
 \item{inicio}{Inicio de la serie de tiempo, igual que frecuencia
 sobreescribe valores de objetos ts}
 
-\item{init_}{(True or False) validar el parametro datos}
+\item{validar_}{(True or False) validar los datos}
 
 \item{...}{Not work}
 }
@@ -35,7 +35,7 @@ La salida no es como tal un objeto, si no una serie de impresiones de varios
   \itemize{\item{\bold{Modelo}}{  Modelo con el menor MSE(Error cuadratico medio)}}
 }
 \description{
-Esta función considera que las recomendaciones de la paqueteria seran tomandas como los valores a usar
+Esta función considera que las recomendaciones de la paquetería serán tomadas como los valores a usar
 }
 \details{
 Esta función comparte los mismos detalles que \code{\link{init}}

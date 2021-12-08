@@ -68,7 +68,7 @@ separador<-function(repite="-",num_repetidas=45,color="red"){
 #' @param frecuencia Frecuencia de los datos, en caso de TS sobrescribe los valores
 #' @param validar_ Indicador para verificar los datos [True/False]
 #'
-#' @return Solo arroja la desición a tomar, por defecto con respecto a p=0.05
+#' @return Solo arroja la decisión a tomar, por defecto con respecto a p=0.05
 #' @export
 #'
 #' @importFrom lmtest dwtest
@@ -799,7 +799,7 @@ dev.TRS <- function(){
 
 #' Grafica de ajuste de TimeSeries en PNG (low computational cost)
 #'
-#' Obten archivos .png de tus graficos de serie de tiempo en tu directorio
+#' Obtén archivos .png de tus gráficos de serie de tiempo en tu directorio
 #'
 #' Se usa una salida interactiva para el proceso
 #'
@@ -834,7 +834,8 @@ dev.TRS <- function(){
 #' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
 #' serie_tiempo_rutina(datos=base,frecuencia=4,inicio=2010)
 #'
-serie_tiempo_plots <- function(datos,frecuencia=NULL,inicio=NULL,validar_=FALSE,pausa_off=1){
+serie_tiempo_plots <- function(datos,frecuencia=NULL,inicio=NULL,
+                               validar_=FALSE,pausa_off=1){
     if(validar_){
       paquetes.tsrutina()
       pausa()

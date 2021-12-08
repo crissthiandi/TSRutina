@@ -2,13 +2,13 @@
 % Please edit documentation in R/series_de_tiempo.R
 \name{Ajuste_ARIMA_rapido}
 \alias{Ajuste_ARIMA_rapido}
-\title{Ajuste ARIMA con pruebas estadisticas}
+\title{Ajuste ARIMA con pruebas estadísticas}
 \usage{
 Ajuste_ARIMA_rapido(
   datos,
   frecuencia = NULL,
   inicio = NULL,
-  init_ = TRUE,
+  validar_ = FALSE,
   msg = FALSE,
   pausa_off = 1,
   ...
@@ -20,21 +20,21 @@ Ajuste_ARIMA_rapido(
 \item{frecuencia}{Frecuencia de los datos, en caso de TS sobrescribe los valores}
 
 \item{inicio}{Inicio de la serie de tiempo, igual que frecuencia
-sobreescribe valores de objetos ts}
+sobrescribe valores de objetos ts}
 
-\item{init_}{Indicador para verificar los datos [True/False]}
+\item{validar_}{Indicador para verificar los datos [True/False]}
 
 \item{...}{}
 }
 \value{
 La salida no es como tal un objeto, si no una serie de impresiones de varios
-  analisis. La siguiente lista detalla alguno de ellos:
+  análisis. La siguiente lista detalla alguno de ellos:
   \itemize{\item{\bold{Plost}}{  Arroja una lista de plots que ayudan a ver el comportamiento de la serie y como ciertos ajustes se aproximan mejor a ella}}
   \itemize{\item{\bold{Resumenes}}{  Arroja ciertos resumenes de ciertos ajustes o pruebas que se hacen}}
   \itemize{\item{\bold{Modelo}}{  Modelo con el menor MSE(Error cuadratico medio)}}
 }
 \description{
-Ajuste ARIMA con pruebas estadisticas
+Ajuste ARIMA con pruebas estadísticas
 }
 \examples{
  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))

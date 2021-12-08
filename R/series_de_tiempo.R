@@ -1,12 +1,13 @@
 # Dudas a @crissthiandi <albertocenaa@gmail.com>
 
-#' Carga paquetes para un analisis de series de tiempo
+#' Carga paquetes para un análisis de series de tiempo
 #'
 #' Ideal para usar en trabajos similar a tidyverse
-#' escribir codigo para analisis de series de tiempo
+#' escribir código para análisis de series de tiempo
 #'
-#' @return Mensage si todo sale bien
+#' @return Mensaje si todo sale bien
 #' @export
+#' @encoding UTF-8
 #'
 #' @examples
 #'
@@ -24,19 +25,21 @@ paquetes.tsrutina <- function(){
 
 }
 
-#' Repide un texto y lo imprime en la consola
+#' Repite un texto y lo imprime en la consola
 #'
 #' Repite un texto de forma seriada y se imprime en consola, ideal para hacer una separación entre elementos impresos en consola
 #'
 #'
-#' @param repite String, que se repetira, idealmente del tipo "-" "_" "*" etc.
+#' @param repite String, que se repetirá, idealmente del tipo "-" "_" "*" etc.
 #' @param num_repetidas Int, Cuantas veces se repite el string anterior.
 #' @param color Color del texto impresa, soportamos red, blue, green, magenta, silver y yellow
 #'
-#' @return Impresión en cosola
+#' @return Impresión en consola
 #' @export
+#' @encoding UTF-8
 #'
 #' @examples
+#' @encoding UTF-8
 #'
 #' separador("-",10,"blue")
 #' separador()
@@ -70,6 +73,7 @@ separador<-function(repite="-",num_repetidas=45,color="red"){
 #'
 #' @return Solo arroja la decisión a tomar, por defecto con respecto a p=0.05
 #' @export
+#' @encoding UTF-8
 #'
 #' @importFrom lmtest dwtest
 #' @importFrom tseries adf.test
@@ -187,9 +191,10 @@ serie_tiempo_pruebas <-function(datos,frecuencia=NULL,validar_=FALSE,
 #' @param datos objeto a verificar
 #'
 #' @description Verifica si un data.frame tiene dos columnas y si la segunda de estas
-#' es de caracter numerico, si es serie de tiempo no hace nada, retorna NULL.
+#' es de carácter numérico, si es serie de tiempo no hace nada, retorna NULL.
 #'
 #' @return NULL or stop() event
+#' @encoding UTF-8
 #'
 #' @examples
 #'
@@ -225,6 +230,7 @@ conditional.tsrutina <- function(datos){
 #'
 #' @return a data.frame object
 #' @export
+#' @encoding UTF-8
 #'
 #' @examples
 #'
@@ -287,13 +293,14 @@ tratamiento.ts_set <- function(datosts){
 #' Tratamiento de fechas TSR
 #'
 #' Tratamiento para que una fecha tenga el formato Date. De no tener un formato convertible se retorna NA
-#' values
+#' valúes
 #'
-#' @param fecha_vector Vector de valores con las fechas en formato caracter o Date
+#' @param fecha_vector Vector de valores con las fechas en formato carácter o Date
 #'     Formatos soportador:  "\%d/\%m/\%Y", "\%Y-\%m-\%d" y "\%d-\%m-\%Y"
 #'
-#' @return Vector en formato fecha estandar de R
+#' @return Vector en formato fecha estándar de R
 #' @export
+#' @encoding UTF-8
 #'
 #' @importFrom  readr parse_date
 #'
@@ -336,6 +343,7 @@ tratamiento.fechas.TSR <- function(fecha_vector){
 #'
 #' @return Una lista \code{\link{list}} que contiene dos elementos, la base de datos tratada y su versión en un objeto TimeSeries
 #' @export
+#' @encoding UTF-8
 #'
 #' @importFrom crayon green red yellow
 #'
@@ -373,6 +381,7 @@ checar_datos <- function(datos,frecuencia,inicio,msg=TRUE) {
 #'
 #' @return
 #' @export
+#' @encoding UTF-8
 #'
 #' @importFrom crayon green red yellow
 #'
@@ -437,6 +446,7 @@ pausa <- function(duracion = Inf){
 #'
 #' @author Cristhian Diaz
 #' @export
+#' @encoding UTF-8
 #'
 #' @import ggplot2
 #' @importFrom forecast ggseasonplot
@@ -777,6 +787,7 @@ serie_tiempo_rutina <- function(datos,frecuencia=NULL,inicio=NULL,validar_=FALSE
 #'
 #' @return NULL return
 #' @export
+#' @encoding UTF-8
 #'
 #' @examples
 #' dev.TRS()
@@ -819,6 +830,7 @@ dev.TRS <- function(){
 #' @author Cristhian Diaz
 #'
 #' @export
+#' @encoding UTF-8
 #'
 #' @import ggplot2
 #' @importFrom forecast ggseasonplot seasonplot
@@ -1228,6 +1240,7 @@ serie_tiempo_plots <- function(datos,frecuencia=NULL,inicio=NULL,
 #'
 #' @return Valor del ultimo lag significativo de la funcion de autocorrelacion
 #' @export
+#' @encoding UTF-8
 #'
 #' @importFrom crayon green red yellow
 #'
@@ -1342,6 +1355,7 @@ recomendacion_autocorrelaciones <- function(objeto_acf,print_IC=FALSE) {
 #'
 #' @return Vector de longitud 2, primera entrada valor de \bold{p}, segunda valor de \bold{q}
 #' @export
+#' @encoding UTF-8
 #'
 #' @importFrom crayon green red yellow
 #'
@@ -1396,6 +1410,7 @@ recomendaciones_arma <- function(time_series,print_matrix=TRUE,msg=FALSE) {
 #' @return La salida no es como tal un objeto, si no una serie de impresiones de varios
 #'    analisis. El mejor basando en criterio AIC.
 #' @export
+#' @encoding UTF-8
 #'
 #' @importFrom crayon green red yellow
 #'
@@ -1617,6 +1632,7 @@ serie_tiempo_ARIMA<-function(datos,frecuencia=NULL,inicio=NULL,
 #'   \itemize{\item{\bold{Modelo}}{  Modelo con el menor MSE(Error cuadratico medio)}}
 #'
 #' @export
+#' @encoding UTF-8
 #'
 #' @importFrom crayon green red yellow
 #'
@@ -1678,6 +1694,7 @@ init <- function(datos,frecuencia=NULL,inicio=NULL,validar_=FALSE,
 #'   \itemize{\item{\bold{Modelo}}{  Modelo con el menor MSE(Error cuadratico medio)}}
 #'
 #' @export
+#' @encoding UTF-8
 #'
 #' @examples
 #'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
@@ -1706,6 +1723,7 @@ Ajuste_rapido <- function(datos,frecuencia=NULL,inicio=NULL,
 #'   \itemize{\item{\bold{Modelo}}{  Modelo con el menor MSE(Error cuadratico medio)}}
 #'
 #' @export
+#' @encoding UTF-8
 #'
 #' @examples
 #'  base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
@@ -1745,6 +1763,7 @@ Ajuste_ARIMA_rapido <- function(datos,frecuencia=NULL,inicio=NULL,
 #'
 #' @return PDF report
 #' @export
+#' @encoding UTF-8
 #'
 #' @import rmarkdown
 #' @import knitr

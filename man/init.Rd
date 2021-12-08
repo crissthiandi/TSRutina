@@ -8,7 +8,7 @@ init(
   datos,
   frecuencia = NULL,
   inicio = NULL,
-  init_ = TRUE,
+  validar_ = FALSE,
   msg = TRUE,
   pausa_off = 1,
   ...
@@ -23,7 +23,7 @@ reescribir la frecuencia cuando datos es un objeto ts}
 \item{inicio}{Inicio de la serie de tiempo, igual que frecuencia
 sobreescribe valores de objetos ts}
 
-\item{init_}{(True or False) validar el parametro datos}
+\item{validar_}{(True or False) validar los datos}
 
 \item{...}{Not work}
 }

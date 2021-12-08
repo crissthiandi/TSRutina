@@ -8,7 +8,7 @@ serie_tiempo_rutina(
   datos,
   frecuencia = NULL,
   inicio = NULL,
-  init_ = FALSE,
+  validar_ = FALSE,
   pausa_off = 1,
   msg = TRUE
 )

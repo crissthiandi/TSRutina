@@ -2,12 +2,12 @@
 % Please edit documentation in R/series_de_tiempo.R
 \name{serie_tiempo_pruebas}
 \alias{serie_tiempo_pruebas}
-\title{Pruebas estadisticas a una serie de tiempo}
+\title{Pruebas estadísticas a una serie de tiempo}
 \usage{
 serie_tiempo_pruebas(
   datos,
   frecuencia = NULL,
-  init_ = FALSE,
+  validar_ = FALSE,
   msg = TRUE,
   pausa_off = 1
 )
@@ -17,13 +17,13 @@ serie_tiempo_pruebas(
 
 \item{frecuencia}{Frecuencia de los datos, en caso de TS sobrescribe los valores}
 
-\item{init_}{Indicador para verificar los datos [True/False]}
+\item{validar_}{Indicador para verificar los datos [True/False]}
 }
 \value{
-Solo arroja la decicion a tomar, por defecto con respecto a p=0.05
+Solo arroja la desición a tomar, por defecto con respecto a p=0.05
 }
 \description{
-Esta funcion incluye el calculo y la decision de dos pruebas estadisticas.
+Esta función incluye el calculo y la decisión de dos pruebas estadísticas.
 }
 \details{
 Realiza las siguientes pruebas:

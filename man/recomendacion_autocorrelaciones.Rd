@@ -4,12 +4,12 @@
 \alias{recomendacion_autocorrelaciones}
 \title{Recomendaciones a un grafico ACF o PACF}
 \usage{
-recomendacion_autocorrelaciones(objeto_cf, print_IC = FALSE)
+recomendacion_autocorrelaciones(objeto_acf, print_IC = FALSE)
 }
 \arguments{
-\item{objeto_cf}{objeto ACF o PACF}
+\item{objeto_acf}{objeto ACF o PACF}
 
-\item{print_IC}{Indicador True/False para mostrar valos absoluto de intervalo de confianza ver details}
+\item{print_IC}{Indicador True/False para mostrar valor absoluto de intervalo de confianza ver details}
 }
 \value{
 Valor del ultimo lag significativo de la funcion de autocorrelacion
@@ -19,6 +19,8 @@ Obten un recomendación a tu ajuste de series de tiempo ACF o PACF
 }
 \details{
 El valor IC se calcula siguiendo la metodologia de la paqueteria Stats en a función acf(). Se retorna el valor positivo talque el intervalo se forma con (IC,-IC)
+
+El intervalo de confianza (IC) de un gráfico ACF/PACF son las bandas a partir de las que una auto-correlación se considera significativas. Cuando las autocorrelaciones para cada lag resultan no significativas, se dice que no hay auto-correlación
 }
 \examples{
 base=data.frame(x=seq(Sys.Date(),by="days",length=200),y=(rexp(50)+1)*sin(1:50))

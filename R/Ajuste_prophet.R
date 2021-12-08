@@ -20,6 +20,17 @@
 #' data_to_prophet(datos)
 #'
 data_to_prophet <- function(datos,date_format=NULL,...){
+  ## ordena cual es fecha, checar primer elemento
+  if(is.numeric(datos[1,1])){
+    aux <- datos[2]
+    aux[2] <- datos[1]
+    datos <- aux
+  }
+  # captura las correcciones de checar datos
+  lista <- checar_datos(datos)
+  datos <- lista$datos
+
+
   if(any(datos %>% names() != c("ds","y"))){
     # Cambiando nombre de la base de datos a ds y y
     names(datos) <- c("ds","y")

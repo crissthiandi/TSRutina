@@ -312,6 +312,8 @@ tratamiento.fechas.TSR <- function(fecha_vector){
   #En caso de que el vector ya sea fecha, es necesario abortar
   if(class(fecha_vector) == "Date"){
     return(fecha_vector)
+  } else if(class(fecha_vector) != "Character"){
+    fecha_vector <- as.character(fecha_vector)
   }
 
   fecha_vector_tratamiento <- readr::parse_date(fecha_vector,"%d%.%m%.%Y")  #Y debe ser mayuscula para 4 digitos de año

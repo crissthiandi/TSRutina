@@ -642,10 +642,11 @@ serie_tiempo_rutina <- function(datos,frecuencia=NULL,inicio=NULL,validar_=FALSE
       datos$Ajustadohw <- as.numeric(pesohw$fitted)
       },
       error = function(e) {
-        cat(crayon::red("El ajuste por Hol-Winter fracasó por el método 1 ¿desea intentar usar ajuste por el método 2?"))
+        cat(crayon::red("El ajuste por Holt-Winter fracasó por el método 1 ¿desea intentar usar ajuste por el método 2?"))
         otro_metodo <- readline("\nRespuesta [TRUE/FALSE]: ")
+        otro_metodo <- ifelse(otro_metodo=="",TRUE,otro_metodo)
         if(as.logical(otro_metodo)){
-          mensaje("\nIniciando proceso Hol-Winter por metodo 2: \n")
+          mensaje("\nIniciando proceso Holt-Winter por metodo 2: \n")
           pesohw <- stats::HoltWinters(datosts)
           print(pesohw)
           datos$Ajustadohw <- pesohw$fitted %>% as.data.frame() %$% c(rep(NA,frecuencia),xhat)

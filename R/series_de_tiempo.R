@@ -358,7 +358,7 @@ checar_datos <- function(datos,frecuencia,inicio,msg=TRUE) {
   datos$x <- tratamiento.fechas.TSR(datos$x)
   print(head(datos))
   if(msg){
-    message("\n ¿Estan bien los datos a usar? \n
+    message("\n ¿Están bien los datos a usar? \n
         Si hay un error [Esc] \n De lo contrario [Enter] para continuar")
     continuar<-readline(": \t")
 

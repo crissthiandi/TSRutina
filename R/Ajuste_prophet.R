@@ -92,3 +92,77 @@ outliers_to_prophet <- function(datos,from,to,...){
   invisible(datos)
 }
 
+#' Holydays to fit prophet hasta 2014
+#'
+#' Histórico de fechas donde hay eventos "relevantes" en México a nivel retail. La lista completa se incluye en details.
+#'
+#'
+#' @param filter filtro de cuales eventos serán usados, por default "all", para alguna lista en particular usar por ejemplo c("Navidad","BuenFin").
+#'
+#' @details Los eventos relevantes son:
+#'    \itemize{\item{Navidad:}{ Todo Diciembre centrado al 23 de diciembre.}}
+#'    \itemize{\item{Buen Fin:}{ Varia con los años}}
+#'    \itemize{\item{Black Friday:}{ Tercer jueves de noviembre}}
+#'    \itemize{\item{Cyber Monday:}{ Lunes despues del Black Friday}}
+#'    \itemize{\item{Hot Sale:}{ Varia entre años}}
+#'
+#' @return Data.frame con fechas y rangos de efectos de promociones.
+#'
+#' @encoding UTF-8
+#'
+#' @export
+#'
+#' @examples
+#'
+#' holydays_to_prophet()
+#'
+#'
+holydays_to_prophet <- function(datos,from,to,...){
+
+  #Ajuste de fechas
+  buen_fin <- data_frame(
+    holiday = "Buen_fin",
+    ds = as.Date(c("2021-11-13","2019-11-16","2018-11-17",
+                   "2017-11-18","2016-11-19","2015-11-14","2014-11-15")),
+    lower_window = c(-4,rep(-2,5)),
+    upper_window = 3
+  )
+
+  Navidad <- data_frame(
+    holiday = "Navidad",
+    ds = as.Date(c("2021-12-23","2019-12-23","2018-12-23",
+                   "2017-12-23","2016-12-23","2015-12-23","2014-12-23")),
+    lower_window = -23,
+    upper_window = 10
+  )
+
+  Black_friday <- data_frame(
+    holiday = "BlackFriday",
+    ds = as.Date(c("2021-11-26","2019-11-29","2018-11-23",
+                   "2017-11-24","2016-11-25","2015-11-27","2014-11-28")),
+    lower_window = 0,
+    upper_window = 1
+  )
+
+  CyberMonday <- data_frame(
+    holiday = "CyberMonday",
+    ds = as.Date(c("2021-11-29","2019-12-02","2018-11-26",
+                   "2017-11-27","2016-11-28","2015-11-30","2014-12-01")),
+    lower_window = 0,
+    upper_window = 1
+  )
+
+  # TODO agregar efectos desde 2014 hasta 2021 de hot sales
+  Hot_sale <- data_frame(
+    holiday = "Hot_sale",
+    ds = as.Date(c("2021-05-27","2019-05-29","2018-05-30",
+                   "2017-05-30","2016-05-31","2015-05-30","2014-09-06")),
+    lower_window = c(-6,-3,-3,-2,-2,-2,-2),
+    upper_window = c(4,2,2,3,3,3,3)
+  )
+
+  Festivos <- rbind(buen_fin,Navidad,Black_friday,CyberMonday,Hot_sale)
+
+  invisible(Festivos)
+}
+

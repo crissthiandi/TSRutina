@@ -822,6 +822,8 @@ dev.TRS <- function(){
 #'    ,mensual = 12, etc.
 #' @param inicio Este es el year a iniciar la serie de tiempo
 #' @param validar_ Boleano, True/False indica si se vericarán los datos
+#' @param img_width Ancho de la imagen a guardar en pixeles
+#' @param img_height Altura de la imagen a guardar en pixeles
 #'
 #' @return  La salida no es como tal un objeto, si no una serie de impresiones de varios
 #'    analisis.
@@ -842,13 +844,14 @@ dev.TRS <- function(){
 #'
 #'
 #' @examples
-#' serie_tiempo_rutina(sunspot.year,5)
+#' serie_tiempo_plots(sunspot.year,15)
 #'
 #' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
-#' serie_tiempo_rutina(datos=base,frecuencia=4,inicio=2010)
+#' serie_tiempo_plots(datos=base,frecuencia=4,inicio=2010)
 #'
 serie_tiempo_plots <- function(datos,frecuencia=NULL,inicio=NULL,
-                               validar_=FALSE,pausa_off=1){
+                               validar_=FALSE,pausa_off=1,
+                               img_width = 1024, img_height = 600){
     if(validar_){
       paquetes.tsrutina()
       pausa()
@@ -875,7 +878,7 @@ serie_tiempo_plots <- function(datos,frecuencia=NULL,inicio=NULL,
 
     #Graficos para ver si es estacional
 
-    png("serie_de_tiempo.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
+    png("serie_de_tiempo.png",width = img_width,height = img_height,units = "px") #se guarda una imagen, esta se plotea luego luego
     print(
     ggplot(datos, aes(x, y)) +
         geom_point()+geom_line()+
@@ -902,7 +905,7 @@ serie_tiempo_plots <- function(datos,frecuencia=NULL,inicio=NULL,
 
 
 
-    png("st_descomposicion.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
+    png("st_descomposicion.png",width = img_width,height = img_height,units = "px") #se guarda una imagen, esta se plotea luego luego
     print(
       forecast::autoplot(stl(datosts, s.window = "periodic"), ts.colour="blue",
                main = "Descomposición de Serie de tiempo")
@@ -923,7 +926,7 @@ serie_tiempo_plots <- function(datos,frecuencia=NULL,inicio=NULL,
     }
 
 
-    png("st_seasonplot.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
+    png("st_seasonplot.png",width = img_width,height = img_height,units = "px") #se guarda una imagen, esta se plotea luego luego
     print(forecast::seasonplot(datosts,col=rainbow(length(datos$y)/frecuencia),year.labels=TRUE,
                xlab="Periodos",ylab="Serie de tiempo",
                main = "Grafico Estacional de la serie de tiempo"))
@@ -943,7 +946,7 @@ serie_tiempo_plots <- function(datos,frecuencia=NULL,inicio=NULL,
       }
     #Se aprecia que no hay estacionalidad
 
-    png("st_boxes_plot.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
+    png("st_boxes_plot.png",width = img_width,height = img_height,units = "px") #se guarda una imagen, esta se plotea luego luego
     print(boxplot(datosts~cycle(datosts),xlab = "Frecuencias",ylab = "Valores",main="Boxplot por cada valor de la frecuencia"))
     cat(crayon::green("Temporalidad de Serie de tiempo st_boxes_plot.png fue creada y guardada \n"))
     dev.off()
@@ -963,7 +966,7 @@ serie_tiempo_plots <- function(datos,frecuencia=NULL,inicio=NULL,
     datos_rl <- lm(y~periodos, data=datos)
 
     #Grafico del modelo de regresion lineal
-    png("st_regresion_lineal.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
+    png("st_regresion_lineal.png",width = img_width,height = img_height,units = "px") #se guarda una imagen, esta se plotea luego luego
 
     datos$lineal <- datos_rl$fitted.values
     print(
@@ -995,7 +998,7 @@ serie_tiempo_plots <- function(datos,frecuencia=NULL,inicio=NULL,
 
     #Promedio Movil simple
     promo <- pracma::movavg(datosts, n=frecuencia, type="s")
-    png("st_prom_movil_simple.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
+    png("st_prom_movil_simple.png",width = img_width,height = img_height,units = "px") #se guarda una imagen, esta se plotea luego luego
     datos$promo <- promo
     print(
     ggplot(datos, aes(x,y)) +
@@ -1031,7 +1034,7 @@ serie_tiempo_plots <- function(datos,frecuencia=NULL,inicio=NULL,
 
     promopo <- pracma::movavg(datosts, n=frecuencia, type="w")
 
-    png("st_prom_movil_ponderado.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
+    png("st_prom_movil_ponderado.png",width = img_width,height = img_height,units = "px") #se guarda una imagen, esta se plotea luego luego
 
     datos$promopo <- promopo
     print(
@@ -1069,7 +1072,7 @@ serie_tiempo_plots <- function(datos,frecuencia=NULL,inicio=NULL,
     #Exponential Smoothing
     pesoses <- forecast::ses(datos$y)
     #summary(pesoses)
-    png("st_ajuste_exponencial.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
+    png("st_ajuste_exponencial.png",width = img_width,height = img_height,units = "px") #se guarda una imagen, esta se plotea luego luego
 
     datos$sess <- pesoses$fitted
     print(
@@ -1106,7 +1109,7 @@ serie_tiempo_plots <- function(datos,frecuencia=NULL,inicio=NULL,
     #Holt's Exponential Smoothing
     pesoholt <- forecast::holt(datos$y)
     #summary(pesoholt)
-    png("st_holt_exponencial.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
+    png("st_holt_exponencial.png",width = img_width,height = img_height,units = "px") #se guarda una imagen, esta se plotea luego luego
 
     datos$holtt <- pesoholt$fitted
     print(
@@ -1143,7 +1146,7 @@ serie_tiempo_plots <- function(datos,frecuencia=NULL,inicio=NULL,
     #pesohw$model
 
     #asignamos valores ajustados a una columna
-    png("st_holt-winter_exponencial.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
+    png("st_holt-winter_exponencial.png",width = img_width,height = img_height,units = "px") #se guarda una imagen, esta se plotea luego luego
 
     datos$Ajustado <- as.numeric(pesohw$fitted)
     print(
@@ -1207,7 +1210,7 @@ serie_tiempo_plots <- function(datos,frecuencia=NULL,inicio=NULL,
     #Promedio Movil ponderado
     pronostico <- forecast::forecast(pronosticado,h=20,level=c(80,95))
 
-    png("st_pronostico_ponderado_80-90.png",width = 720,height = 480,units = "px") #se guarda una imagen, esta se plotea luego luego
+    png("st_pronostico_ponderado_80-90.png",width = img_width,height = img_height,units = "px") #se guarda una imagen, esta se plotea luego luego
     print(
       forecast::autoplot(pronostico)
     )

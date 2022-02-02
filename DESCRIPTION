@@ -21,4 +21,6 @@ Imports:
     tseries,
     crayon,
     rmarkdown,
-    knitr
+    knitr,
+    ggfortify,
+    prophet

@@ -844,14 +844,14 @@ dev.TRS <- function(){
 #'
 #'
 #' @examples
-#' serie_tiempo_rutina(sunspot.year,5)
+#' serie_tiempo_plots(sunspot.year,15)
 #'
 #' base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
-#' serie_tiempo_rutina(datos=base,frecuencia=4,inicio=2010)
+#' serie_tiempo_plots(datos=base,frecuencia=4,inicio=2010)
 #'
 serie_tiempo_plots <- function(datos,frecuencia=NULL,inicio=NULL,
                                validar_=FALSE,pausa_off=1,
-                               img_width = 940, img_height = 600){
+                               img_width = 1024, img_height = 600){
     if(validar_){
       paquetes.tsrutina()
       pausa()

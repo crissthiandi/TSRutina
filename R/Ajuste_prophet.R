@@ -1,16 +1,15 @@
+# Dudas a @crissthiandi <albertocenaa@gmail.com>
 
 #' Data to prophet format
 #'
 #' Agrega el formato para hacer modelado prophet
 #' nombres de variable ds and y
 #'
-#'
 #' @param datos Datos para el análisis de serie de tiempo solo Data.frame
 #'
 #' @return Dataframe con formato para prophet
 #'
 #' @export
-#'
 #' @encoding UTF-8
 #'
 #' @examples
@@ -18,7 +17,6 @@
 #' datos <- read.csv("https://raw.githubusercontent.com/crissthiandi/datos/master/Series_tiempo/sunspot_month_dataframe.csv")
 #'
 #' data_to_prophet(datos)
-#'
 data_to_prophet <- function(datos,...){
   ## ordena cual es fecha, checar primer elemento
   if(is.numeric(datos[1,1])){
@@ -70,8 +68,6 @@ data_to_prophet <- function(datos,...){
 #' from <- c(as.Date('1800-06-01'),as.Date('2004-03-01'))
 #' to <- c(as.Date('1805-06-01'),as.Date('2007-03-01'))
 #' outliers_to_prophet(datos,from,to)
-#'
-#'
 outliers_to_prophet <- function(datos,from,to,...){
   # valida los datos
   datos <- data_to_prophet(datos)
@@ -107,6 +103,11 @@ outliers_to_prophet <- function(datos,from,to,...){
 #'    \itemize{\item{Black Friday:}{ Tercer jueves de noviembre}}
 #'    \itemize{\item{Cyber Monday:}{ Lunes despues del Black Friday}}
 #'    \itemize{\item{Hot Sale:}{ Varia entre años}}
+#'    \itemize{\item{Independencia:}{ 16 de septiembre MX}}
+#'    \itemize{\item{Halloween:}{ Finales de octubre}}
+#'    \itemize{\item{Pre_Halloween:}{ Compras a inicio de octubre}}
+#'    \itemize{\item{San_valentin:}{ 14 de Febrero}}
+#'    \itemize{\item{caida_25_diciembre:}{ Efecto de "pausa" economica por dia despues a navidad}}
 #'
 #' @return Data.frame con fechas y rangos de efectos de promociones.
 #'
@@ -117,8 +118,6 @@ outliers_to_prophet <- function(datos,from,to,...){
 #' @examples
 #'
 #' holydays_to_prophet()
-#'
-#'
 holydays_to_prophet <- function(datos,from,to,...){
 
 
@@ -218,3 +217,71 @@ holydays_to_prophet <- function(datos,from,to,...){
   invisible(Festivos)
 }
 
+#' Training model
+#'
+#' Entrena modelo Prophet
+#'
+#'
+#' @param Datos Datos para entrenamiento
+#' @param modelo (opcional) by default NULL. Modelos de la class prophet que sera entrenado ver detalles
+#' @param Days_to_forecast by default 45. ¿cuantos días serán pronosticados?
+#' @param Festivos data.frame con las fechas de eventos festivos
+#'
+#' @details De no dar un modelo se ajusta el modelo más general acotado a los parametros que el equipo de prophet asigno. Para más detalles leer paper del modelo.
+#'
+#' \link{https://peerj.com/preprints/3190.pdf}
+#'
+#'
+#' @return lista con datos entrenados y grafico dyplot
+#'
+#' @encoding UTF-8
+#'
+#' @importFrom prophet prophet
+#' @importFrom prophet fit.prophet
+#' @importFrom prophet make_future_dataframe
+#' @importFrom prophet dyplot.prophet
+#'
+#' @export
+#'
+#' @examples
+#'
+#' # Sin modelo
+#' entrenando_ando(Datos)
+#'
+#' # Con modelo
+#' entrenando_ando(Datos,Modelo)
+entrenando_ando <- function(datos,Modelo = NULL,Days_to_forecast,Festivos){
+
+  ## DEFINE MODELO GENERAL
+  framework_model <- if(is.null(Modelo)){
+    prophet(
+      seasonality.mode = "multiplicative",
+      growth = "linear",
+      n.changepoints = 150,
+      holidays = Festivos,
+      fit = FALSE
+    )
+  }else{
+    Modelo
+    Modelo$holidays <- Festivos
+    Modelo
+  }
+
+
+  fit_model <- fit.prophet(framework_model,df = datos)
+
+  predicciones_days <- make_future_dataframe(m = fit_model,
+                                          periods = Days_to_forecast,
+                                          freq = "days")
+  #Prediction prophet
+  predicciones <- prophet:::predict.prophet(object = fit_model,
+                             df = predicciones_days)
+
+  ## Graficar
+  p_de_plot <- prophet::dyplot.prophet(x=modelo_sem,fcst = predicciones)
+
+  invisible(list(
+    "Grafico" = p_de_plot,
+    "Predicciones" = predicciones
+  ))
+}

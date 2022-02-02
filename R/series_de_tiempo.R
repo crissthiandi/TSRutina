@@ -38,7 +38,6 @@ paquetes.tsrutina <- function(){
 #' @export
 #' @encoding UTF-8
 #'
-#' @examples
 #' @encoding UTF-8
 #'
 #' separador("-",10,"blue")

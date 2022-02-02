@@ -1,6 +1,8 @@
 
 #' Mensaje con retorno
 #'
+#' Similar a message solo que retorna el mensaje.
+#'
 #' @param ... Conjunto de elementos caracter a mostrar en el mensaje
 #' @param domain See \code{\link{message}}
 #' @param appendLF See \code{\link{message}}

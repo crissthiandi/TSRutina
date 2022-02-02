@@ -17,7 +17,7 @@ mensaje(..., domain = NULL, appendLF = TRUE)
 Cadena de texto del mensaje impreso
 }
 \description{
-Mensaje con retorno
+Similar a message solo que retorna el mensaje.
 }
 \examples{
 a <- mensaje("Hola"," Cristhiandi")

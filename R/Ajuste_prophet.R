@@ -340,7 +340,7 @@ entrenando_ando <- function(datos,Modelo = NULL,Days_to_forecast,Festivos){
                              df = predicciones_days)
 
   ## Graficar
-  p_de_plot <- prophet::dyplot.prophet(x=modelo_sem,fcst = predicciones)
+  p_de_plot <- prophet::dyplot.prophet(x=fit_model,fcst = predicciones)
 
   invisible(list(
     "Grafico" = p_de_plot,

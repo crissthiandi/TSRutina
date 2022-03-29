@@ -325,8 +325,6 @@ entrenando_ando <- function(datos,Modelo = NULL,Days_to_forecast,Festivos){
     )
   }else{
     Modelo
-    Modelo$holidays <- Festivos
-    Modelo
   }
 
 
@@ -344,6 +342,7 @@ entrenando_ando <- function(datos,Modelo = NULL,Days_to_forecast,Festivos){
 
   invisible(list(
     "Grafico" = p_de_plot,
-    "Predicciones" = predicciones
+    "Predicciones" = predicciones,
+    "fit_model" = fit_model
   ))
 }

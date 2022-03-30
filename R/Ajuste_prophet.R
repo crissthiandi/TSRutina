@@ -209,6 +209,15 @@ holydays_to_prophet <- function(datos,from,to,...){
     upper_window = 0
   )
 
+  # quien sale el primer dia del año (?)
+  caida_Primero_dia_del_ano <- data_frame(
+    holiday = "primer_dia_del_ano",
+    ds = as.Date(c("2022-01-01","2021-01-01","2019-01-01","2018-01-01",
+                   "2017-01-01","2016-01-01","2015-01-01","2014-01-01")),
+    lower_window = 0,
+    upper_window = 1
+  )
+
   puente_natalicio_Benito_juarez <- data_frame(
     holiday = "natalicio_BJ",
     ds = as.Date(c("2022-03-21","2021-03-15","2020-03-16","2019-03-18",
@@ -274,7 +283,8 @@ holydays_to_prophet <- function(datos,from,to,...){
                     Hot_sale,Independencia,Halloween,Pre_Halloween,
                     Noche_buena,San_valentin,caida_25_diciembre,
                     puente_natalicio_Benito_juarez,
-                    Vacaciones_semana_santa)
+                    Vacaciones_semana_santa,
+                    caida_Primero_dia_del_ano)
 
   invisible(Festivos)
 }

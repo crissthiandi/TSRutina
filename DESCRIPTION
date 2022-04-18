@@ -1,12 +1,12 @@
 Package: TSRutina
 Type: Package
-Title: Asistente para Analisis de Time Series
-Version: 3.4.0
+Title: Asistente para Analisis de Series de Tiempo
+Version: 3.3.0
 nameVersion: Taby
 Author: Crissthiandi <albertocenaa@gmail.com>
 Maintainer: Crissthiandi <albertocenaa@gmail.com>
 Description: Con ayuda de un entorno interactivo recibe asistencia al analizar una 
-  serie de tiempo. Este asistente viene incorporado con modelos basicos
+  series de tiempo. Este asistente viene incorporado con modelos basicos
   que pudieran ajustarse a tu serie de tiempo y acelerar tu tiempo de trabajo.
 License: GPL-3
 Encoding: UTF-8

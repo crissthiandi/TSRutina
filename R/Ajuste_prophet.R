@@ -209,10 +209,72 @@ holydays_to_prophet <- function(datos,from,to,...){
     upper_window = 0
   )
 
+  puente_natalicio_Benito_juarez <- data_frame(
+    holiday = "natalicio_BJ",
+    ds = as.Date(c("2022-03-21","2021-03-15","2020-03-16","2019-03-18",
+                   "2018-03-19",
+                   "2017-03-20","2016-03-21","2015-03-16","2014-03-17")),
+    lower_window = c(-3,-3,-3,-3,-3,-3,-3,-3,-3),
+    upper_window = c(0,0,0,0,0,0,0,0,0)
+  )
+
+  # 2014 - Viernes 11 de Abril y deberán regresar a clase el día lunes 28 de Abril. ==>
+  # as.Date("2014-04-12") - as.Date("2014-04-27")
+  # as.Date("2014-04-12") + 7 # 7- 8
+  #
+  # 2015 - Del lunes 30 de marzo al viernes 10 de abril. ==>
+  # as.Date("2015-03-28") - as.Date("2015-04-12")
+  # as.Date("2015-03-28") + 7 # 7-8
+  #
+  # 2016 - 22 de marzo al 5 de abril
+  # as.Date("2016-03-22") - as.Date("2016-04-05")
+  # as.Date("2016-03-22") +7 # 7-7
+  # base::weekdays.Date(as.Date("2016-03-22")) # martes
+  # base::weekdays.Date(as.Date("2016-04-05")) # martes
+  #
+  # 2017 - Del 10 al 21 de abril
+  # as.Date("2017-04-10") - as.Date("2017-04-21")
+  # base::weekdays.Date(as.Date("2017-04-10")) # lunes
+  # as.Date("2017-04-08") - as.Date("2017-04-23")
+  # as.Date("2017-04-08") + 7 # 7- 8
+  #
+  # 2018 - Del 26 de Marzo al 6 de Abril
+  # as.Date("2018-03-26") - as.Date("2018-04-06")
+  # base::weekdays.Date(as.Date("2018-03-26")) # lunes
+  # as.Date("2018-03-24") - as.Date("2018-04-08")
+  # as.Date("2018-03-24") + 7 # 7 - 8
+  #
+  # 2019 - Del 15 de Abril al 26 de Abril
+  # as.Date("2019-04-15") - as.Date("2019-04-26")
+  # base::weekdays.Date(as.Date("2019-04-15")) # lunes
+  # as.Date("2019-04-13") - as.Date("2019-04-28")
+  # as.Date("2019-04-13") + 7 # 7 - 8
+  #
+  # 2022 - el lunes 11 de abril y termina el viernes 22 de abril
+  # as.Date("2022-04-11") - as.Date("2022-04-22")
+  # base::weekdays.Date(as.Date("2022-04-11")) # lunes
+  # base::weekdays.Date(as.Date("2022-04-09")) # domingo
+  # as.Date("2022-04-09") - as.Date("2022-04-24")
+  # as.Date("2022-04-09") + 7 # 7 - 8
+  #
+
+  Vacaciones_semana_santa <- data_frame(
+    holiday = "Semana_Santa",
+    ds = as.Date(c(
+      "2014-04-19","2015-04-04","2016-03-29","2017-04-15",
+      "2018-03-31","2019-04-20","2022-04-16"
+    )),
+    lower_window = c(-7,-7,-7,-7,-7,-7,-7),
+    upper_window = c(8,8,7,8,8,8,8)
+  )
+
+
 
   Festivos <- rbind(buen_fin,Navidad,Black_friday,CyberMonday,
                     Hot_sale,Independencia,Halloween,Pre_Halloween,
-                    Noche_buena,San_valentin,caida_25_diciembre)
+                    Noche_buena,San_valentin,caida_25_diciembre,
+                    puente_natalicio_Benito_juarez,
+                    Vacaciones_semana_santa)
 
   invisible(Festivos)
 }
@@ -278,7 +340,7 @@ entrenando_ando <- function(datos,Modelo = NULL,Days_to_forecast,Festivos){
                              df = predicciones_days)
 
   ## Graficar
-  p_de_plot <- prophet::dyplot.prophet(x=modelo_sem,fcst = predicciones)
+  p_de_plot <- prophet::dyplot.prophet(x=fit_model,fcst = predicciones)
 
   invisible(list(
     "Grafico" = p_de_plot,

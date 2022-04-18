@@ -104,10 +104,12 @@ outliers_to_prophet <- function(datos,from,to,...){
 #'    \itemize{\item{Cyber Monday:}{ Lunes despues del Black Friday}}
 #'    \itemize{\item{Hot Sale:}{ Varia entre años}}
 #'    \itemize{\item{Independencia:}{ 16 de septiembre MX}}
-#'    \itemize{\item{Halloween:}{ Finales de octubre}}
-#'    \itemize{\item{Pre_Halloween:}{ Compras a inicio de octubre}}
+#'    \itemize{\item{Halloween:}{ Finales de octubre, Noche de halloween}}
+#'    \itemize{\item{Pre_Halloween:}{ Compras a inicio de octubre, efecto de temporada previa a halloween}}
 #'    \itemize{\item{San_valentin:}{ 14 de Febrero}}
 #'    \itemize{\item{caida_25_diciembre:}{ Efecto de "pausa" economica por dia despues a navidad}}
+#'    \itemize{\item{Puente natalicio Benito Juarez:}{Puente oficial por parte del estado Mexicano}}
+#'    \itemize{\item{Vacaciones semana santa}{Efecto por las ventas en vacaciones de semana santa}}
 #'
 #' @return Data.frame con fechas y rangos de efectos de promociones.
 #'
@@ -210,8 +212,8 @@ holydays_to_prophet <- function(datos,from,to,...){
   )
 
   # quien sale el primer dia del año (?)
-  caida_Primero_dia_del_ano <- data_frame(
-    holiday = "primer_dia_del_ano",
+  caida_Primero_dia_del_anio <- data_frame(
+    holiday = "primer_dia_del_anio",
     ds = as.Date(c("2022-01-01","2021-01-01","2019-01-01","2018-01-01",
                    "2017-01-01","2016-01-01","2015-01-01","2014-01-01")),
     lower_window = 0,
@@ -284,7 +286,7 @@ holydays_to_prophet <- function(datos,from,to,...){
                     Noche_buena,San_valentin,caida_25_diciembre,
                     puente_natalicio_Benito_juarez,
                     Vacaciones_semana_santa,
-                    caida_Primero_dia_del_ano)
+                    caida_Primero_dia_del_anio)
 
   invisible(Festivos)
 }
@@ -295,16 +297,17 @@ holydays_to_prophet <- function(datos,from,to,...){
 #'
 #'
 #' @param Datos Datos para entrenamiento
-#' @param modelo (opcional) by default NULL. Modelos de la class prophet que sera entrenado ver detalles
-#' @param Days_to_forecast by default 45. ¿cuantos días serán pronosticados?
+#' @param modelo (opcional) by default NULL. Modelos de la class prophet que sera entrenado, ver detalles.
+#' @param Days_to_forecast by default 45 ¿cuantos días serán pronosticados?
 #' @param Festivos data.frame con las fechas de eventos festivos
 #'
-#' @details De no dar un modelo se ajusta el modelo más general acotado a los parametros que el equipo de prophet asigno. Para más detalles leer paper del modelo.
+#' @details De no dar un modelo se ajusta el modelo más general acotado a los
+#' parámetros que el equipo de prophet asigno. Para más detalles leer paper del modelo.
 #'
 #' \link{https://peerj.com/preprints/3190.pdf}
 #'
 #'
-#' @return lista con datos entrenados y grafico dyplot
+#' @return lista con datos entrenados y gráfico de la clase dyplot
 #'
 #' @encoding UTF-8
 #'
@@ -343,7 +346,7 @@ entrenando_ando <- function(datos,Modelo = NULL,Days_to_forecast,Festivos){
   predicciones_days <- make_future_dataframe(m = fit_model,
                                           periods = Days_to_forecast,
                                           freq = "days")
-  #Prediction prophet
+  # Prediction
   predicciones <- prophet:::predict.prophet(object = fit_model,
                              df = predicciones_days)
 

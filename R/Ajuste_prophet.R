@@ -123,47 +123,47 @@ outliers_to_prophet <- function(datos,from,to,...){
 holydays_to_prophet <- function(datos,from,to,...){
 
 
-  buen_fin <- data_frame(
+  buen_fin <- tibble::tibble(
     holiday = "Buen_fin",
     ds = as.Date(c("2022-11-19","2021-11-13","2019-11-16","2018-11-17",
-                   "2017-11-18","2016-11-19","2015-11-14")),
-    lower_window = c(-1,-4,rep(-2,5)),
+                   "2017-11-18","2016-11-19","2015-11-14","2014-11-14")),
+    lower_window = c(-2,-4,rep(-2,6)),
     upper_window = 3
   )
 
-  Navidad <- data_frame(
+  Navidad <- tibble::tibble(
     holiday = "Navidad",
     ds = as.Date(c("2022-12-15","2021-12-15","2019-12-15","2018-12-15",
-                   "2017-12-15","2016-12-15","2015-12-15")),
+                   "2017-12-15","2016-12-15","2015-12-15","2014-12-15")),
     lower_window = -15,
     upper_window = 16
   )
 
-  Noche_buena <- data_frame(
+  Noche_buena <- tibble::tibble(
     holiday = "Noche_buena",
     ds = as.Date(c("2022-12-23","2021-12-23","2019-12-23","2018-12-23",
-                   "2017-12-23","2016-12-23","2015-12-23")),
+                   "2017-12-23","2016-12-23","2015-12-23","2014-12-23")),
     lower_window = -3,
     upper_window = 1
   )
 
-  Black_friday <- data_frame(
+  Black_friday <- tibble::tibble(
     holiday = "BlackFriday",
     ds = as.Date(c("2022-11-25","2021-11-26","2019-11-29","2018-11-23",
-                   "2017-11-24","2016-11-25","2015-11-27")),
+                   "2017-11-24","2016-11-25","2015-11-27","2014-11-28")),
     lower_window = 0,
     upper_window = 1
   )
 
-  CyberMonday <- data_frame(
+  CyberMonday <- tibble::tibble(
     holiday = "CyberMonday",
     ds = as.Date(c("2022-11-28","2021-11-29","2019-12-02","2018-11-26",
-                   "2017-11-27","2016-11-28","2015-11-30")),
+                   "2017-11-27","2016-11-28","2015-11-30","2014-12-01")),
     lower_window = 0,
     upper_window = 1
   )
 
-  Hot_sale <- data_frame(
+  Hot_sale <- tibble::tibble(
     holiday = "Hot_sale",
     ds = as.Date(c("2022-05-28","2021-05-27","2019-05-29","2018-05-30",
                    "2017-05-30","2016-05-31","2015-05-30","2014-09-06")),
@@ -171,7 +171,7 @@ holydays_to_prophet <- function(datos,from,to,...){
     upper_window = c(3,4,2,2,3,3,3,3)
   )
 
-  Independencia <- data_frame(
+  Independencia <- tibble::tibble(
     holiday = "independencia",
     ds = as.Date(c("2022-09-16","2021-09-16","2019-09-16","2018-09-16",
                    "2017-09-16","2016-09-16","2015-09-16","2014-09-16")),
@@ -179,7 +179,7 @@ holydays_to_prophet <- function(datos,from,to,...){
     upper_window = 1
   )
 
-  Halloween <- data_frame(
+  Halloween <- tibble::tibble(
     holiday = "Halloween",
     ds = as.Date(c("2022-10-31","2021-10-31","2019-10-31","2018-10-31",
                    "2017-10-31","2016-10-31","2015-10-31","2014-10-31")),
@@ -187,7 +187,7 @@ holydays_to_prophet <- function(datos,from,to,...){
     upper_window = 1
   )
 
-  Pre_Halloween <- data_frame(
+  Pre_Halloween <- tibble::tibble(
     holiday = "Pre_Halloween",
     ds = as.Date(c("2022-10-10","2021-10-10","2019-10-10","2018-10-10",
                    "2017-10-10","2016-10-10","2015-10-10","2014-10-10")),
@@ -195,7 +195,7 @@ holydays_to_prophet <- function(datos,from,to,...){
     upper_window = 7
   )
 
-  San_valentin <- data_frame(
+  San_valentin <- tibble::tibble(
     holiday = "San_valentin",
     ds = as.Date(c("2022-02-14","2021-02-14","2020-02-14","2019-02-14",
                    "2018-02-14","2017-02-14","2016-02-14","2015-02-14","2014-02-14")),
@@ -203,7 +203,7 @@ holydays_to_prophet <- function(datos,from,to,...){
     upper_window = 1
   )
 
-  caida_25_diciembre <- data_frame(
+  caida_25_diciembre <- tibble::tibble(
     holiday = "caida_25_diciembre",
     ds = as.Date(c("2022-12-25","2021-12-25","2019-12-25","2018-12-25",
                    "2017-12-25","2016-12-25","2015-12-25","2014-12-25")),
@@ -212,7 +212,7 @@ holydays_to_prophet <- function(datos,from,to,...){
   )
 
   # quien sale el primer dia del año (?)
-  caida_Primero_dia_del_anio <- data_frame(
+  caida_Primero_dia_del_anio <- tibble::tibble(
     holiday = "primer_dia_del_anio",
     ds = as.Date(c("2022-01-01","2021-01-01","2019-01-01","2018-01-01",
                    "2017-01-01","2016-01-01","2015-01-01","2014-01-01")),
@@ -220,7 +220,7 @@ holydays_to_prophet <- function(datos,from,to,...){
     upper_window = 1
   )
 
-  puente_natalicio_Benito_juarez <- data_frame(
+  puente_natalicio_Benito_juarez <- tibble::tibble(
     holiday = "natalicio_BJ",
     ds = as.Date(c("2022-03-21","2021-03-15","2020-03-16","2019-03-18",
                    "2018-03-19",
@@ -269,7 +269,7 @@ holydays_to_prophet <- function(datos,from,to,...){
   # as.Date("2022-04-09") + 7 # 7 - 8
   #
 
-  Vacaciones_semana_santa <- data_frame(
+  Vacaciones_semana_santa <- tibble::tibble(
     holiday = "Semana_Santa",
     ds = as.Date(c(
       "2014-04-19","2015-04-04","2016-03-29","2017-04-15",
@@ -329,7 +329,7 @@ entrenando_ando <- function(datos,Modelo = NULL,Days_to_forecast,Festivos){
 
   ## DEFINE MODELO GENERAL
   framework_model <- if(is.null(Modelo)){
-    prophet(
+    prophet::prophet(
       seasonality.mode = "multiplicative",
       growth = "linear",
       n.changepoints = 150,
@@ -341,9 +341,9 @@ entrenando_ando <- function(datos,Modelo = NULL,Days_to_forecast,Festivos){
   }
 
 
-  fit_model <- fit.prophet(framework_model,df = datos)
+  fit_model <- prophet:::fit.prophet(framework_model,df = datos)
 
-  predicciones_days <- make_future_dataframe(m = fit_model,
+  predicciones_days <- prophet::make_future_dataframe(m = fit_model,
                                           periods = Days_to_forecast,
                                           freq = "days")
   # Prediction

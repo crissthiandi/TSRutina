@@ -279,6 +279,13 @@ holydays_to_prophet <- function(datos,from,to,...){
     upper_window = c(8,8,7,8,8,8,8)
   )
 
+  Dia_de_las_madres <- tibble::tibble(
+    holiday = "Dia_de_la_madre",
+    ds = as.Date(paste(2014:2022,"05",10,sep = "-")),
+    lower_window = -7,
+    upper_window = 1
+  )
+
 
 
   Festivos <- rbind(buen_fin,Navidad,Black_friday,CyberMonday,
@@ -286,7 +293,8 @@ holydays_to_prophet <- function(datos,from,to,...){
                     Noche_buena,San_valentin,caida_25_diciembre,
                     puente_natalicio_Benito_juarez,
                     Vacaciones_semana_santa,
-                    caida_Primero_dia_del_anio)
+                    caida_Primero_dia_del_anio,
+                    Dia_de_las_madres)
 
   invisible(Festivos)
 }

@@ -95,7 +95,13 @@ outliers_to_prophet <- function(datos,from,to,...){
 #' Histórico de fechas donde hay eventos "relevantes" en México para retail. La lista completa se incluye en details.
 #'
 #'
-#' @param filter filtro de cuales eventos serán usados, por default "all", para alguna lista en particular usar por ejemplo c("Navidad","BuenFin").
+#' @param filter filtro de cuales eventos serán usados,
+#'     por default "all", para alguna lista en particular usar
+#'     por ejemplo c("Navidad","BuenFin").
+#' @param datos
+#' @param from
+#' @param to
+#' @param ...
 #'
 #' @details Los eventos relevantes son:
 #'    \itemize{\item{Navidad:}{ Todo Diciembre centrado al 23 de diciembre.}}
@@ -287,6 +293,55 @@ holydays_to_prophet <- function(datos,from,to,...){
   )
 
 
+  #' Obten la fecha del tercer domingo dado una fecha de inicio
+  #'
+  #' Ideal para encontrar el tercer domingo de junio dado el primer
+  #' dia de junio
+  #'
+  #' @param fun_date es la fecha inicial
+  #'
+  get_tercer_domingo <- function(fun_date){
+    # 1 es domingo, 2 es lunes, etc. 5 es jueves
+    dia_de_inicio <- lubridate::wday(x = fun_date,label = F,
+                                     abbr = F,week_start = 7)
+    #llevar a reales con 0 divisible entre 7 domingo
+    dia_de_inicio <- dia_de_inicio-1
+    # 0:10%%7 el residuo 0 es domingo
+    residuo <- dia_de_inicio%%7
+    #primer_domingo
+    primer_domingo <- NA_character_
+    # un character NA puede convertirse clase Date
+    attr(primer_domingo,"class") <- "Date"
+    for (r in 1:length(residuo)) {
+      if(residuo[r] == 0){
+        primer_domingo[r] <- fun_date[r]
+      } else {
+        primer_domingo[r] <- fun_date[r] + (7-residuo[r])
+      }
+    }
+    # > typeof(primer_domingo)
+    # [1] "character"
+    # > typeof(Sys.Date())
+    # [1] "double"
+    primer_domingo <- as.Date(primer_domingo)
+    tercer_domingo <- primer_domingo+lubridate::days(14)
+    # desconozco porque tengo que usar lubridate
+    return(as.Date(tercer_domingo))
+  }
+  # intento de entender que pasa
+  # Sys.Date() %>% attributes()
+  # primer_domingo %>% attributes()
+  # methods(`+`)
+  # `+.Date`
+
+  # Dia del padre
+  inicios_junio <- as.Date(paste(2014:2022,"06","01",sep = "-"))
+  Dia_del_padre <- tibble::tibble(
+    holiday = "Dia_del_padre",
+    ds = get_tercer_domingo(inicios_junio),
+    lower_window = -1,
+    upper_window = 1
+  )
 
   Festivos <- rbind(buen_fin,Navidad,Black_friday,CyberMonday,
                     Hot_sale,Independencia,Halloween,Pre_Halloween,
@@ -294,7 +349,8 @@ holydays_to_prophet <- function(datos,from,to,...){
                     puente_natalicio_Benito_juarez,
                     Vacaciones_semana_santa,
                     caida_Primero_dia_del_anio,
-                    Dia_de_las_madres)
+                    Dia_de_las_madres,
+                    Dia_del_padre)
 
   invisible(Festivos)
 }

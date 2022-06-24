@@ -70,9 +70,9 @@ data_to_prophet <- function(datos,...,verbose = T){
 #' from <- c(as.Date('1800-06-01'),as.Date('2004-03-01'))
 #' to <- c(as.Date('1805-06-01'),as.Date('2007-03-01'))
 #' outliers_to_prophet(datos,from,to)
-outliers_to_prophet <- function(datos,from,to,...){
+outliers_to_prophet <- function(datos,from,to,...,verbose=T){
   # valida los datos
-  datos <- data_to_prophet(datos)
+  datos <- data_to_prophet(datos,verbose = verbose)
   # mismo tamaño entre from y to
   n <- length(from)
   stopifnot(length(from) == length(to))

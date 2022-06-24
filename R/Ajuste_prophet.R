@@ -17,7 +17,7 @@
 #' datos <- read.csv("https://raw.githubusercontent.com/crissthiandi/datos/master/Series_tiempo/sunspot_month_dataframe.csv")
 #'
 #' data_to_prophet(datos)
-data_to_prophet <- function(datos,...){
+data_to_prophet <- function(datos,...,verbose = T){
   ## ordena cual es fecha, checar primer elemento
   if(is.numeric(datos[1,1])){
     aux <- datos[2]
@@ -25,14 +25,16 @@ data_to_prophet <- function(datos,...){
     datos <- aux
   }
   # captura las correcciones de checar datos
-  lista <- checar_datos(datos)
+  lista <- checar_datos(datos,msg=verbose)
   datos <- lista$datos
 
 
   if(any(datos %>% names() != c("ds","y"))){
     # Cambiando nombre de la base de datos a ds y y
     names(datos) <- c("ds","y")
-    cat(crayon::cyan("\n Se tomo la primera columna como tiempo y\n la segunda como valores de la serie de tiempo."))
+    if(verbose) {
+      cat(crayon::cyan("\n Se tomo la primera columna como tiempo y\n la segunda como valores de la serie de tiempo."))
+    }
   }
 
   invisible(datos)

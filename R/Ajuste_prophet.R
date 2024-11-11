@@ -17,7 +17,7 @@
 #' datos <- read.csv("https://raw.githubusercontent.com/crissthiandi/datos/master/Series_tiempo/sunspot_month_dataframe.csv")
 #'
 #' data_to_prophet(datos)
-data_to_prophet <- function(datos,...){
+data_to_prophet <- function(datos,...,verbose = T){
   ## ordena cual es fecha, checar primer elemento
   if(is.numeric(datos[1,1])){
     aux <- datos[2]
@@ -25,14 +25,16 @@ data_to_prophet <- function(datos,...){
     datos <- aux
   }
   # captura las correcciones de checar datos
-  lista <- checar_datos(datos)
+  lista <- checar_datos(datos,msg=verbose)
   datos <- lista$datos
 
 
   if(any(datos %>% names() != c("ds","y"))){
     # Cambiando nombre de la base de datos a ds y y
     names(datos) <- c("ds","y")
-    cat(crayon::cyan("\n Se tomo la primera columna como tiempo y\n la segunda como valores de la serie de tiempo."))
+    if(verbose) {
+      cat(crayon::cyan("\n Se tomo la primera columna como tiempo y\n la segunda como valores de la serie de tiempo."))
+    }
   }
 
   invisible(datos)
@@ -68,9 +70,9 @@ data_to_prophet <- function(datos,...){
 #' from <- c(as.Date('1800-06-01'),as.Date('2004-03-01'))
 #' to <- c(as.Date('1805-06-01'),as.Date('2007-03-01'))
 #' outliers_to_prophet(datos,from,to)
-outliers_to_prophet <- function(datos,from,to,...){
+outliers_to_prophet <- function(datos,from,to,...,verbose=T){
   # valida los datos
-  datos <- data_to_prophet(datos)
+  datos <- data_to_prophet(datos,verbose = verbose)
   # mismo tamaño entre from y to
   n <- length(from)
   stopifnot(length(from) == length(to))
@@ -95,7 +97,13 @@ outliers_to_prophet <- function(datos,from,to,...){
 #' Histórico de fechas donde hay eventos "relevantes" en México para retail. La lista completa se incluye en details.
 #'
 #'
-#' @param filter filtro de cuales eventos serán usados, por default "all", para alguna lista en particular usar por ejemplo c("Navidad","BuenFin").
+#' @param filter filtro de cuales eventos serán usados,
+#'     por default "all", para alguna lista en particular usar
+#'     por ejemplo c("Navidad","BuenFin").
+#' @param datos
+#' @param from
+#' @param to
+#' @param ...
 #'
 #' @details Los eventos relevantes son:
 #'    \itemize{\item{Navidad:}{ Todo Diciembre centrado al 23 de diciembre.}}
@@ -123,47 +131,47 @@ outliers_to_prophet <- function(datos,from,to,...){
 holydays_to_prophet <- function(datos,from,to,...){
 
 
-  buen_fin <- data_frame(
+  buen_fin <- tibble::tibble(
     holiday = "Buen_fin",
     ds = as.Date(c("2022-11-19","2021-11-13","2019-11-16","2018-11-17",
-                   "2017-11-18","2016-11-19","2015-11-14")),
-    lower_window = c(-1,-4,rep(-2,5)),
+                   "2017-11-18","2016-11-19","2015-11-14","2014-11-14")),
+    lower_window = c(-2,-4,rep(-2,6)),
     upper_window = 3
   )
 
-  Navidad <- data_frame(
+  Navidad <- tibble::tibble(
     holiday = "Navidad",
     ds = as.Date(c("2022-12-15","2021-12-15","2019-12-15","2018-12-15",
-                   "2017-12-15","2016-12-15","2015-12-15")),
+                   "2017-12-15","2016-12-15","2015-12-15","2014-12-15")),
     lower_window = -15,
     upper_window = 16
   )
 
-  Noche_buena <- data_frame(
+  Noche_buena <- tibble::tibble(
     holiday = "Noche_buena",
     ds = as.Date(c("2022-12-23","2021-12-23","2019-12-23","2018-12-23",
-                   "2017-12-23","2016-12-23","2015-12-23")),
+                   "2017-12-23","2016-12-23","2015-12-23","2014-12-23")),
     lower_window = -3,
     upper_window = 1
   )
 
-  Black_friday <- data_frame(
+  Black_friday <- tibble::tibble(
     holiday = "BlackFriday",
     ds = as.Date(c("2022-11-25","2021-11-26","2019-11-29","2018-11-23",
-                   "2017-11-24","2016-11-25","2015-11-27")),
+                   "2017-11-24","2016-11-25","2015-11-27","2014-11-28")),
     lower_window = 0,
     upper_window = 1
   )
 
-  CyberMonday <- data_frame(
+  CyberMonday <- tibble::tibble(
     holiday = "CyberMonday",
     ds = as.Date(c("2022-11-28","2021-11-29","2019-12-02","2018-11-26",
-                   "2017-11-27","2016-11-28","2015-11-30")),
+                   "2017-11-27","2016-11-28","2015-11-30","2014-12-01")),
     lower_window = 0,
     upper_window = 1
   )
 
-  Hot_sale <- data_frame(
+  Hot_sale <- tibble::tibble(
     holiday = "Hot_sale",
     ds = as.Date(c("2022-05-28","2021-05-27","2019-05-29","2018-05-30",
                    "2017-05-30","2016-05-31","2015-05-30","2014-09-06")),
@@ -171,7 +179,7 @@ holydays_to_prophet <- function(datos,from,to,...){
     upper_window = c(3,4,2,2,3,3,3,3)
   )
 
-  Independencia <- data_frame(
+  Independencia <- tibble::tibble(
     holiday = "independencia",
     ds = as.Date(c("2022-09-16","2021-09-16","2019-09-16","2018-09-16",
                    "2017-09-16","2016-09-16","2015-09-16","2014-09-16")),
@@ -179,7 +187,7 @@ holydays_to_prophet <- function(datos,from,to,...){
     upper_window = 1
   )
 
-  Halloween <- data_frame(
+  Halloween <- tibble::tibble(
     holiday = "Halloween",
     ds = as.Date(c("2022-10-31","2021-10-31","2019-10-31","2018-10-31",
                    "2017-10-31","2016-10-31","2015-10-31","2014-10-31")),
@@ -187,7 +195,7 @@ holydays_to_prophet <- function(datos,from,to,...){
     upper_window = 1
   )
 
-  Pre_Halloween <- data_frame(
+  Pre_Halloween <- tibble::tibble(
     holiday = "Pre_Halloween",
     ds = as.Date(c("2022-10-10","2021-10-10","2019-10-10","2018-10-10",
                    "2017-10-10","2016-10-10","2015-10-10","2014-10-10")),
@@ -195,7 +203,7 @@ holydays_to_prophet <- function(datos,from,to,...){
     upper_window = 7
   )
 
-  San_valentin <- data_frame(
+  San_valentin <- tibble::tibble(
     holiday = "San_valentin",
     ds = as.Date(c("2022-02-14","2021-02-14","2020-02-14","2019-02-14",
                    "2018-02-14","2017-02-14","2016-02-14","2015-02-14","2014-02-14")),
@@ -203,7 +211,7 @@ holydays_to_prophet <- function(datos,from,to,...){
     upper_window = 1
   )
 
-  caida_25_diciembre <- data_frame(
+  caida_25_diciembre <- tibble::tibble(
     holiday = "caida_25_diciembre",
     ds = as.Date(c("2022-12-25","2021-12-25","2019-12-25","2018-12-25",
                    "2017-12-25","2016-12-25","2015-12-25","2014-12-25")),
@@ -212,7 +220,7 @@ holydays_to_prophet <- function(datos,from,to,...){
   )
 
   # quien sale el primer dia del año (?)
-  caida_Primero_dia_del_anio <- data_frame(
+  caida_Primero_dia_del_anio <- tibble::tibble(
     holiday = "primer_dia_del_anio",
     ds = as.Date(c("2022-01-01","2021-01-01","2019-01-01","2018-01-01",
                    "2017-01-01","2016-01-01","2015-01-01","2014-01-01")),
@@ -220,7 +228,7 @@ holydays_to_prophet <- function(datos,from,to,...){
     upper_window = 1
   )
 
-  puente_natalicio_Benito_juarez <- data_frame(
+  puente_natalicio_Benito_juarez <- tibble::tibble(
     holiday = "natalicio_BJ",
     ds = as.Date(c("2022-03-21","2021-03-15","2020-03-16","2019-03-18",
                    "2018-03-19",
@@ -269,7 +277,7 @@ holydays_to_prophet <- function(datos,from,to,...){
   # as.Date("2022-04-09") + 7 # 7 - 8
   #
 
-  Vacaciones_semana_santa <- data_frame(
+  Vacaciones_semana_santa <- tibble::tibble(
     holiday = "Semana_Santa",
     ds = as.Date(c(
       "2014-04-19","2015-04-04","2016-03-29","2017-04-15",
@@ -279,14 +287,72 @@ holydays_to_prophet <- function(datos,from,to,...){
     upper_window = c(8,8,7,8,8,8,8)
   )
 
+  Dia_de_las_madres <- tibble::tibble(
+    holiday = "Dia_de_la_madre",
+    ds = as.Date(paste(2014:2022,"05",10,sep = "-")),
+    lower_window = -7,
+    upper_window = 1
+  )
 
+
+  #' Obten la fecha del tercer domingo dado una fecha de inicio
+  #'
+  #' Ideal para encontrar el tercer domingo de junio dado el primer
+  #' dia de junio
+  #'
+  #' @param fun_date es la fecha inicial
+  #'
+  get_tercer_domingo <- function(fun_date){
+    # 1 es domingo, 2 es lunes, etc. 5 es jueves
+    dia_de_inicio <- lubridate::wday(x = fun_date,label = F,
+                                     abbr = F,week_start = 7)
+    #llevar a reales con 0 divisible entre 7 domingo
+    dia_de_inicio <- dia_de_inicio-1
+    # 0:10%%7 el residuo 0 es domingo
+    residuo <- dia_de_inicio%%7
+    #primer_domingo
+    primer_domingo <- NA_character_
+    # un character NA puede convertirse clase Date
+    attr(primer_domingo,"class") <- "Date"
+    for (r in 1:length(residuo)) {
+      if(residuo[r] == 0){
+        primer_domingo[r] <- fun_date[r]
+      } else {
+        primer_domingo[r] <- fun_date[r] + (7-residuo[r])
+      }
+    }
+    # > typeof(primer_domingo)
+    # [1] "character"
+    # > typeof(Sys.Date())
+    # [1] "double"
+    primer_domingo <- as.Date(primer_domingo)
+    tercer_domingo <- primer_domingo+lubridate::days(14)
+    # desconozco porque tengo que usar lubridate
+    return(as.Date(tercer_domingo))
+  }
+  # intento de entender que pasa
+  # Sys.Date() %>% attributes()
+  # primer_domingo %>% attributes()
+  # methods(`+`)
+  # `+.Date`
+
+  # Dia del padre
+  inicios_junio <- as.Date(paste(2014:2022,"06","01",sep = "-"))
+  Dia_del_padre <- tibble::tibble(
+    holiday = "Dia_del_padre",
+    ds = get_tercer_domingo(inicios_junio),
+    lower_window = -1,
+    upper_window = 1
+  )
 
   Festivos <- rbind(buen_fin,Navidad,Black_friday,CyberMonday,
                     Hot_sale,Independencia,Halloween,Pre_Halloween,
                     Noche_buena,San_valentin,caida_25_diciembre,
                     puente_natalicio_Benito_juarez,
                     Vacaciones_semana_santa,
-                    caida_Primero_dia_del_anio)
+                    caida_Primero_dia_del_anio,
+                    Dia_de_las_madres,
+                    Dia_del_padre)
 
   invisible(Festivos)
 }
@@ -329,7 +395,7 @@ entrenando_ando <- function(datos,Modelo = NULL,Days_to_forecast,Festivos){
 
   ## DEFINE MODELO GENERAL
   framework_model <- if(is.null(Modelo)){
-    prophet(
+    prophet::prophet(
       seasonality.mode = "multiplicative",
       growth = "linear",
       n.changepoints = 150,
@@ -341,9 +407,9 @@ entrenando_ando <- function(datos,Modelo = NULL,Days_to_forecast,Festivos){
   }
 
 
-  fit_model <- fit.prophet(framework_model,df = datos)
+  fit_model <- prophet:::fit.prophet(framework_model,df = datos)
 
-  predicciones_days <- make_future_dataframe(m = fit_model,
+  predicciones_days <- prophet::make_future_dataframe(m = fit_model,
                                           periods = Days_to_forecast,
                                           freq = "days")
   # Prediction

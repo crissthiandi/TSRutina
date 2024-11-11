@@ -1,7 +1,7 @@
 Package: TSRutina
 Type: Package
 Title: Asistente para Analisis de Series de Tiempo
-Version: 3.3.0
+Version: 3.4.1
 nameVersion: Taby
 Author: Crissthiandi <albertocenaa@gmail.com>
 Maintainer: Crissthiandi <albertocenaa@gmail.com>

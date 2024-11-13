@@ -5,7 +5,7 @@
 \alias{outliers_to_prophet}
 \title{Outliers to prophet}
 \usage{
-outliers_to_prophet(datos, from, to, ...)
+outliers_to_prophet(datos, from, to, ..., verbose = T)
 }
 \arguments{
 \item{datos}{Datos para el análisis de serie de tiempo solo Data.frame}

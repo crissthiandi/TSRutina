@@ -8,7 +8,13 @@
 holydays_to_prophet(datos, from, to, ...)
 }
 \arguments{
-\item{filter}{filtro de cuales eventos serán usados, por default "all", para alguna lista en particular usar por ejemplo c("Navidad","BuenFin").}
+\item{...}{}
+
+\item{filter}{filtro de cuales eventos serán usados,
+por default "all", para alguna lista en particular usar
+por ejemplo c("Navidad","BuenFin").}
+
+\item{fun_date}{es la fecha inicial}
 }
 \value{
 Data.frame con fechas y rangos de efectos de promociones.
@@ -24,12 +30,19 @@ Los eventos relevantes son:
    \itemize{\item{Cyber Monday:}{ Lunes despues del Black Friday}}
    \itemize{\item{Hot Sale:}{ Varia entre años}}
    \itemize{\item{Independencia:}{ 16 de septiembre MX}}
-   \itemize{\item{Halloween:}{ Finales de octubre}}
-   \itemize{\item{Pre_Halloween:}{ Compras a inicio de octubre}}
+   \itemize{\item{Halloween:}{ Finales de octubre, Noche de halloween}}
+   \itemize{\item{Pre_Halloween:}{ Compras a inicio de octubre, efecto de temporada previa a halloween}}
    \itemize{\item{San_valentin:}{ 14 de Febrero}}
    \itemize{\item{caida_25_diciembre:}{ Efecto de "pausa" economica por dia despues a navidad}}
+   \itemize{\item{Puente natalicio Benito Juarez:}{Puente oficial por parte del estado Mexicano}}
+   \itemize{\item{Vacaciones semana santa}{Efecto por las ventas en vacaciones de semana santa}}
 }
 \examples{
 
 holydays_to_prophet()
+Obten la fecha del tercer domingo dado una fecha de inicio
+
+Ideal para encontrar el tercer domingo de junio dado el primer
+dia de junio
+
 }

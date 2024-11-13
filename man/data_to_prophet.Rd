@@ -5,7 +5,7 @@
 \alias{data_to_prophet}
 \title{Data to prophet format}
 \usage{
-data_to_prophet(datos, ...)
+data_to_prophet(datos, ..., verbose = T)
 }
 \arguments{
 \item{datos}{Datos para el análisis de serie de tiempo solo Data.frame}

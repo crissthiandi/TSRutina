@@ -10,9 +10,6 @@ pausa(duracion = Inf)
 \arguments{
 \item{duracion}{Tiempo de pausa en segundos, default Inf (infinito)}
 }
-\value{
-
-}
 \description{
 Realiza una pausa tanto indeterminada como por una cantidad de segundos
 }

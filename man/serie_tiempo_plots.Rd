@@ -10,7 +10,9 @@ serie_tiempo_plots(
   frecuencia = NULL,
   inicio = NULL,
   validar_ = FALSE,
-  pausa_off = 1
+  pausa_off = 1,
+  img_width = 1024,
+  img_height = 600
 )
 }
 \arguments{
@@ -24,6 +26,10 @@ dia-mes-year. La versión 2.1 soporta objetos de la clase TS (time series)}
 \item{inicio}{Este es el year a iniciar la serie de tiempo}
 
 \item{validar_}{Boleano, True/False indica si se vericarán los datos}
+
+\item{img_width}{Ancho de la imagen a guardar en pixeles}
+
+\item{img_height}{Altura de la imagen a guardar en pixeles}
 }
 \value{
 La salida no es como tal un objeto, si no una serie de impresiones de varios
@@ -38,10 +44,10 @@ Obtén archivos .png de tus gráficos de serie de tiempo en tu directorio
 Se usa una salida interactiva para el proceso
 }
 \examples{
-serie_tiempo_rutina(sunspot.year,5)
+serie_tiempo_plots(sunspot.year,15)
 
 base=data.frame(tiempo=seq(Sys.Date(),by="days",length=20),valores=(rexp(50)+1)*sin(1:50))
-serie_tiempo_rutina(datos=base,frecuencia=4,inicio=2010)
+serie_tiempo_plots(datos=base,frecuencia=4,inicio=2010)
 
 }
 \author{

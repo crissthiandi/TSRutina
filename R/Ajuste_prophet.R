@@ -325,7 +325,7 @@ holydays_to_prophet <- function(datos,from,to,...){
     # [1] "character"
     # > typeof(Sys.Date())
     # [1] "double"
-    primer_domingo <- as.Date(primer_domingo)
+    primer_domingo <- lubridate::as_datetime(primer_domingo)
     tercer_domingo <- primer_domingo+lubridate::days(14)
     # desconozco porque tengo que usar lubridate
     return(as.Date(tercer_domingo))

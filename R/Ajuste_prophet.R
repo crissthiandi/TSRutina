@@ -130,91 +130,84 @@ outliers_to_prophet <- function(datos,from,to,...,verbose=T){
 #' holydays_to_prophet()
 holydays_to_prophet <- function(datos,from,to,...){
 
-
+  # se toma el primer sabado del buen fin
   buen_fin <- tibble::tibble(
     holiday = "Buen_fin",
-    ds = as.Date(c("2022-11-19","2021-11-13","2019-11-16","2018-11-17",
+    ds = as.Date(c("2025-11-22","2024-11-16","2023-11-18","2022-11-19","2021-11-13","2019-11-16","2018-11-17",
                    "2017-11-18","2016-11-19","2015-11-14","2014-11-14")),
-    lower_window = c(-2,-4,rep(-2,6)),
+    lower_window = c(rep(-1,4),-4,rep(-2,6)),
     upper_window = 3
   )
 
   Navidad <- tibble::tibble(
     holiday = "Navidad",
-    ds = as.Date(c("2022-12-15","2021-12-15","2019-12-15","2018-12-15",
-                   "2017-12-15","2016-12-15","2015-12-15","2014-12-15")),
+    ds = as.Date(paste0(2014:2025,"-12-15")),
     lower_window = -15,
     upper_window = 16
   )
 
   Noche_buena <- tibble::tibble(
     holiday = "Noche_buena",
-    ds = as.Date(c("2022-12-23","2021-12-23","2019-12-23","2018-12-23",
-                   "2017-12-23","2016-12-23","2015-12-23","2014-12-23")),
+    ds = as.Date(paste0(2014:2025,"-12-23")),
     lower_window = -3,
     upper_window = 1
   )
 
   Black_friday <- tibble::tibble(
     holiday = "BlackFriday",
-    ds = as.Date(c("2022-11-25","2021-11-26","2019-11-29","2018-11-23",
-                   "2017-11-24","2016-11-25","2015-11-27","2014-11-28")),
+    ds = as.Date(c("2025-11-28","2024-12-02","2023-11-27","2022-11-25","2021-11-26","2019-11-29","2018-11-23",
+                   "2017-11-24","2016-11-25","2015-11-27","2014-11-27")),
     lower_window = 0,
     upper_window = 1
   )
 
   CyberMonday <- tibble::tibble(
     holiday = "CyberMonday",
-    ds = as.Date(c("2022-11-28","2021-11-29","2019-12-02","2018-11-26",
-                   "2017-11-27","2016-11-28","2015-11-30","2014-12-01")),
+    ds = as.Date(c("2025-12-01","2024-12-02","2023-11-27","2022-11-28","2021-11-29","2019-12-02","2018-11-26",
+                   "2017-11-27","2016-11-28","2015-11-30","2014-11-30")),
     lower_window = 0,
     upper_window = 1
   )
 
   Hot_sale <- tibble::tibble(
     holiday = "Hot_sale",
-    ds = as.Date(c("2022-05-28","2021-05-27","2019-05-29","2018-05-30",
+    ds = as.Date(c("2025-05-18","2024-05-18","2023-06-03","2022-05-28","2021-05-27","2019-05-29","2018-05-30",
                    "2017-05-30","2016-05-31","2015-05-30","2014-09-06")),
-    lower_window = c(-5,-6,-3,-3,-2,-2,-2,-2),
-    upper_window = c(3,4,2,2,3,3,3,3)
+    lower_window = c(-3,-3,-5,-5,-6,-3,-3,-2,-2,-2,-2),
+    upper_window = c(5,5,3,3,4,2,2,3,3,3,3)
   )
 
   Independencia <- tibble::tibble(
     holiday = "independencia",
-    ds = as.Date(c("2022-09-16","2021-09-16","2019-09-16","2018-09-16",
-                   "2017-09-16","2016-09-16","2015-09-16","2014-09-16")),
+    ds = as.Date(paste0(2014:2025,"-09-16")),
     lower_window = -2,
     upper_window = 1
   )
 
   Halloween <- tibble::tibble(
     holiday = "Halloween",
-    ds = as.Date(c("2022-10-31","2021-10-31","2019-10-31","2018-10-31",
-                   "2017-10-31","2016-10-31","2015-10-31","2014-10-31")),
+    ds = as.Date(paste0(2014:2025,"-10-31")),
     lower_window = -2,
     upper_window = 1
   )
 
   Pre_Halloween <- tibble::tibble(
     holiday = "Pre_Halloween",
-    ds = as.Date(c("2022-10-10","2021-10-10","2019-10-10","2018-10-10",
-                   "2017-10-10","2016-10-10","2015-10-10","2014-10-10")),
+    ds = as.Date(paste0(2014:2025,"-10-10")),
     lower_window = -7,
     upper_window = 7
   )
 
   San_valentin <- tibble::tibble(
     holiday = "San_valentin",
-    ds = as.Date(c("2022-02-14","2021-02-14","2020-02-14","2019-02-14",
-                   "2018-02-14","2017-02-14","2016-02-14","2015-02-14","2014-02-14")),
+    ds = as.Date(paste0(2014:2025,"-02-14")),
     lower_window = -2,
     upper_window = 1
   )
 
   caida_25_diciembre <- tibble::tibble(
     holiday = "caida_25_diciembre",
-    ds = as.Date(c("2022-12-25","2021-12-25","2019-12-25","2018-12-25",
-                   "2017-12-25","2016-12-25","2015-12-25","2014-12-25")),
+    ds = as.Date(paste0(2014:2025,"-12-25")),
     lower_window = 0,
     upper_window = 0
   )
@@ -222,19 +215,18 @@ holydays_to_prophet <- function(datos,from,to,...){
   # quien sale el primer dia del año (?)
   caida_Primero_dia_del_anio <- tibble::tibble(
     holiday = "primer_dia_del_anio",
-    ds = as.Date(c("2022-01-01","2021-01-01","2019-01-01","2018-01-01",
-                   "2017-01-01","2016-01-01","2015-01-01","2014-01-01")),
+    ds = as.Date(paste0(2014:2025,"-01-01")),
     lower_window = 0,
     upper_window = 1
   )
 
   puente_natalicio_Benito_juarez <- tibble::tibble(
     holiday = "natalicio_BJ",
-    ds = as.Date(c("2022-03-21","2021-03-15","2020-03-16","2019-03-18",
+    ds = as.Date(c("2025-03-17","2024-03-18","2023-03-20","2022-03-21","2021-03-15","2020-03-16","2019-03-18",
                    "2018-03-19",
                    "2017-03-20","2016-03-21","2015-03-16","2014-03-17")),
-    lower_window = c(-3,-3,-3,-3,-3,-3,-3,-3,-3),
-    upper_window = c(0,0,0,0,0,0,0,0,0)
+    lower_window = -3,
+    upper_window = 0
   )
 
   # 2014 - Viernes 11 de Abril y deberán regresar a clase el día lunes 28 de Abril. ==>
@@ -280,16 +272,16 @@ holydays_to_prophet <- function(datos,from,to,...){
   Vacaciones_semana_santa <- tibble::tibble(
     holiday = "Semana_Santa",
     ds = as.Date(c(
-      "2014-04-19","2015-04-04","2016-03-29","2017-04-15",
-      "2018-03-31","2019-04-20","2022-04-16"
+      "2025-04-27","2024-04-07","2023-04-16","2022-04-16","2019-04-20","2018-03-31","2017-04-15",
+      "2016-03-29","2015-04-04","2014-04-19"
     )),
-    lower_window = c(-7,-7,-7,-7,-7,-7,-7),
-    upper_window = c(8,8,7,8,8,8,8)
+    lower_window = -7,
+    upper_window = 8
   )
 
   Dia_de_las_madres <- tibble::tibble(
     holiday = "Dia_de_la_madre",
-    ds = as.Date(paste(2014:2022,"05",10,sep = "-")),
+    ds = as.Date(paste(2014:2025,"05",10,sep = "-")),
     lower_window = -7,
     upper_window = 1
   )
@@ -337,7 +329,7 @@ holydays_to_prophet <- function(datos,from,to,...){
   # `+.Date`
 
   # Dia del padre
-  inicios_junio <- as.Date(paste(2014:2022,"06","01",sep = "-"))
+  inicios_junio <- as.Date(paste(2014:2025,"06","01",sep = "-"))
   Dia_del_padre <- tibble::tibble(
     holiday = "Dia_del_padre",
     ds = get_tercer_domingo(inicios_junio),
